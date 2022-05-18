@@ -273,7 +273,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2022-05-18 23:24:59" itemprop="dateModified" datetime="2022-05-18T23:24:59+08:00">2022-05-18</time>
+                <time title="修改时间：2022-05-19 00:13:43" itemprop="dateModified" datetime="2022-05-19T00:13:43+08:00">2022-05-19</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -369,34 +369,42 @@ User {
     string avatar
     int status "用户状态，封号注销等"
 }
+UserFollowed {
+    string uid "用户uid"
+    string followed_uid "被关注人uid"
+    int follow_time "关注时间"
+}
+UserFans {
+    string uid "用户uid"
+    string fans_uid "粉丝uid"
+    int follow_time "粉丝关注时间"
+}
+User ||--o{ UserFollowed: follow
+User ||--o{ UserFans: be_followed
+
+
 Feed {
     string feedid PK "视频唯一ID"
     string title
     string cover_url "封面图"
     string play_url "视频播放链接"
 }
-User ||--o{ Feed: post</pre>
-
-<h2 id="demo"><a href="#demo" class="headerlink" title="demo"></a>demo</h2><pre class="mermaid">erDiagram
-    CUSTOMER ||--o{ ORDER : places
-    ORDER ||--|{ LINE-ITEM : contains
-    CUSTOMER }|..|{ DELIVERY-ADDRESS : uses</pre>
-
-<pre class="mermaid">erDiagram
-CAR ||--o{ NAMED-DRIVER : allows
-CAR {
-    string allowedDriver FK "The license of the allowed driver"
-    string registrationNumber
-    string make
-    string model
+FeedComment {
+    string comment_id
+    string feedid
+    string content
+    string uid "评论人uid"
 }
-PERSON ||--o{ NAMED-DRIVER : is
-PERSON {
-    string driversLicense PK "The license #"
-    string firstName "hello"
-    string lastName
-    int age
-}</pre>
+Feed ||--o{ FeedComment: post
+User ||--o{ Feed: post
+
+Msg {
+    string msg_id PK
+    string receiver_uid
+    string sender_uid
+    string content
+}
+User ||--o{ Msg: has</pre>
 
 <h3 id="参考文档"><a href="#参考文档" class="headerlink" title="参考文档"></a>参考文档</h3><p><a target="_blank" rel="noopener" href="https://www.smartdraw.com/entity-relationship-diagram/">ERD介绍</a></p>
 <p><a target="_blank" rel="noopener" href="https://mermaid-js.github.io/mermaid/#/entityRelationshipDiagram">mermaid官方手册</a></p>
