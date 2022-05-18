@@ -1,0 +1,157 @@
+<?xml version="1.0" encoding="utf-8"?>
+<search>
+  <entry>
+    <title>ERD</title>
+    <url>/post/2022/05/ERD.html</url>
+    <content><![CDATA[<h2 id="ERD定义"><a href="#ERD定义" class="headerlink" title="ERD定义"></a>ERD定义</h2><p>ERD全称<code>Entity Relationship Diagrams</code>, 提供了表示存储结构的实体类型、属性和联系的方法，用来描述存储设计。</p>
+<p>Markdown的mermaid插件提供了代码绘制ERD的功能，功能简洁，便于维护。</p>
+<h2 id="ERD概念"><a href="#ERD概念" class="headerlink" title="ERD概念"></a>ERD概念</h2><p>ERD的概念很简单，只需要将实体和实体间的关系描述清楚即可</p>
+<h3 id="实体Entity"><a href="#实体Entity" class="headerlink" title="实体Entity"></a>实体Entity</h3><p><code>实体(entity)</code> 表示一个存储的对象，使用长方形表现</p>
+<pre class="mermaid">erDiagram
+    Entity</pre>
+
+<p>实体可以使用表格形式将其属性包含进来</p>
+<pre class="mermaid">erDiagram
+CAR {
+    string allowedDriver FK "The license of the allowed driver"
+    string registrationNumber
+    string make
+    string model
+}</pre>
+
+<h3 id="关联关系Relationship"><a href="#关联关系Relationship" class="headerlink" title="关联关系Relationship"></a>关联关系Relationship</h3><p>实体间的基本关联关系有以下3种</p>
+<blockquote>
+<p>1.一对一：对于实体集A与实体集B，A中的每一个实体至多与B中一个实体有关系；反之，在实体集B中的每个实体至多与实体集A中一个实体有关系。</p>
+</blockquote>
+<pre class="mermaid">erDiagram
+    Citizen ||--|| IDnum: has</pre>
+<blockquote>
+<p>2.一对多：实体集A与实体集B中至少有N(N&gt;0)个实体有关系；并且实体集B中每一个实体至多与实体集A中一个实体有关系。</p>
+</blockquote>
+<pre class="mermaid">erDiagram
+    Class ||--|{ Student: has</pre>
+<blockquote>
+<p>3.多对多：实体集A中的每一个实体与实体集B中至少有M(M&gt;0)个实体有关系，并且实体集B中的每一个实体与实体集A中的至少N（N&gt;0）个实体有关系。</p>
+</blockquote>
+<pre class="mermaid">erDiagram
+    Student }o--|{ Course: elective</pre>
+
+<h3 id="mermaid对ERD的支持"><a href="#mermaid对ERD的支持" class="headerlink" title="mermaid对ERD的支持"></a>mermaid对ERD的支持</h3><table>
+<thead>
+<tr>
+<th>ValueLeft</th>
+<th>ValueRight</th>
+<th>含义</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>|o</td>
+<td>o|</td>
+<td>0或1个</td>
+</tr>
+<tr>
+<td>||</td>
+<td>||</td>
+<td>1个</td>
+</tr>
+<tr>
+<td>}o</td>
+<td>o{</td>
+<td>0或多个</td>
+</tr>
+<tr>
+<td>}|</td>
+<td>|{</td>
+<td>1或多个</td>
+</tr>
+</tbody></table>
+<h2 id="demo"><a href="#demo" class="headerlink" title="demo"></a>demo</h2><pre class="mermaid">erDiagram
+    CUSTOMER ||--o{ ORDER : places
+    ORDER ||--|{ LINE-ITEM : contains
+    CUSTOMER }|..|{ DELIVERY-ADDRESS : uses</pre>
+
+<pre class="mermaid">erDiagram
+CAR ||--o{ NAMED-DRIVER : allows
+CAR {
+    string allowedDriver FK "The license of the allowed driver"
+    string registrationNumber
+    string make
+    string model
+}
+PERSON ||--o{ NAMED-DRIVER : is
+PERSON {
+    string driversLicense PK "The license #"
+    string firstName "hello"
+    string lastName
+    int age
+}</pre>
+
+<h3 id="参考文档"><a href="#参考文档" class="headerlink" title="参考文档"></a>参考文档</h3><p><a href="https://www.smartdraw.com/entity-relationship-diagram/">ERD介绍</a></p>
+<p><a href="https://mermaid-js.github.io/mermaid/#/entityRelationshipDiagram">mermaid官方手册</a></p>
+]]></content>
+      <categories>
+        <category>编程技术</category>
+        <category>工具</category>
+      </categories>
+      <tags>
+        <tag>ERD</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Hello World</title>
+    <url>/post/2022/05/hello-world.html</url>
+    <content><![CDATA[<p>用来测试相关特性</p>
+<h1 id="测试代码块"><a href="#测试代码块" class="headerlink" title="测试代码块"></a>测试代码块</h1><figure class="highlight go"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">getFreeAddr</span><span class="params">()</span></span> (<span class="type">string</span>, <span class="type">error</span>) &#123;</span><br><span class="line">	tmpAddr, err := net.ResolveTCPAddr(<span class="string">&quot;tcp&quot;</span>, <span class="string">&quot;127.0.0.1:0&quot;</span>)</span><br><span class="line">	<span class="keyword">if</span> err != <span class="literal">nil</span> &#123;</span><br><span class="line">		<span class="keyword">return</span> <span class="string">&quot;&quot;</span>, err</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	l, err := net.ListenTCP(<span class="string">&quot;tcp&quot;</span>, tmpAddr)</span><br><span class="line">	<span class="keyword">if</span> err != <span class="literal">nil</span> &#123;</span><br><span class="line">		<span class="keyword">return</span> <span class="string">&quot;&quot;</span>, err</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	err = l.Close()</span><br><span class="line">	<span class="keyword">if</span> err != <span class="literal">nil</span> &#123;</span><br><span class="line">		<span class="keyword">return</span> <span class="string">&quot;&quot;</span>, err</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="keyword">return</span> l.Addr().String(), <span class="literal">nil</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h1 id="测试专用语法代码块"><a href="#测试专用语法代码块" class="headerlink" title="测试专用语法代码块"></a>测试专用语法代码块</h1><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">alert(&#x27;Hello World!&#x27;);</span><br></pre></td></tr></table></figure>
+
+<span id="more"></span>
+<h2 id="Quick-Start"><a href="#Quick-Start" class="headerlink" title="Quick Start"></a>Quick Start</h2>]]></content>
+      <categories>
+        <category>备忘录</category>
+      </categories>
+  </entry>
+  <entry>
+    <title>论用神</title>
+    <url>/post/2022/05/%E8%AE%BA%E7%94%A8%E7%A5%9E.html</url>
+    <content><![CDATA[<p>用神，就是对命主有好处的干支，能雪中送炭，能锦上添花。</p>
+<span id="more"></span>
+<p>用神可以分成下面四类</p>
+<ul>
+<li>扶抑用神</li>
+<li>格局用神</li>
+<li>调候用神</li>
+<li>通关用神</li>
+</ul>
+<h2 id="扶抑用神"><a href="#扶抑用神" class="headerlink" title="扶抑用神"></a>扶抑用神</h2><p>这也是目前最流行的一种用神定位方式，以追求日元平衡为目标。先看日主强弱，综合全盘衡量自党异党力量对比，日元强则喜克泄耗，弱则喜扶助。</p>
+<p>TODO</p>
+]]></content>
+      <categories>
+        <category>易经</category>
+        <category>子平</category>
+        <category>用神</category>
+      </categories>
+  </entry>
+  <entry>
+    <title>论驿马</title>
+    <url>/post/2022/05/%E8%AE%BA%E9%A9%BF%E9%A9%AC.html</url>
+    <content><![CDATA[]]></content>
+      <categories>
+        <category>易经</category>
+        <category>子平</category>
+      </categories>
+  </entry>
+  <entry>
+    <title>论寅巳申三刑</title>
+    <url>/post/2022/05/%E8%AE%BA%E5%AF%85%E5%B7%B3%E7%94%B3%E4%B8%89%E5%88%91.html</url>
+    <content><![CDATA[<p>正在亲身体验寅巳申三刑<code>壬寅年乙巳月 2022.05.05 -- 2022.06.06</code>, 等6.6过后我再总结下相关案例和自己的体验</p>
+<span id="more"></span>
+
+<p>TODO</p>
+]]></content>
+      <categories>
+        <category>易经</category>
+        <category>子平</category>
+        <category>三刑</category>
+      </categories>
+  </entry>
+</search>
