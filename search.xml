@@ -2,7 +2,7 @@
 <search>
   <entry>
     <title>ERD</title>
-    <url>/post/2022/05/ERD.html</url>
+    <url>/post/702c2c66.html</url>
     <content><![CDATA[<h2 id="ERD定义"><a href="#ERD定义" class="headerlink" title="ERD定义"></a>ERD定义</h2><p>ERD全称<code>Entity Relationship Diagrams</code>, 提供了表示存储结构的实体类型、属性和联系的方法，用来描述存储设计。</p>
 <p>Markdown的mermaid插件提供了代码绘制ERD的功能，功能简洁，便于维护。</p>
 <h2 id="ERD概念"><a href="#ERD概念" class="headerlink" title="ERD概念"></a>ERD概念</h2><p>ERD的概念很简单，只需要将实体和实体间的关系描述清楚即可</p>
@@ -65,6 +65,21 @@ CAR {
 <td>1或多个</td>
 </tr>
 </tbody></table>
+<h3 id="常见视频app的ERD"><a href="#常见视频app的ERD" class="headerlink" title="常见视频app的ERD"></a>常见视频app的ERD</h3><pre class="mermaid">erDiagram
+User {
+    string uid PK "用户唯一ID"
+    string name
+    string avatar
+    int status "用户状态，封号注销等"
+}
+Feed {
+    string feedid PK "视频唯一ID"
+    string title
+    string cover_url "封面图"
+    string play_url "视频播放链接"
+}
+User ||--o{ Feed: post</pre>
+
 <h2 id="demo"><a href="#demo" class="headerlink" title="demo"></a>demo</h2><pre class="mermaid">erDiagram
     CUSTOMER ||--o{ ORDER : places
     ORDER ||--|{ LINE-ITEM : contains
@@ -98,8 +113,22 @@ PERSON {
       </tags>
   </entry>
   <entry>
+    <title>论寅巳申三刑</title>
+    <url>/post/ee408ec8.html</url>
+    <content><![CDATA[<p>正在亲身体验寅巳申三刑<code>壬寅年乙巳月 2022.05.05 -- 2022.06.06</code>, 等6.6过后我再总结下相关案例和自己的体验</p>
+<span id="more"></span>
+
+<p>TODO</p>
+]]></content>
+      <categories>
+        <category>易经</category>
+        <category>子平</category>
+        <category>三刑</category>
+      </categories>
+  </entry>
+  <entry>
     <title>Hello World</title>
-    <url>/post/2022/05/hello-world.html</url>
+    <url>/post/4a17b156.html</url>
     <content><![CDATA[<p>用来测试相关特性</p>
 <h1 id="测试代码块"><a href="#测试代码块" class="headerlink" title="测试代码块"></a>测试代码块</h1><figure class="highlight go"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">getFreeAddr</span><span class="params">()</span></span> (<span class="type">string</span>, <span class="type">error</span>) &#123;</span><br><span class="line">	tmpAddr, err := net.ResolveTCPAddr(<span class="string">&quot;tcp&quot;</span>, <span class="string">&quot;127.0.0.1:0&quot;</span>)</span><br><span class="line">	<span class="keyword">if</span> err != <span class="literal">nil</span> &#123;</span><br><span class="line">		<span class="keyword">return</span> <span class="string">&quot;&quot;</span>, err</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	l, err := net.ListenTCP(<span class="string">&quot;tcp&quot;</span>, tmpAddr)</span><br><span class="line">	<span class="keyword">if</span> err != <span class="literal">nil</span> &#123;</span><br><span class="line">		<span class="keyword">return</span> <span class="string">&quot;&quot;</span>, err</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	err = l.Close()</span><br><span class="line">	<span class="keyword">if</span> err != <span class="literal">nil</span> &#123;</span><br><span class="line">		<span class="keyword">return</span> <span class="string">&quot;&quot;</span>, err</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="keyword">return</span> l.Addr().String(), <span class="literal">nil</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <h1 id="测试专用语法代码块"><a href="#测试专用语法代码块" class="headerlink" title="测试专用语法代码块"></a>测试专用语法代码块</h1><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">alert(&#x27;Hello World!&#x27;);</span><br></pre></td></tr></table></figure>
@@ -111,8 +140,17 @@ PERSON {
       </categories>
   </entry>
   <entry>
+    <title>论驿马</title>
+    <url>/post/53de3820.html</url>
+    <content><![CDATA[]]></content>
+      <categories>
+        <category>易经</category>
+        <category>子平</category>
+      </categories>
+  </entry>
+  <entry>
     <title>论用神</title>
-    <url>/post/2022/05/%E8%AE%BA%E7%94%A8%E7%A5%9E.html</url>
+    <url>/post/935779c7.html</url>
     <content><![CDATA[<p>用神，就是对命主有好处的干支，能雪中送炭，能锦上添花。</p>
 <span id="more"></span>
 <p>用神可以分成下面四类</p>
@@ -129,29 +167,6 @@ PERSON {
         <category>易经</category>
         <category>子平</category>
         <category>用神</category>
-      </categories>
-  </entry>
-  <entry>
-    <title>论驿马</title>
-    <url>/post/2022/05/%E8%AE%BA%E9%A9%BF%E9%A9%AC.html</url>
-    <content><![CDATA[]]></content>
-      <categories>
-        <category>易经</category>
-        <category>子平</category>
-      </categories>
-  </entry>
-  <entry>
-    <title>论寅巳申三刑</title>
-    <url>/post/2022/05/%E8%AE%BA%E5%AF%85%E5%B7%B3%E7%94%B3%E4%B8%89%E5%88%91.html</url>
-    <content><![CDATA[<p>正在亲身体验寅巳申三刑<code>壬寅年乙巳月 2022.05.05 -- 2022.06.06</code>, 等6.6过后我再总结下相关案例和自己的体验</p>
-<span id="more"></span>
-
-<p>TODO</p>
-]]></content>
-      <categories>
-        <category>易经</category>
-        <category>子平</category>
-        <category>三刑</category>
       </categories>
   </entry>
 </search>
