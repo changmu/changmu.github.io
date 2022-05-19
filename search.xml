@@ -121,18 +121,11 @@ User ||--o{ Msg: has</pre>
       </tags>
   </entry>
   <entry>
-    <title>论寅巳申三刑</title>
-    <url>/post/ee408ec8.html</url>
-    <content><![CDATA[<p>正在亲身体验寅巳申三刑<code>壬寅年乙巳月 2022.05.05 -- 2022.06.06</code>, 等6.6过后我再总结下相关案例和自己的体验</p>
-<span id="more"></span>
+    <title>golang code snippet</title>
+    <url>/post/cee729f9.html</url>
+    <content><![CDATA[<h2 id="列表去重"><a href="#列表去重" class="headerlink" title="列表去重"></a>列表去重</h2><figure class="highlight go"><table><tr><td class="code"><pre><span class="line"><span class="comment">// RmDupAndEmptyOfList 列表元素去重并去空</span></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">RmDupAndEmptyOfList</span><span class="params">(list []<span class="type">string</span>)</span></span> []<span class="type">string</span> &#123;</span><br><span class="line">	mp := <span class="keyword">map</span>[<span class="type">string</span>]<span class="type">bool</span>&#123;&#125;</span><br><span class="line">	<span class="keyword">for</span> _, item := <span class="keyword">range</span> list &#123;</span><br><span class="line">		<span class="keyword">if</span> item != <span class="string">&quot;&quot;</span> &#123;</span><br><span class="line">			mp[item] = <span class="literal">true</span></span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="keyword">var</span> listUniq []<span class="type">string</span></span><br><span class="line">	<span class="keyword">for</span> k := <span class="keyword">range</span> mp &#123;</span><br><span class="line">		listUniq = <span class="built_in">append</span>(listUniq, k)</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="keyword">return</span> listUniq</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
-<p>TODO</p>
-]]></content>
-      <categories>
-        <category>易经</category>
-        <category>子平</category>
-        <category>三刑</category>
-      </categories>
+<h2 id="并发处理任务"><a href="#并发处理任务" class="headerlink" title="并发处理任务"></a>并发处理任务</h2><figure class="highlight go"><table><tr><td class="code"><pre><span class="line"><span class="comment">// GoAndWait 封装更安全的多并发调用, 启动goroutine并等待所有处理流程完成，自动recover</span></span><br><span class="line"><span class="comment">// 返回值error返回的是多并发协程里面第一个返回的不为nil的error，主要用于关键路径判断，当多并发协程里面有一个是关键路径且有失败则返回err，其他非关键路径并发全部返回nil</span></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">GoAndWait</span><span class="params">(handlers ...<span class="keyword">func</span>()</span></span> <span class="type">error</span>) <span class="type">error</span> &#123;</span><br><span class="line">	<span class="keyword">var</span> (</span><br><span class="line">		wg   sync.WaitGroup</span><br><span class="line">		once sync.Once</span><br><span class="line">		err  <span class="type">error</span></span><br><span class="line">	)</span><br><span class="line">	<span class="keyword">for</span> _, f := <span class="keyword">range</span> handlers &#123;</span><br><span class="line">		wg.Add(<span class="number">1</span>)</span><br><span class="line">		<span class="keyword">go</span> <span class="function"><span class="keyword">func</span><span class="params">(handler <span class="keyword">func</span>()</span></span> <span class="type">error</span>) &#123;</span><br><span class="line">			<span class="keyword">defer</span> <span class="function"><span class="keyword">func</span><span class="params">()</span></span> &#123;</span><br><span class="line">				<span class="keyword">if</span> e := <span class="built_in">recover</span>(); e != <span class="literal">nil</span> &#123;</span><br><span class="line">					buf := <span class="built_in">make</span>([]<span class="type">byte</span>, PanicBufLen)</span><br><span class="line">					buf = buf[:runtime.Stack(buf, <span class="literal">false</span>)]</span><br><span class="line">					log.Errorf(<span class="string">&quot;[PANIC]%v\n%s\n&quot;</span>, e, buf)</span><br><span class="line">					once.Do(<span class="function"><span class="keyword">func</span><span class="params">()</span></span> &#123;</span><br><span class="line">						err = errs.New(errs.RetServerSystemErr, <span class="string">&quot;panic found in call handlers&quot;</span>)</span><br><span class="line">					&#125;)</span><br><span class="line">				&#125;</span><br><span class="line">				wg.Done()</span><br><span class="line">			&#125;()</span><br><span class="line">			<span class="keyword">if</span> e := handler(); e != <span class="literal">nil</span> &#123;</span><br><span class="line">				once.Do(<span class="function"><span class="keyword">func</span><span class="params">()</span></span> &#123;</span><br><span class="line">					err = e</span><br><span class="line">				&#125;)</span><br><span class="line">			&#125;</span><br><span class="line">		&#125;(f)</span><br><span class="line">	&#125;</span><br><span class="line">	wg.Wait()</span><br><span class="line">	<span class="keyword">return</span> err</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>]]></content>
   </entry>
   <entry>
     <title>Hello World</title>
@@ -148,12 +141,17 @@ User ||--o{ Msg: has</pre>
       </categories>
   </entry>
   <entry>
-    <title>论驿马</title>
-    <url>/post/53de3820.html</url>
-    <content><![CDATA[]]></content>
+    <title>论寅巳申三刑</title>
+    <url>/post/ee408ec8.html</url>
+    <content><![CDATA[<p>正在亲身体验寅巳申三刑<code>壬寅年乙巳月 2022.05.05 -- 2022.06.06</code>, 等6.6过后我再总结下相关案例和自己的体验</p>
+<span id="more"></span>
+
+<p>TODO</p>
+]]></content>
       <categories>
         <category>易经</category>
         <category>子平</category>
+        <category>三刑</category>
       </categories>
   </entry>
   <entry>
@@ -178,10 +176,12 @@ User ||--o{ Msg: has</pre>
       </categories>
   </entry>
   <entry>
-    <title>golang code snippet</title>
-    <url>/post/cee729f9.html</url>
-    <content><![CDATA[<h2 id="列表去重"><a href="#列表去重" class="headerlink" title="列表去重"></a>列表去重</h2><figure class="highlight go"><table><tr><td class="code"><pre><span class="line"><span class="comment">// RmDupAndEmptyOfList 列表元素去重并去空</span></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">RmDupAndEmptyOfList</span><span class="params">(list []<span class="type">string</span>)</span></span> []<span class="type">string</span> &#123;</span><br><span class="line">	mp := <span class="keyword">map</span>[<span class="type">string</span>]<span class="type">bool</span>&#123;&#125;</span><br><span class="line">	<span class="keyword">for</span> _, item := <span class="keyword">range</span> list &#123;</span><br><span class="line">		<span class="keyword">if</span> item != <span class="string">&quot;&quot;</span> &#123;</span><br><span class="line">			mp[item] = <span class="literal">true</span></span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="keyword">var</span> listUniq []<span class="type">string</span></span><br><span class="line">	<span class="keyword">for</span> k := <span class="keyword">range</span> mp &#123;</span><br><span class="line">		listUniq = <span class="built_in">append</span>(listUniq, k)</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="keyword">return</span> listUniq</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<h2 id="并发处理任务"><a href="#并发处理任务" class="headerlink" title="并发处理任务"></a>并发处理任务</h2><figure class="highlight go"><table><tr><td class="code"><pre><span class="line"><span class="comment">// GoAndWait 封装更安全的多并发调用, 启动goroutine并等待所有处理流程完成，自动recover</span></span><br><span class="line"><span class="comment">// 返回值error返回的是多并发协程里面第一个返回的不为nil的error，主要用于关键路径判断，当多并发协程里面有一个是关键路径且有失败则返回err，其他非关键路径并发全部返回nil</span></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">GoAndWait</span><span class="params">(handlers ...<span class="keyword">func</span>()</span></span> <span class="type">error</span>) <span class="type">error</span> &#123;</span><br><span class="line">	<span class="keyword">var</span> (</span><br><span class="line">		wg   sync.WaitGroup</span><br><span class="line">		once sync.Once</span><br><span class="line">		err  <span class="type">error</span></span><br><span class="line">	)</span><br><span class="line">	<span class="keyword">for</span> _, f := <span class="keyword">range</span> handlers &#123;</span><br><span class="line">		wg.Add(<span class="number">1</span>)</span><br><span class="line">		<span class="keyword">go</span> <span class="function"><span class="keyword">func</span><span class="params">(handler <span class="keyword">func</span>()</span></span> <span class="type">error</span>) &#123;</span><br><span class="line">			<span class="keyword">defer</span> <span class="function"><span class="keyword">func</span><span class="params">()</span></span> &#123;</span><br><span class="line">				<span class="keyword">if</span> e := <span class="built_in">recover</span>(); e != <span class="literal">nil</span> &#123;</span><br><span class="line">					buf := <span class="built_in">make</span>([]<span class="type">byte</span>, PanicBufLen)</span><br><span class="line">					buf = buf[:runtime.Stack(buf, <span class="literal">false</span>)]</span><br><span class="line">					log.Errorf(<span class="string">&quot;[PANIC]%v\n%s\n&quot;</span>, e, buf)</span><br><span class="line">					once.Do(<span class="function"><span class="keyword">func</span><span class="params">()</span></span> &#123;</span><br><span class="line">						err = errs.New(errs.RetServerSystemErr, <span class="string">&quot;panic found in call handlers&quot;</span>)</span><br><span class="line">					&#125;)</span><br><span class="line">				&#125;</span><br><span class="line">				wg.Done()</span><br><span class="line">			&#125;()</span><br><span class="line">			<span class="keyword">if</span> e := handler(); e != <span class="literal">nil</span> &#123;</span><br><span class="line">				once.Do(<span class="function"><span class="keyword">func</span><span class="params">()</span></span> &#123;</span><br><span class="line">					err = e</span><br><span class="line">				&#125;)</span><br><span class="line">			&#125;</span><br><span class="line">		&#125;(f)</span><br><span class="line">	&#125;</span><br><span class="line">	wg.Wait()</span><br><span class="line">	<span class="keyword">return</span> err</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>]]></content>
+    <title>论驿马</title>
+    <url>/post/53de3820.html</url>
+    <content><![CDATA[]]></content>
+      <categories>
+        <category>易经</category>
+        <category>子平</category>
+      </categories>
   </entry>
 </search>
