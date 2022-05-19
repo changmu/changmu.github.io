@@ -30,7 +30,7 @@
 <meta property="og:description" content="ERD定义ERD全称Entity Relationship Diagrams, 提供了表示存储结构的实体类型、属性和联系的方法，用来描述存储设计。 Markdown的mermaid插件提供了代码绘制ERD的功能，功能简洁，便于维护。 ERD概念ERD的概念很简单，只需要将实体和实体间的关系描述清楚即可 实体Entity实体(entity) 表示一个存储的对象，使用长方形表现 erDiagram">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2022-05-16T13:27:42.000Z">
-<meta property="article:modified_time" content="2022-05-18T16:13:43.757Z">
+<meta property="article:modified_time" content="2022-05-18T16:17:30.113Z">
 <meta property="article:author" content="windqiu">
 <meta property="article:tag" content="ERD">
 <meta name="twitter:card" content="summary">
@@ -79,7 +79,7 @@
   </style>
 </noscript>
 
-</head>
+<style>.darkmode--activated{--body-bg-color:#282828;--content-bg-color:#333;--card-bg-color:#555;--text-color:#ccc;--blockquote-color:#bbb;--link-color:#ccc;--link-hover-color:#eee;--brand-color:#ddd;--brand-hover-color:#ddd;--table-row-odd-bg-color:#282828;--table-row-hover-bg-color:#363636;--menu-item-bg-color:#555;--btn-default-bg:#222;--btn-default-color:#ccc;--btn-default-border-color:#555;--btn-default-hover-bg:#666;--btn-default-hover-color:#ccc;--btn-default-hover-border-color:#666;--highlight-background:#282b2e;--highlight-foreground:#a9b7c6;--highlight-gutter-background:#34393d;--highlight-gutter-foreground:#9ca9b6}.darkmode--activated img{opacity:.75}.darkmode--activated img:hover{opacity:.9}.darkmode--activated code{color:#69dbdc;background:0 0}button.darkmode-toggle{z-index:9999}.darkmode-ignore,img{display:flex!important}.beian img{display:inline-block!important}</style></head>
 
 <body itemscope itemtype="http://schema.org/WebPage">
   <div class="container use-motion">
@@ -122,7 +122,7 @@
   </li>
         <li class="menu-item menu-item-archives">
 
-    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档<span class="badge">5</span></a>
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档<span class="badge">6</span></a>
 
   </li>
         <li class="menu-item menu-item-about">
@@ -198,7 +198,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2022-05-19 00:13:43" itemprop="dateModified" datetime="2022-05-19T00:13:43+08:00">2022-05-19</time>
+                <time title="修改时间：2022-05-19 00:17:30" itemprop="dateModified" datetime="2022-05-19T00:17:30+08:00">2022-05-19</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -287,7 +287,7 @@ CAR {
 <td>1或多个</td>
 </tr>
 </tbody></table>
-<h3 id="常见视频app的ERD"><a href="#常见视频app的ERD" class="headerlink" title="常见视频app的ERD"></a>常见视频app的ERD</h3><pre class="mermaid">erDiagram
+<h3 id="demo-一个常见视频app的ERD"><a href="#demo-一个常见视频app的ERD" class="headerlink" title="demo 一个常见视频app的ERD"></a>demo 一个常见视频app的ERD</h3><pre class="mermaid">erDiagram
 User {
     string uid PK "用户唯一ID"
     string name
@@ -355,8 +355,8 @@ User ||--o{ Msg: has</pre>
       <i class="fa fa-chevron-left"></i> 论寅巳申三刑
     </a></div>
       <div class="post-nav-item">
-    <a href="/post/4a17b156.html" rel="next" title="Hello World">
-      Hello World <i class="fa fa-chevron-right"></i>
+    <a href="/post/cee729f9.html" rel="next" title="golang code snippet">
+      golang code snippet <i class="fa fa-chevron-right"></i>
     </a></div>
     </div>
       </footer>
@@ -421,7 +421,7 @@ User ||--o{ Msg: has</pre>
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#ERD%E5%AE%9A%E4%B9%89"><span class="nav-number">1.</span> <span class="nav-text">ERD定义</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#ERD%E6%A6%82%E5%BF%B5"><span class="nav-number">2.</span> <span class="nav-text">ERD概念</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AE%9E%E4%BD%93Entity"><span class="nav-number">2.1.</span> <span class="nav-text">实体Entity</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%85%B3%E8%81%94%E5%85%B3%E7%B3%BBRelationship"><span class="nav-number">2.2.</span> <span class="nav-text">关联关系Relationship</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#mermaid%E5%AF%B9ERD%E7%9A%84%E6%94%AF%E6%8C%81"><span class="nav-number">2.3.</span> <span class="nav-text">mermaid对ERD的支持</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%B8%B8%E8%A7%81%E8%A7%86%E9%A2%91app%E7%9A%84ERD"><span class="nav-number">2.4.</span> <span class="nav-text">常见视频app的ERD</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%8F%82%E8%80%83%E6%96%87%E6%A1%A3"><span class="nav-number">2.5.</span> <span class="nav-text">参考文档</span></a></li></ol></li></ol></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#ERD%E5%AE%9A%E4%B9%89"><span class="nav-number">1.</span> <span class="nav-text">ERD定义</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#ERD%E6%A6%82%E5%BF%B5"><span class="nav-number">2.</span> <span class="nav-text">ERD概念</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AE%9E%E4%BD%93Entity"><span class="nav-number">2.1.</span> <span class="nav-text">实体Entity</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%85%B3%E8%81%94%E5%85%B3%E7%B3%BBRelationship"><span class="nav-number">2.2.</span> <span class="nav-text">关联关系Relationship</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#mermaid%E5%AF%B9ERD%E7%9A%84%E6%94%AF%E6%8C%81"><span class="nav-number">2.3.</span> <span class="nav-text">mermaid对ERD的支持</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#demo-%E4%B8%80%E4%B8%AA%E5%B8%B8%E8%A7%81%E8%A7%86%E9%A2%91app%E7%9A%84ERD"><span class="nav-number">2.4.</span> <span class="nav-text">demo 一个常见视频app的ERD</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%8F%82%E8%80%83%E6%96%87%E6%A1%A3"><span class="nav-number">2.5.</span> <span class="nav-text">参考文档</span></a></li></ol></li></ol></div>
       </div>
       <!--/noindex-->
 
@@ -437,7 +437,7 @@ User ||--o{ Msg: has</pre>
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">5</span>
+          <span class="site-state-item-count">6</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
@@ -556,6 +556,26 @@ if (document.querySelectorAll('pre.mermaid').length) {
   
 
   
+<script src="https://unpkg.com/darkmode-js@1.5.7/lib/darkmode-js.min.js"></script>
+
+<script>
+var options = {
+  bottom: '64px',
+  right: 'unset',
+  left: '32px',
+  time: '0.5s',
+  mixColor: 'transparent',
+  backgroundColor: 'transparent',
+  buttonColorDark: '#100f2c',
+  buttonColorLight: '#fff',
+  saveInCookies: true,
+  label: '🌓',
+  autoMatchOsTheme: true
+}
+const darkmode = new Darkmode(options);
+window.darkmode = darkmode;
+darkmode.showWidget();
+</script>
 
 <script>
 NexT.utils.loadComments(document.querySelector('#lv-container'), () => {

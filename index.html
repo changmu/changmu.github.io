@@ -77,7 +77,7 @@
   </style>
 </noscript>
 
-</head>
+<style>.darkmode--activated{--body-bg-color:#282828;--content-bg-color:#333;--card-bg-color:#555;--text-color:#ccc;--blockquote-color:#bbb;--link-color:#ccc;--link-hover-color:#eee;--brand-color:#ddd;--brand-hover-color:#ddd;--table-row-odd-bg-color:#282828;--table-row-hover-bg-color:#363636;--menu-item-bg-color:#555;--btn-default-bg:#222;--btn-default-color:#ccc;--btn-default-border-color:#555;--btn-default-hover-bg:#666;--btn-default-hover-color:#ccc;--btn-default-hover-border-color:#666;--highlight-background:#282b2e;--highlight-foreground:#a9b7c6;--highlight-gutter-background:#34393d;--highlight-gutter-foreground:#9ca9b6}.darkmode--activated img{opacity:.75}.darkmode--activated img:hover{opacity:.9}.darkmode--activated code{color:#69dbdc;background:0 0}button.darkmode-toggle{z-index:9999}.darkmode-ignore,img{display:flex!important}.beian img{display:inline-block!important}</style></head>
 
 <body itemscope itemtype="http://schema.org/WebPage">
   <div class="container use-motion">
@@ -120,7 +120,7 @@
   </li>
         <li class="menu-item menu-item-archives">
 
-    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档<span class="badge">5</span></a>
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档<span class="badge">6</span></a>
 
   </li>
         <li class="menu-item menu-item-about">
@@ -165,7 +165,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://blog.windqiu.com/post/4a17b156.html">
+    <link itemprop="mainEntityOfPage" href="https://blog.windqiu.com/post/cee729f9.html">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.png">
@@ -179,7 +179,7 @@
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
           
-            <a href="/post/4a17b156.html" class="post-title-link" itemprop="url">Hello World</a>
+            <a href="/post/cee729f9.html" class="post-title-link" itemprop="url">golang code snippet</a>
         </h2>
 
         <div class="post-meta">
@@ -190,16 +190,7 @@
               <span class="post-meta-item-text">发表于</span>
               
 
-              <time title="创建时间：2022-05-18 21:53:14 / 修改时间：23:15:34" itemprop="dateCreated datePublished" datetime="2022-05-18T21:53:14+08:00">2022-05-18</time>
-            </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E5%A4%87%E5%BF%98%E5%BD%95/" itemprop="url" rel="index"><span itemprop="name">备忘录</span></a>
-                </span>
+              <time title="创建时间：2022-05-19 10:44:32 / 修改时间：23:31:40" itemprop="dateCreated datePublished" datetime="2022-05-19T10:44:32+08:00">2022-05-19</time>
             </span>
 
           
@@ -213,17 +204,9 @@
     <div class="post-body" itemprop="articleBody">
 
       
-          <p>用来测试相关特性</p>
-<h1 id="测试代码块"><a href="#测试代码块" class="headerlink" title="测试代码块"></a>测试代码块</h1><figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">getFreeAddr</span><span class="params">()</span></span> (<span class="type">string</span>, <span class="type">error</span>) &#123;</span><br><span class="line">	tmpAddr, err := net.ResolveTCPAddr(<span class="string">&quot;tcp&quot;</span>, <span class="string">&quot;127.0.0.1:0&quot;</span>)</span><br><span class="line">	<span class="keyword">if</span> err != <span class="literal">nil</span> &#123;</span><br><span class="line">		<span class="keyword">return</span> <span class="string">&quot;&quot;</span>, err</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	l, err := net.ListenTCP(<span class="string">&quot;tcp&quot;</span>, tmpAddr)</span><br><span class="line">	<span class="keyword">if</span> err != <span class="literal">nil</span> &#123;</span><br><span class="line">		<span class="keyword">return</span> <span class="string">&quot;&quot;</span>, err</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	err = l.Close()</span><br><span class="line">	<span class="keyword">if</span> err != <span class="literal">nil</span> &#123;</span><br><span class="line">		<span class="keyword">return</span> <span class="string">&quot;&quot;</span>, err</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="keyword">return</span> l.Addr().String(), <span class="literal">nil</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<h1 id="测试专用语法代码块"><a href="#测试专用语法代码块" class="headerlink" title="测试专用语法代码块"></a>测试专用语法代码块</h1><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">alert(&#x27;Hello World!&#x27;);</span><br></pre></td></tr></table></figure>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/post/4a17b156.html#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
+          <h2 id="列表去重"><a href="#列表去重" class="headerlink" title="列表去重"></a>列表去重</h2><figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// RmDupAndEmptyOfList 列表元素去重并去空</span></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">RmDupAndEmptyOfList</span><span class="params">(list []<span class="type">string</span>)</span></span> []<span class="type">string</span> &#123;</span><br><span class="line">	mp := <span class="keyword">map</span>[<span class="type">string</span>]<span class="type">bool</span>&#123;&#125;</span><br><span class="line">	<span class="keyword">for</span> _, item := <span class="keyword">range</span> list &#123;</span><br><span class="line">		<span class="keyword">if</span> item != <span class="string">&quot;&quot;</span> &#123;</span><br><span class="line">			mp[item] = <span class="literal">true</span></span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="keyword">var</span> listUniq []<span class="type">string</span></span><br><span class="line">	<span class="keyword">for</span> k := <span class="keyword">range</span> mp &#123;</span><br><span class="line">		listUniq = <span class="built_in">append</span>(listUniq, k)</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="keyword">return</span> listUniq</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="并发处理任务"><a href="#并发处理任务" class="headerlink" title="并发处理任务"></a>并发处理任务</h2><figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// GoAndWait 封装更安全的多并发调用, 启动goroutine并等待所有处理流程完成，自动recover</span></span><br><span class="line"><span class="comment">// 返回值error返回的是多并发协程里面第一个返回的不为nil的error，主要用于关键路径判断，当多并发协程里面有一个是关键路径且有失败则返回err，其他非关键路径并发全部返回nil</span></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">GoAndWait</span><span class="params">(handlers ...<span class="keyword">func</span>()</span></span> <span class="type">error</span>) <span class="type">error</span> &#123;</span><br><span class="line">	<span class="keyword">var</span> (</span><br><span class="line">		wg   sync.WaitGroup</span><br><span class="line">		once sync.Once</span><br><span class="line">		err  <span class="type">error</span></span><br><span class="line">	)</span><br><span class="line">	<span class="keyword">for</span> _, f := <span class="keyword">range</span> handlers &#123;</span><br><span class="line">		wg.Add(<span class="number">1</span>)</span><br><span class="line">		<span class="keyword">go</span> <span class="function"><span class="keyword">func</span><span class="params">(handler <span class="keyword">func</span>()</span></span> <span class="type">error</span>) &#123;</span><br><span class="line">			<span class="keyword">defer</span> <span class="function"><span class="keyword">func</span><span class="params">()</span></span> &#123;</span><br><span class="line">				<span class="keyword">if</span> e := <span class="built_in">recover</span>(); e != <span class="literal">nil</span> &#123;</span><br><span class="line">					buf := <span class="built_in">make</span>([]<span class="type">byte</span>, PanicBufLen)</span><br><span class="line">					buf = buf[:runtime.Stack(buf, <span class="literal">false</span>)]</span><br><span class="line">					log.Errorf(<span class="string">&quot;[PANIC]%v\n%s\n&quot;</span>, e, buf)</span><br><span class="line">					once.Do(<span class="function"><span class="keyword">func</span><span class="params">()</span></span> &#123;</span><br><span class="line">						err = errs.New(errs.RetServerSystemErr, <span class="string">&quot;panic found in call handlers&quot;</span>)</span><br><span class="line">					&#125;)</span><br><span class="line">				&#125;</span><br><span class="line">				wg.Done()</span><br><span class="line">			&#125;()</span><br><span class="line">			<span class="keyword">if</span> e := handler(); e != <span class="literal">nil</span> &#123;</span><br><span class="line">				once.Do(<span class="function"><span class="keyword">func</span><span class="params">()</span></span> &#123;</span><br><span class="line">					err = e</span><br><span class="line">				&#125;)</span><br><span class="line">			&#125;</span><br><span class="line">		&#125;(f)</span><br><span class="line">	&#125;</span><br><span class="line">	wg.Wait()</span><br><span class="line">	<span class="keyword">return</span> err</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
       
     </div>
 
@@ -273,7 +256,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2022-05-19 00:13:43" itemprop="dateModified" datetime="2022-05-19T00:13:43+08:00">2022-05-19</time>
+                <time title="修改时间：2022-05-19 00:17:30" itemprop="dateModified" datetime="2022-05-19T00:17:30+08:00">2022-05-19</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -362,7 +345,7 @@ CAR {
 <td>1或多个</td>
 </tr>
 </tbody></table>
-<h3 id="常见视频app的ERD"><a href="#常见视频app的ERD" class="headerlink" title="常见视频app的ERD"></a>常见视频app的ERD</h3><pre class="mermaid">erDiagram
+<h3 id="demo-一个常见视频app的ERD"><a href="#demo-一个常见视频app的ERD" class="headerlink" title="demo 一个常见视频app的ERD"></a>demo 一个常见视频app的ERD</h3><pre class="mermaid">erDiagram
 User {
     string uid PK "用户唯一ID"
     string name
@@ -678,6 +661,89 @@ User ||--o{ Msg: has</pre>
   
   
 
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://blog.windqiu.com/post/4a17b156.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.png">
+      <meta itemprop="name" content="windqiu">
+      <meta itemprop="description" content="备忘录">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="windqiu's blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/post/4a17b156.html" class="post-title-link" itemprop="url">Hello World</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2022-05-01 10:00:00" itemprop="dateCreated datePublished" datetime="2022-05-01T10:00:00+08:00">2022-05-01</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2022-05-19 23:31:40" itemprop="dateModified" datetime="2022-05-19T23:31:40+08:00">2022-05-19</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E5%A4%87%E5%BF%98%E5%BD%95/" itemprop="url" rel="index"><span itemprop="name">备忘录</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>用来测试相关特性</p>
+<h1 id="测试代码块"><a href="#测试代码块" class="headerlink" title="测试代码块"></a>测试代码块</h1><figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">getFreeAddr</span><span class="params">()</span></span> (<span class="type">string</span>, <span class="type">error</span>) &#123;</span><br><span class="line">	tmpAddr, err := net.ResolveTCPAddr(<span class="string">&quot;tcp&quot;</span>, <span class="string">&quot;127.0.0.1:0&quot;</span>)</span><br><span class="line">	<span class="keyword">if</span> err != <span class="literal">nil</span> &#123;</span><br><span class="line">		<span class="keyword">return</span> <span class="string">&quot;&quot;</span>, err</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	l, err := net.ListenTCP(<span class="string">&quot;tcp&quot;</span>, tmpAddr)</span><br><span class="line">	<span class="keyword">if</span> err != <span class="literal">nil</span> &#123;</span><br><span class="line">		<span class="keyword">return</span> <span class="string">&quot;&quot;</span>, err</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	err = l.Close()</span><br><span class="line">	<span class="keyword">if</span> err != <span class="literal">nil</span> &#123;</span><br><span class="line">		<span class="keyword">return</span> <span class="string">&quot;&quot;</span>, err</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="keyword">return</span> l.Addr().String(), <span class="literal">nil</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h1 id="测试专用语法代码块"><a href="#测试专用语法代码块" class="headerlink" title="测试专用语法代码块"></a>测试专用语法代码块</h1><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">alert(&#x27;Hello World!&#x27;);</span><br></pre></td></tr></table></figure>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/post/4a17b156.html#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
 
   
 
@@ -746,7 +812,7 @@ User ||--o{ Msg: has</pre>
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">5</span>
+          <span class="site-state-item-count">6</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
@@ -865,6 +931,26 @@ if (document.querySelectorAll('pre.mermaid').length) {
   
 
   
+<script src="https://unpkg.com/darkmode-js@1.5.7/lib/darkmode-js.min.js"></script>
+
+<script>
+var options = {
+  bottom: '64px',
+  right: 'unset',
+  left: '32px',
+  time: '0.5s',
+  mixColor: 'transparent',
+  backgroundColor: 'transparent',
+  buttonColorDark: '#100f2c',
+  buttonColorLight: '#fff',
+  saveInCookies: true,
+  label: '🌓',
+  autoMatchOsTheme: true
+}
+const darkmode = new Darkmode(options);
+window.darkmode = darkmode;
+darkmode.showWidget();
+</script>
 
 
 </body>
