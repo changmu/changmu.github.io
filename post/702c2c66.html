@@ -30,7 +30,7 @@
 <meta property="og:description" content="ERD定义ERD全称Entity Relationship Diagrams, 提供了表示存储结构的实体类型、属性和联系的方法，用来描述存储设计。 Markdown的mermaid插件提供了代码绘制ERD的功能，功能简洁，便于维护。 ERD概念ERD的概念很简单，只需要将实体和实体间的关系描述清楚即可 实体Entity实体(entity) 表示一个存储的对象，使用长方形表现 erDiagram">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2022-05-16T13:27:42.000Z">
-<meta property="article:modified_time" content="2022-05-18T16:17:30.113Z">
+<meta property="article:modified_time" content="2022-05-24T15:36:10.895Z">
 <meta property="article:author" content="windqiu">
 <meta property="article:tag" content="ERD">
 <meta name="twitter:card" content="summary">
@@ -122,7 +122,7 @@
   </li>
         <li class="menu-item menu-item-archives">
 
-    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档<span class="badge">6</span></a>
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档<span class="badge">7</span></a>
 
   </li>
         <li class="menu-item menu-item-about">
@@ -132,7 +132,7 @@
   </li>
         <li class="menu-item menu-item-categories">
 
-    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类<span class="badge">7</span></a>
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类<span class="badge">6</span></a>
 
   </li>
         <li class="menu-item menu-item-schedule">
@@ -198,7 +198,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2022-05-19 00:17:30" itemprop="dateModified" datetime="2022-05-19T00:17:30+08:00">2022-05-19</time>
+                <time title="修改时间：2022-05-24 23:36:10" itemprop="dateModified" datetime="2022-05-24T23:36:10+08:00">2022-05-24</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -206,15 +206,22 @@
               </span>
               <span class="post-meta-item-text">分类于</span>
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E7%BC%96%E7%A8%8B%E6%8A%80%E6%9C%AF/" itemprop="url" rel="index"><span itemprop="name">编程技术</span></a>
+                  <a href="/categories/%E6%8A%80%E6%9C%AF/" itemprop="url" rel="index"><span itemprop="name">技术</span></a>
                 </span>
                   ，
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E7%BC%96%E7%A8%8B%E6%8A%80%E6%9C%AF/%E5%B7%A5%E5%85%B7/" itemprop="url" rel="index"><span itemprop="name">工具</span></a>
+                  <a href="/categories/%E6%8A%80%E6%9C%AF/%E5%B7%A5%E5%85%B7/" itemprop="url" rel="index"><span itemprop="name">工具</span></a>
                 </span>
             </span>
 
           
+            <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv" style="display: none;">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span id="busuanzi_value_page_pv"></span>
+            </span>
 
         </div>
       </header>
@@ -261,33 +268,53 @@ CAR {
 <h3 id="mermaid对ERD的支持"><a href="#mermaid对ERD的支持" class="headerlink" title="mermaid对ERD的支持"></a>mermaid对ERD的支持</h3><table>
 <thead>
 <tr>
-<th>ValueLeft</th>
-<th>ValueRight</th>
-<th>含义</th>
+<th align="center">ValueLeft</th>
+<th align="center">ValueRight</th>
+<th align="center">含义</th>
 </tr>
 </thead>
 <tbody><tr>
-<td>|o</td>
-<td>o|</td>
-<td>0或1个</td>
+<td align="center">|o</td>
+<td align="center">o|</td>
+<td align="center">0或1个</td>
 </tr>
 <tr>
-<td>||</td>
-<td>||</td>
-<td>1个</td>
+<td align="center">||</td>
+<td align="center">||</td>
+<td align="center">1个</td>
 </tr>
 <tr>
-<td>}o</td>
-<td>o{</td>
-<td>0或多个</td>
+<td align="center">}o</td>
+<td align="center">o{</td>
+<td align="center">0或多个</td>
 </tr>
 <tr>
-<td>}|</td>
-<td>|{</td>
-<td>1或多个</td>
+<td align="center">}|</td>
+<td align="center">|{</td>
+<td align="center">1或多个</td>
 </tr>
 </tbody></table>
-<h3 id="demo-一个常见视频app的ERD"><a href="#demo-一个常见视频app的ERD" class="headerlink" title="demo 一个常见视频app的ERD"></a>demo 一个常见视频app的ERD</h3><pre class="mermaid">erDiagram
+<h3 id="demo-app内测阶段激活码的ERD"><a href="#demo-app内测阶段激活码的ERD" class="headerlink" title="demo app内测阶段激活码的ERD"></a>demo app内测阶段激活码的ERD</h3><pre class="mermaid">erDiagram
+Channel {
+    int channel_id PK "渠道id"
+    string name "渠道名"
+}
+InvitationCode {
+    string code PK "邀请码"
+    int channel_id FK "渠道id"
+    int total "配额总个数"
+    int used "已使用个数"
+    int start_time "开始时间"
+    int end_time "结束时间"
+}
+InvitationUser {
+    string uid PK "被激活uid"
+    string code "激活码"
+    int ctime "激活时间"
+}
+Channel ||--o{ InvitationCode: has
+InvitationCode ||--o{ InvitationUser: has</pre>
+<h3 id="demo-常见视频app的ERD"><a href="#demo-常见视频app的ERD" class="headerlink" title="demo 常见视频app的ERD"></a>demo 常见视频app的ERD</h3><pre class="mermaid">erDiagram
 User {
     string uid PK "用户唯一ID"
     string name
@@ -421,7 +448,7 @@ User ||--o{ Msg: has</pre>
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#ERD%E5%AE%9A%E4%B9%89"><span class="nav-number">1.</span> <span class="nav-text">ERD定义</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#ERD%E6%A6%82%E5%BF%B5"><span class="nav-number">2.</span> <span class="nav-text">ERD概念</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AE%9E%E4%BD%93Entity"><span class="nav-number">2.1.</span> <span class="nav-text">实体Entity</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%85%B3%E8%81%94%E5%85%B3%E7%B3%BBRelationship"><span class="nav-number">2.2.</span> <span class="nav-text">关联关系Relationship</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#mermaid%E5%AF%B9ERD%E7%9A%84%E6%94%AF%E6%8C%81"><span class="nav-number">2.3.</span> <span class="nav-text">mermaid对ERD的支持</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#demo-%E4%B8%80%E4%B8%AA%E5%B8%B8%E8%A7%81%E8%A7%86%E9%A2%91app%E7%9A%84ERD"><span class="nav-number">2.4.</span> <span class="nav-text">demo 一个常见视频app的ERD</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%8F%82%E8%80%83%E6%96%87%E6%A1%A3"><span class="nav-number">2.5.</span> <span class="nav-text">参考文档</span></a></li></ol></li></ol></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#ERD%E5%AE%9A%E4%B9%89"><span class="nav-number">1.</span> <span class="nav-text">ERD定义</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#ERD%E6%A6%82%E5%BF%B5"><span class="nav-number">2.</span> <span class="nav-text">ERD概念</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AE%9E%E4%BD%93Entity"><span class="nav-number">2.1.</span> <span class="nav-text">实体Entity</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%85%B3%E8%81%94%E5%85%B3%E7%B3%BBRelationship"><span class="nav-number">2.2.</span> <span class="nav-text">关联关系Relationship</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#mermaid%E5%AF%B9ERD%E7%9A%84%E6%94%AF%E6%8C%81"><span class="nav-number">2.3.</span> <span class="nav-text">mermaid对ERD的支持</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#demo-app%E5%86%85%E6%B5%8B%E9%98%B6%E6%AE%B5%E6%BF%80%E6%B4%BB%E7%A0%81%E7%9A%84ERD"><span class="nav-number">2.4.</span> <span class="nav-text">demo app内测阶段激活码的ERD</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#demo-%E5%B8%B8%E8%A7%81%E8%A7%86%E9%A2%91app%E7%9A%84ERD"><span class="nav-number">2.5.</span> <span class="nav-text">demo 常见视频app的ERD</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%8F%82%E8%80%83%E6%96%87%E6%A1%A3"><span class="nav-number">2.6.</span> <span class="nav-text">参考文档</span></a></li></ol></li></ol></div>
       </div>
       <!--/noindex-->
 
@@ -437,14 +464,14 @@ User ||--o{ Msg: has</pre>
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">6</span>
+          <span class="site-state-item-count">7</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
             <a href="/categories/">
           
-        <span class="site-state-item-count">7</span>
+        <span class="site-state-item-count">6</span>
         <span class="site-state-item-name">分类</span></a>
       </div>
       <div class="site-state-item site-state-tags">
@@ -494,6 +521,26 @@ User ||--o{ Msg: has</pre>
   </div>
 
         
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    <span class="post-meta-item" id="busuanzi_container_site_uv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
 
 
 

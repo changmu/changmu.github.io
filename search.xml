@@ -39,33 +39,53 @@ CAR {
 <h3 id="mermaid对ERD的支持"><a href="#mermaid对ERD的支持" class="headerlink" title="mermaid对ERD的支持"></a>mermaid对ERD的支持</h3><table>
 <thead>
 <tr>
-<th>ValueLeft</th>
-<th>ValueRight</th>
-<th>含义</th>
+<th align="center">ValueLeft</th>
+<th align="center">ValueRight</th>
+<th align="center">含义</th>
 </tr>
 </thead>
 <tbody><tr>
-<td>|o</td>
-<td>o|</td>
-<td>0或1个</td>
+<td align="center">|o</td>
+<td align="center">o|</td>
+<td align="center">0或1个</td>
 </tr>
 <tr>
-<td>||</td>
-<td>||</td>
-<td>1个</td>
+<td align="center">||</td>
+<td align="center">||</td>
+<td align="center">1个</td>
 </tr>
 <tr>
-<td>}o</td>
-<td>o{</td>
-<td>0或多个</td>
+<td align="center">}o</td>
+<td align="center">o{</td>
+<td align="center">0或多个</td>
 </tr>
 <tr>
-<td>}|</td>
-<td>|{</td>
-<td>1或多个</td>
+<td align="center">}|</td>
+<td align="center">|{</td>
+<td align="center">1或多个</td>
 </tr>
 </tbody></table>
-<h3 id="demo-一个常见视频app的ERD"><a href="#demo-一个常见视频app的ERD" class="headerlink" title="demo 一个常见视频app的ERD"></a>demo 一个常见视频app的ERD</h3><pre class="mermaid">erDiagram
+<h3 id="demo-app内测阶段激活码的ERD"><a href="#demo-app内测阶段激活码的ERD" class="headerlink" title="demo app内测阶段激活码的ERD"></a>demo app内测阶段激活码的ERD</h3><pre class="mermaid">erDiagram
+Channel {
+    int channel_id PK "渠道id"
+    string name "渠道名"
+}
+InvitationCode {
+    string code PK "邀请码"
+    int channel_id FK "渠道id"
+    int total "配额总个数"
+    int used "已使用个数"
+    int start_time "开始时间"
+    int end_time "结束时间"
+}
+InvitationUser {
+    string uid PK "被激活uid"
+    string code "激活码"
+    int ctime "激活时间"
+}
+Channel ||--o{ InvitationCode: has
+InvitationCode ||--o{ InvitationUser: has</pre>
+<h3 id="demo-常见视频app的ERD"><a href="#demo-常见视频app的ERD" class="headerlink" title="demo 常见视频app的ERD"></a>demo 常见视频app的ERD</h3><pre class="mermaid">erDiagram
 User {
     string uid PK "用户唯一ID"
     string name
@@ -113,7 +133,7 @@ User ||--o{ Msg: has</pre>
 <p><a href="https://mermaid-js.github.io/mermaid/#/entityRelationshipDiagram">mermaid官方手册</a></p>
 ]]></content>
       <categories>
-        <category>编程技术</category>
+        <category>技术</category>
         <category>工具</category>
       </categories>
       <tags>
@@ -151,7 +171,6 @@ User ||--o{ Msg: has</pre>
       <categories>
         <category>易经</category>
         <category>子平</category>
-        <category>三刑</category>
       </categories>
   </entry>
   <entry>
@@ -172,7 +191,6 @@ User ||--o{ Msg: has</pre>
       <categories>
         <category>易经</category>
         <category>子平</category>
-        <category>用神</category>
       </categories>
   </entry>
   <entry>
@@ -182,6 +200,20 @@ User ||--o{ Msg: has</pre>
       <categories>
         <category>易经</category>
         <category>子平</category>
+      </categories>
+  </entry>
+  <entry>
+    <title>golang知识点总结</title>
+    <url>/post/393519b.html</url>
+    <content><![CDATA[<h1 id="GMP调度器"><a href="#GMP调度器" class="headerlink" title="GMP调度器"></a>GMP调度器</h1><p>linux默认线程大小是8MB(默认栈大小)<br>goroutine大小是8KB左右</p>
+<h3 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h3><ul>
+<li><a href="https://learnku.com/articles/41728">Golang 调度器 GMP 原理与调度全分析</a></li>
+<li><a href="https://www.yuque.com/aceld/golang/ithv8f">Golang修养之路</a></li>
+</ul>
+]]></content>
+      <categories>
+        <category>技术</category>
+        <category>golang</category>
       </categories>
   </entry>
 </search>
