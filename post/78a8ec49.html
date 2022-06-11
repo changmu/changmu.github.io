@@ -22,15 +22,15 @@
 
 <script class="next-config" data-name="main" type="application/json">{"hostname":"blog.windqiu.com","root":"/","images":"/images","scheme":"Pisces","darkmode":false,"version":"8.12.1","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":true,"style":"mac","show_result":true},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":"waline","storage":true,"lazyload":false,"nav":null,"activeClass":"waline"},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"}}</script><script src="/js/config.js"></script>
 
-    <meta name="description" content="比较 在比较不同类型的值时，处于相等判断符号 &#x3D;&#x3D; 两侧的值会先被转化为数字。空字符串和 false 也是如此，转化后它们都为数字 0。 严格相等运算符 &#x3D;&#x3D;&#x3D; 在进行比较时不会做任何的类型转换。12345&amp;#x27;&amp;#x27; &#x3D;&#x3D; false &#x2F;&#x2F; trueundefined &#x3D;&#x3D; null &#x2F;&#x2F; trueundefined &#x3D;&#x3D;&#x3D; null">
+    <meta name="description" content="‘use strict’; 严格模式下，当一个函数声明在一个代码块内时，它在该代码块内的任何位置都是可见的。但在代码块外不可见。  比较 在比较不同类型的值时，处于相等判断符号 &#x3D;&#x3D; 两侧的值会先被转化为数字。空字符串和 false 也是如此，转化后它们都为数字 0。 严格相等运算符 &#x3D;&#x3D;&#x3D; 在进行比较时不会做任何的类型转换。12345&amp;#x27;">
 <meta property="og:type" content="article">
 <meta property="og:title" content="javascript知识点总结">
 <meta property="og:url" content="https://blog.windqiu.com/post/78a8ec49.html">
 <meta property="og:site_name" content="windqiu&#39;s blog">
-<meta property="og:description" content="比较 在比较不同类型的值时，处于相等判断符号 &#x3D;&#x3D; 两侧的值会先被转化为数字。空字符串和 false 也是如此，转化后它们都为数字 0。 严格相等运算符 &#x3D;&#x3D;&#x3D; 在进行比较时不会做任何的类型转换。12345&amp;#x27;&amp;#x27; &#x3D;&#x3D; false &#x2F;&#x2F; trueundefined &#x3D;&#x3D; null &#x2F;&#x2F; trueundefined &#x3D;&#x3D;&#x3D; null">
+<meta property="og:description" content="‘use strict’; 严格模式下，当一个函数声明在一个代码块内时，它在该代码块内的任何位置都是可见的。但在代码块外不可见。  比较 在比较不同类型的值时，处于相等判断符号 &#x3D;&#x3D; 两侧的值会先被转化为数字。空字符串和 false 也是如此，转化后它们都为数字 0。 严格相等运算符 &#x3D;&#x3D;&#x3D; 在进行比较时不会做任何的类型转换。12345&amp;#x27;">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2022-06-10T01:08:33.000Z">
-<meta property="article:modified_time" content="2022-06-10T02:15:54.733Z">
+<meta property="article:modified_time" content="2022-06-11T06:30:35.294Z">
 <meta property="article:author" content="windqiu">
 <meta property="article:tag" content="技术 易经 备忘录">
 <meta name="twitter:card" content="summary">
@@ -118,7 +118,7 @@
       <div class="sidebar-panel-container">
         <!--noindex-->
         <div class="post-toc-wrap sidebar-panel">
-            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%AF%94%E8%BE%83"><span class="nav-number">1.</span> <span class="nav-text">比较</span></a></li></ol></div>
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E2%80%98use-strict%E2%80%99"><span class="nav-number">1.</span> <span class="nav-text">‘use strict’;</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%AF%94%E8%BE%83"><span class="nav-number">2.</span> <span class="nav-text">比较</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%A9%BA%E5%80%BC%E5%90%88%E5%B9%B6%E8%BF%90%E7%AE%97%E7%AC%A6"><span class="nav-number">3.</span> <span class="nav-text">空值合并运算符 ??</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%95%B0%E5%AD%97%E7%B1%BB%E5%9E%8B"><span class="nav-number">4.</span> <span class="nav-text">数字类型</span></a></li></ol></div>
         </div>
         <!--/noindex-->
 
@@ -219,9 +219,15 @@
         <i class="far fa-calendar"></i>
       </span>
       <span class="post-meta-item-text">发表于</span>
-      
 
-      <time title="创建时间：2022-06-10 09:08:33 / 修改时间：10:15:54" itemprop="dateCreated datePublished" datetime="2022-06-10T09:08:33+08:00">2022-06-10</time>
+      <time title="创建时间：2022-06-10 09:08:33" itemprop="dateCreated datePublished" datetime="2022-06-10T09:08:33+08:00">2022-06-10</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2022-06-11 14:30:35" itemprop="dateModified" datetime="2022-06-11T14:30:35+08:00">2022-06-11</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -265,7 +271,7 @@
         <i class="far fa-file-word"></i>
       </span>
       <span class="post-meta-item-text">本文字数：</span>
-      <span>241</span>
+      <span>454</span>
     </span>
     <span class="post-meta-item" title="阅读时长">
       <span class="post-meta-item-icon">
@@ -283,9 +289,21 @@
     
     
     <div class="post-body" itemprop="articleBody">
-        <h1 id="比较"><a href="#比较" class="headerlink" title="比较"></a>比较</h1><ul>
+        <h1 id="‘use-strict’"><a href="#‘use-strict’" class="headerlink" title="‘use strict’;"></a>‘use strict’;</h1><ul>
+<li>严格模式下，当一个函数声明在一个代码块内时，它在该代码块内的任何位置都是可见的。但在代码块外不可见。</li>
+</ul>
+<h1 id="比较"><a href="#比较" class="headerlink" title="比较"></a>比较</h1><ul>
 <li>在比较不同类型的值时，处于相等判断符号 &#x3D;&#x3D; 两侧的值会先被转化为数字。空字符串和 false 也是如此，转化后它们都为数字 0。</li>
 <li>严格相等运算符 &#x3D;&#x3D;&#x3D; 在进行比较时不会做任何的类型转换。<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">&#x27;&#x27; == false // true</span><br><span class="line">undefined == null // true</span><br><span class="line">undefined === null // false</span><br><span class="line">undefined == undefined // true</span><br><span class="line">undefined === undefined // true</span><br></pre></td></tr></table></figure></li>
+</ul>
+<h1 id="空值合并运算符"><a href="#空值合并运算符" class="headerlink" title="空值合并运算符 ??"></a>空值合并运算符 ??</h1><p>空值合并运算符 ?? 是最近才被添加到 JavaScript 中的，它的出现是因为人们对 || 不太满意。<br>它们之间重要的区别是：</p>
+<ul>
+<li>|| 返回第一个 真 值。</li>
+<li>?? 返回第一个 已定义的 值。</li>
+</ul>
+<h1 id="数字类型"><a href="#数字类型" class="headerlink" title="数字类型"></a>数字类型</h1><ul>
+<li>NaN &#x3D;&#x3D;&#x3D; NaN &#x2F;&#x2F; false</li>
+<li>判断数字是否有效<code>isFinite</code></li>
 </ul>
 
     </div>
