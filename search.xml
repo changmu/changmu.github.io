@@ -141,6 +141,13 @@ User ||--o{ Msg: has</pre>
       </tags>
   </entry>
   <entry>
+    <title>golang code snippet</title>
+    <url>/post/cee729f9.html</url>
+    <content><![CDATA[<h2 id="列表去重"><a href="#列表去重" class="headerlink" title="列表去重"></a>列表去重</h2><figure class="highlight go"><table><tr><td class="code"><pre><span class="line"><span class="comment">// RmDupAndEmptyOfList 列表元素去重并去空</span></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">RmDupAndEmptyOfList</span><span class="params">(list []<span class="type">string</span>)</span></span> []<span class="type">string</span> &#123;</span><br><span class="line">	mp := <span class="keyword">map</span>[<span class="type">string</span>]<span class="type">bool</span>&#123;&#125;</span><br><span class="line">	<span class="keyword">for</span> _, item := <span class="keyword">range</span> list &#123;</span><br><span class="line">		<span class="keyword">if</span> item != <span class="string">&quot;&quot;</span> &#123;</span><br><span class="line">			mp[item] = <span class="literal">true</span></span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="keyword">var</span> listUniq []<span class="type">string</span></span><br><span class="line">	<span class="keyword">for</span> k := <span class="keyword">range</span> mp &#123;</span><br><span class="line">		listUniq = <span class="built_in">append</span>(listUniq, k)</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="keyword">return</span> listUniq</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="并发处理任务"><a href="#并发处理任务" class="headerlink" title="并发处理任务"></a>并发处理任务</h2><figure class="highlight go"><table><tr><td class="code"><pre><span class="line"><span class="comment">// GoAndWait 封装更安全的多并发调用, 启动goroutine并等待所有处理流程完成，自动recover</span></span><br><span class="line"><span class="comment">// 返回值error返回的是多并发协程里面第一个返回的不为nil的error，主要用于关键路径判断，当多并发协程里面有一个是关键路径且有失败则返回err，其他非关键路径并发全部返回nil</span></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">GoAndWait</span><span class="params">(handlers ...<span class="keyword">func</span>()</span></span> <span class="type">error</span>) <span class="type">error</span> &#123;</span><br><span class="line">	<span class="keyword">var</span> (</span><br><span class="line">		wg   sync.WaitGroup</span><br><span class="line">		once sync.Once</span><br><span class="line">		err  <span class="type">error</span></span><br><span class="line">	)</span><br><span class="line">	<span class="keyword">for</span> _, f := <span class="keyword">range</span> handlers &#123;</span><br><span class="line">		wg.Add(<span class="number">1</span>)</span><br><span class="line">		<span class="keyword">go</span> <span class="function"><span class="keyword">func</span><span class="params">(handler <span class="keyword">func</span>()</span></span> <span class="type">error</span>) &#123;</span><br><span class="line">			<span class="keyword">defer</span> <span class="function"><span class="keyword">func</span><span class="params">()</span></span> &#123;</span><br><span class="line">				<span class="keyword">if</span> e := <span class="built_in">recover</span>(); e != <span class="literal">nil</span> &#123;</span><br><span class="line">					buf := <span class="built_in">make</span>([]<span class="type">byte</span>, PanicBufLen)</span><br><span class="line">					buf = buf[:runtime.Stack(buf, <span class="literal">false</span>)]</span><br><span class="line">					log.Errorf(<span class="string">&quot;[PANIC]%v\n%s\n&quot;</span>, e, buf)</span><br><span class="line">					once.Do(<span class="function"><span class="keyword">func</span><span class="params">()</span></span> &#123;</span><br><span class="line">						err = errs.New(errs.RetServerSystemErr, <span class="string">&quot;panic found in call handlers&quot;</span>)</span><br><span class="line">					&#125;)</span><br><span class="line">				&#125;</span><br><span class="line">				wg.Done()</span><br><span class="line">			&#125;()</span><br><span class="line">			<span class="keyword">if</span> e := handler(); e != <span class="literal">nil</span> &#123;</span><br><span class="line">				once.Do(<span class="function"><span class="keyword">func</span><span class="params">()</span></span> &#123;</span><br><span class="line">					err = e</span><br><span class="line">				&#125;)</span><br><span class="line">			&#125;</span><br><span class="line">		&#125;(f)</span><br><span class="line">	&#125;</span><br><span class="line">	wg.Wait()</span><br><span class="line">	<span class="keyword">return</span> err</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>]]></content>
+  </entry>
+  <entry>
     <title>golang知识点总结</title>
     <url>/post/393519b.html</url>
     <content><![CDATA[<h1 id="GMP调度器"><a href="#GMP调度器" class="headerlink" title="GMP调度器"></a>GMP调度器</h1><p>gmp可以理解为是golang管理协程的一套算法</p>
@@ -156,25 +163,46 @@ User ||--o{ Msg: has</pre>
       </categories>
   </entry>
   <entry>
-    <title>论寅巳申三刑</title>
-    <url>/post/ee408ec8.html</url>
-    <content><![CDATA[<p>寅巳申三刑是地支刑冲破害合会关系中的一种，本身无关吉凶，其吉凶体现在以下各个场景</p>
-<h2 id="1-申金柱透出庚金"><a href="#1-申金柱透出庚金" class="headerlink" title="1.申金柱透出庚金"></a>1.申金柱透出庚金</h2><p>此时庚金受伤，若庚金为用神，则吉，否则凶，具体应事看受伤的十神</p>
-]]></content>
-      <categories>
-        <category>易经</category>
-        <category>子平</category>
-      </categories>
-  </entry>
-  <entry>
     <title>Hello World</title>
     <url>/post/4a17b156.html</url>
     <content><![CDATA[<p>用来测试相关特性.</p>
 <h1 id="测试代码块"><a href="#测试代码块" class="headerlink" title="测试代码块"></a>测试代码块</h1><figure class="highlight go"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">getFreeAddr</span><span class="params">()</span></span> (<span class="type">string</span>, <span class="type">error</span>) &#123;</span><br><span class="line">	tmpAddr, err := net.ResolveTCPAddr(<span class="string">&quot;tcp&quot;</span>, <span class="string">&quot;127.0.0.1:0&quot;</span>)</span><br><span class="line">	<span class="keyword">if</span> err != <span class="literal">nil</span> &#123;</span><br><span class="line">		<span class="keyword">return</span> <span class="string">&quot;&quot;</span>, err</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	l, err := net.ListenTCP(<span class="string">&quot;tcp&quot;</span>, tmpAddr)</span><br><span class="line">	<span class="keyword">if</span> err != <span class="literal">nil</span> &#123;</span><br><span class="line">		<span class="keyword">return</span> <span class="string">&quot;&quot;</span>, err</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	err = l.Close()</span><br><span class="line">	<span class="keyword">if</span> err != <span class="literal">nil</span> &#123;</span><br><span class="line">		<span class="keyword">return</span> <span class="string">&quot;&quot;</span>, err</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="keyword">return</span> l.Addr().String(), <span class="literal">nil</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
 <h1 id="测试专用语法代码块"><a href="#测试专用语法代码块" class="headerlink" title="测试专用语法代码块"></a>测试专用语法代码块</h1><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">alert(&#x27;Hello World!&#x27;);</span><br></pre></td></tr></table></figure>
 
 <span id="more"></span>
-<h2 id="Quick-Start"><a href="#Quick-Start" class="headerlink" title="Quick Start"></a>Quick Start</h2>]]></content>
+
+<h2 id="Quick-Start"><a href="#Quick-Start" class="headerlink" title="Quick Start"></a>Quick Start</h2><pre class="mermaid">gantt
+    dateFormat  YYYY-MM-DD
+    title       Adding GANTT diagram functionality to mermaid
+    excludes    weekends
+    %% (`excludes` accepts specific dates in YYYY-MM-DD format, days of the week ("sunday") or "weekends", but not the word "weekdays".)
+
+    section A section
+    Completed task            :done,    des1, 2014-01-06,2014-01-08
+    Active task               :active,  des2, 2014-01-09, 3d
+    Future task               :         des3, after des2, 5d
+    Future task2              :         des4, after des3, 5d
+
+    section Critical tasks
+    Completed task in the critical line :crit, done, 2014-01-06,24h
+    Implement parser and jison          :crit, done, after des1, 2d
+    Create tests for parser             :crit, active, 3d
+    Future task in critical line        :crit, 5d
+    Create tests for renderer           :2d
+    Add to mermaid                      :1d
+    Functionality added                 :milestone, 2014-01-25, 0d
+
+    section Documentation
+    Describe gantt syntax               :active, a1, after des1, 3d
+    Add gantt diagram to demo page      :after a1  , 20h
+    Add another diagram to demo page    :doc1, after a1  , 48h
+
+    section Last section
+    Describe gantt syntax               :after doc1, 3d
+    Add gantt diagram to demo page      :20h
+    Add another diagram to demo page    :48h</pre>
+]]></content>
       <categories>
         <category>备忘录</category>
       </categories>
@@ -445,13 +473,6 @@ User ||--o{ Msg: has</pre>
       </tags>
   </entry>
   <entry>
-    <title>golang code snippet</title>
-    <url>/post/cee729f9.html</url>
-    <content><![CDATA[<h2 id="列表去重"><a href="#列表去重" class="headerlink" title="列表去重"></a>列表去重</h2><figure class="highlight go"><table><tr><td class="code"><pre><span class="line"><span class="comment">// RmDupAndEmptyOfList 列表元素去重并去空</span></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">RmDupAndEmptyOfList</span><span class="params">(list []<span class="type">string</span>)</span></span> []<span class="type">string</span> &#123;</span><br><span class="line">	mp := <span class="keyword">map</span>[<span class="type">string</span>]<span class="type">bool</span>&#123;&#125;</span><br><span class="line">	<span class="keyword">for</span> _, item := <span class="keyword">range</span> list &#123;</span><br><span class="line">		<span class="keyword">if</span> item != <span class="string">&quot;&quot;</span> &#123;</span><br><span class="line">			mp[item] = <span class="literal">true</span></span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="keyword">var</span> listUniq []<span class="type">string</span></span><br><span class="line">	<span class="keyword">for</span> k := <span class="keyword">range</span> mp &#123;</span><br><span class="line">		listUniq = <span class="built_in">append</span>(listUniq, k)</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="keyword">return</span> listUniq</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<h2 id="并发处理任务"><a href="#并发处理任务" class="headerlink" title="并发处理任务"></a>并发处理任务</h2><figure class="highlight go"><table><tr><td class="code"><pre><span class="line"><span class="comment">// GoAndWait 封装更安全的多并发调用, 启动goroutine并等待所有处理流程完成，自动recover</span></span><br><span class="line"><span class="comment">// 返回值error返回的是多并发协程里面第一个返回的不为nil的error，主要用于关键路径判断，当多并发协程里面有一个是关键路径且有失败则返回err，其他非关键路径并发全部返回nil</span></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">GoAndWait</span><span class="params">(handlers ...<span class="keyword">func</span>()</span></span> <span class="type">error</span>) <span class="type">error</span> &#123;</span><br><span class="line">	<span class="keyword">var</span> (</span><br><span class="line">		wg   sync.WaitGroup</span><br><span class="line">		once sync.Once</span><br><span class="line">		err  <span class="type">error</span></span><br><span class="line">	)</span><br><span class="line">	<span class="keyword">for</span> _, f := <span class="keyword">range</span> handlers &#123;</span><br><span class="line">		wg.Add(<span class="number">1</span>)</span><br><span class="line">		<span class="keyword">go</span> <span class="function"><span class="keyword">func</span><span class="params">(handler <span class="keyword">func</span>()</span></span> <span class="type">error</span>) &#123;</span><br><span class="line">			<span class="keyword">defer</span> <span class="function"><span class="keyword">func</span><span class="params">()</span></span> &#123;</span><br><span class="line">				<span class="keyword">if</span> e := <span class="built_in">recover</span>(); e != <span class="literal">nil</span> &#123;</span><br><span class="line">					buf := <span class="built_in">make</span>([]<span class="type">byte</span>, PanicBufLen)</span><br><span class="line">					buf = buf[:runtime.Stack(buf, <span class="literal">false</span>)]</span><br><span class="line">					log.Errorf(<span class="string">&quot;[PANIC]%v\n%s\n&quot;</span>, e, buf)</span><br><span class="line">					once.Do(<span class="function"><span class="keyword">func</span><span class="params">()</span></span> &#123;</span><br><span class="line">						err = errs.New(errs.RetServerSystemErr, <span class="string">&quot;panic found in call handlers&quot;</span>)</span><br><span class="line">					&#125;)</span><br><span class="line">				&#125;</span><br><span class="line">				wg.Done()</span><br><span class="line">			&#125;()</span><br><span class="line">			<span class="keyword">if</span> e := handler(); e != <span class="literal">nil</span> &#123;</span><br><span class="line">				once.Do(<span class="function"><span class="keyword">func</span><span class="params">()</span></span> &#123;</span><br><span class="line">					err = e</span><br><span class="line">				&#125;)</span><br><span class="line">			&#125;</span><br><span class="line">		&#125;(f)</span><br><span class="line">	&#125;</span><br><span class="line">	wg.Wait()</span><br><span class="line">	<span class="keyword">return</span> err</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>]]></content>
-  </entry>
-  <entry>
     <title>论用神</title>
     <url>/post/935779c7.html</url>
     <content><![CDATA[<p>用神，就是对命主有好处的干支，能雪中送炭，能锦上添花。</p>
@@ -465,6 +486,17 @@ User ||--o{ Msg: has</pre>
 </ul>
 <h2 id="扶抑用神"><a href="#扶抑用神" class="headerlink" title="扶抑用神"></a>扶抑用神</h2><p>这也是目前最流行的一种用神定位方式，以追求日元平衡为目标。先看日主强弱，综合全盘衡量自党异党力量对比，日元强则喜克泄耗，弱则喜扶助。</p>
 <p>TODO</p>
+]]></content>
+      <categories>
+        <category>易经</category>
+        <category>子平</category>
+      </categories>
+  </entry>
+  <entry>
+    <title>论寅巳申三刑</title>
+    <url>/post/ee408ec8.html</url>
+    <content><![CDATA[<p>寅巳申三刑是地支刑冲破害合会关系中的一种，本身无关吉凶，其吉凶体现在以下各个场景</p>
+<h2 id="1-申金柱透出庚金"><a href="#1-申金柱透出庚金" class="headerlink" title="1.申金柱透出庚金"></a>1.申金柱透出庚金</h2><p>此时庚金受伤，若庚金为用神，则吉，否则凶，具体应事看受伤的十神</p>
 ]]></content>
       <categories>
         <category>易经</category>
@@ -488,8 +520,10 @@ User ||--o{ Msg: has</pre>
 </ul>
 <h1 id="比较"><a href="#比较" class="headerlink" title="比较"></a>比较</h1><ul>
 <li>在比较不同类型的值时，处于相等判断符号 &#x3D;&#x3D; 两侧的值会先被转化为数字。空字符串和 false 也是如此，转化后它们都为数字 0。</li>
-<li>严格相等运算符 &#x3D;&#x3D;&#x3D; 在进行比较时不会做任何的类型转换。<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">&#x27;&#x27; == false // true</span><br><span class="line">undefined == null // true</span><br><span class="line">undefined === null // false</span><br><span class="line">undefined == undefined // true</span><br><span class="line">undefined === undefined // true</span><br></pre></td></tr></table></figure></li>
+<li>严格相等运算符 &#x3D;&#x3D;&#x3D; 在进行比较时不会做任何的类型转换。</li>
 </ul>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">&#x27;&#x27; == false // true</span><br><span class="line">undefined == null // true</span><br><span class="line">undefined === null // false</span><br><span class="line">undefined == undefined // true</span><br><span class="line">undefined === undefined // true</span><br></pre></td></tr></table></figure>
+
 <h1 id="空值合并运算符"><a href="#空值合并运算符" class="headerlink" title="空值合并运算符 ??"></a>空值合并运算符 ??</h1><p>空值合并运算符 ?? 是最近才被添加到 JavaScript 中的，它的出现是因为人们对 || 不太满意。<br>它们之间重要的区别是：</p>
 <ul>
 <li>|| 返回第一个 真 值。</li>
@@ -497,30 +531,62 @@ User ||--o{ Msg: has</pre>
 </ul>
 <h1 id="数字类型"><a href="#数字类型" class="headerlink" title="数字类型"></a>数字类型</h1><ul>
 <li>NaN &#x3D;&#x3D;&#x3D; NaN &#x2F;&#x2F; false</li>
-<li>判断数字是否有效<code>isFinite</code></li>
-<li>生成指定范围内概率均匀的随机整数<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="keyword">function</span> <span class="title function_">randomInteger</span>(<span class="params">min, max</span>) &#123;</span><br><span class="line">  <span class="comment">// here rand is from min to (max+1)</span></span><br><span class="line">  <span class="keyword">let</span> rand = min + <span class="title class_">Math</span>.<span class="title function_">random</span>() * (max + <span class="number">1</span> - min);</span><br><span class="line">  <span class="keyword">return</span> <span class="title class_">Math</span>.<span class="title function_">floor</span>(rand);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li>
+<li>判断数字是否有效 <code>isFinite</code></li>
+<li>生成指定范围内概率均匀的随机整数</li>
 </ul>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="keyword">function</span> <span class="title function_">randomInteger</span>(<span class="params">min, max</span>) &#123;</span><br><span class="line">  <span class="comment">// here rand is from min to (max+1)</span></span><br><span class="line">  <span class="keyword">let</span> rand = min + <span class="title class_">Math</span>.<span class="title function_">random</span>() * (max + <span class="number">1</span> - min);</span><br><span class="line">  <span class="keyword">return</span> <span class="title class_">Math</span>.<span class="title function_">floor</span>(rand);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
 <h1 id="数组"><a href="#数组" class="headerlink" title="数组"></a>数组</h1><ul>
 <li>取最后一个元素: <code>fruits.at(-1)</code></li>
-<li>遍历数组使用<code>for (let fruit of fruits)</code></li>
+<li>遍历数组使用 <code>for (let fruit of fruits)</code></li>
 <li>清空数组最简单的方法就是: <code>arr.length = 0</code></li>
-<li>数组删除元素用<code>arr.splice(start[, deleteCount, elem1, ..., elemN])</code></li>
-<li>拷贝数组<code>arr.slice()</code></li>
-<li>拼接多个数组<code>arr.concat()</code></li>
-<li>判断对象是否为数组<code>Array.isArray()</code></li>
+<li>数组删除元素用 <code>arr.splice(start[, deleteCount, elem1, ..., elemN])</code></li>
+<li>拷贝数组 <code>arr.slice()</code></li>
+<li>拼接多个数组 <code>arr.concat()</code></li>
+<li>判断对象是否为数组 <code>Array.isArray()</code></li>
 </ul>
 <h1 id="对象"><a href="#对象" class="headerlink" title="对象"></a>对象</h1><ul>
-<li>对象解构赋值，函数参数默认值<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="keyword">function</span> <span class="title function_">showMenu</span>(<span class="params">&#123; title = <span class="string">&quot;Menu&quot;</span>, width = <span class="number">100</span>, height = <span class="number">200</span> &#125; = &#123;&#125;</span>) &#123;</span><br><span class="line">    <span class="title function_">alert</span>( <span class="string">`<span class="subst">$&#123;title&#125;</span> <span class="subst">$&#123;width&#125;</span> <span class="subst">$&#123;height&#125;</span>`</span> );</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li>
+<li>对象解构赋值，函数参数默认值</li>
 </ul>
-<h1 id="函数"><a href="#函数" class="headerlink" title="函数"></a>函数</h1><ul>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="keyword">function</span> <span class="title function_">showMenu</span>(<span class="params">&#123; title = <span class="string">&quot;Menu&quot;</span>, width = <span class="number">100</span>, height = <span class="number">200</span> &#125; = &#123;&#125;</span>) &#123;</span><br><span class="line">    <span class="title function_">alert</span>( <span class="string">`<span class="subst">$&#123;title&#125;</span> <span class="subst">$&#123;width&#125;</span> <span class="subst">$&#123;height&#125;</span>`</span> );</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>使用 Object.create 来实现比复制 for..in 循环中的属性更强大的对象克隆方式：<br><code>let clone = Object.create(Object.getPrototypeOf(obj), Object.getOwnPropertyDescriptors(obj));</code></li>
+<li>使用 Object.create(null) 创建一个没有 <strong>proto</strong> 的 “very plain” 对象，或者对此类场景坚持使用 Map 对象就可以了。</li>
+</ul>
+<h1 id="this"><a href="#this" class="headerlink" title="this"></a>this</h1><ul>
 <li>箭头函数 this 的查找与常规变量的搜索方式完全相同：在外部词法环境中查找。</li>
 <li>普通函数this在调用时决定，即调用对象</li>
 <li>在一个对象还是在原型中。在一个方法调用中，this 始终是点符号 . 前面的对象。this 根本不受原型的影响。</li>
+</ul>
+<h1 id="继承"><a href="#继承" class="headerlink" title="继承"></a>继承</h1><ul>
+<li>for..in 循环在其自身和继承的属性上进行迭代。所有其他的键&#x2F;值获取方法仅对对象本身起作用。</li>
+<li>几乎所有其他键&#x2F;值获取方法，例如 Object.keys 和 Object.values 等，都会忽略继承的属性。它们只会对对象自身进行操作。不考虑 继承自原型的属性。</li>
+<li>父类构造器总是会使用它自己字段的值，而不是被重写的那一个。</li>
 </ul>
 ]]></content>
       <categories>
         <category>技术</category>
         <category>javascript</category>
+      </categories>
+  </entry>
+  <entry>
+    <title>八字案例收集</title>
+    <url>/post/9a56a5e1.html</url>
+    <content><![CDATA[<h3 id="case-1-坤造-壬戌-辛亥-甲子-丙寅"><a href="#case-1-坤造-壬戌-辛亥-甲子-丙寅" class="headerlink" title="case 1: 坤造: 壬戌 辛亥 甲子 丙寅"></a>case 1: 坤造: 壬戌 辛亥 甲子 丙寅</h3><blockquote>
+<p>大运: 庚戌 己酉 戊申 丁未 丙午</p>
+</blockquote>
+<ul>
+<li>分析: 日主身强，正官格，偏印格，食神格，用火土金</li>
+<li>优点: 己酉、戊申运，夫星旺相，夫登甲第，官至御史</li>
+<li>缺点: 运入南方，旺火烧金夫，丁未夫死孀居</li>
+<li>综合: 中年旺夫，晚年旺子，夫明子秀</li>
+<li>出自: 《神峰通考》</li>
+</ul>
+]]></content>
+      <categories>
+        <category>易经</category>
+        <category>子平</category>
       </categories>
   </entry>
 </search>
