@@ -30,7 +30,7 @@
 <meta property="og:description" content="‘use strict’; 严格模式下，当一个函数声明在一个代码块内时，它在该代码块内的任何位置都是可见的。但在代码块外不可见。  比较 在比较不同类型的值时，处于相等判断符号 &#x3D;&#x3D; 两侧的值会先被转化为数字。空字符串和 false 也是如此，转化后它们都为数字 0。 严格相等运算符 &#x3D;&#x3D;&#x3D; 在进行比较时不会做任何的类型转换。  12345&amp;#x2">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2022-06-10T01:08:33.000Z">
-<meta property="article:modified_time" content="2022-06-16T13:50:37.241Z">
+<meta property="article:modified_time" content="2022-06-19T06:36:57.384Z">
 <meta property="article:author" content="windqiu">
 <meta property="article:tag" content="技术 易经 备忘录">
 <meta name="twitter:card" content="summary">
@@ -118,7 +118,7 @@
       <div class="sidebar-panel-container">
         <!--noindex-->
         <div class="post-toc-wrap sidebar-panel">
-            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E2%80%98use-strict%E2%80%99"><span class="nav-number">1.</span> <span class="nav-text">‘use strict’;</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%AF%94%E8%BE%83"><span class="nav-number">2.</span> <span class="nav-text">比较</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%A9%BA%E5%80%BC%E5%90%88%E5%B9%B6%E8%BF%90%E7%AE%97%E7%AC%A6"><span class="nav-number">3.</span> <span class="nav-text">空值合并运算符 ??</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%95%B0%E7%BB%84"><span class="nav-number">4.</span> <span class="nav-text">数组</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%AF%B9%E8%B1%A1"><span class="nav-number">5.</span> <span class="nav-text">对象</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#this"><span class="nav-number">6.</span> <span class="nav-text">this</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%BB%A7%E6%89%BF"><span class="nav-number">7.</span> <span class="nav-text">继承</span></a></li></ol></div>
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E2%80%98use-strict%E2%80%99"><span class="nav-number">1.</span> <span class="nav-text">‘use strict’;</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%AF%94%E8%BE%83"><span class="nav-number">2.</span> <span class="nav-text">比较</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%A9%BA%E5%80%BC%E5%90%88%E5%B9%B6%E8%BF%90%E7%AE%97%E7%AC%A6"><span class="nav-number">3.</span> <span class="nav-text">空值合并运算符 ??</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%95%B0%E7%BB%84"><span class="nav-number">4.</span> <span class="nav-text">数组</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%AF%B9%E8%B1%A1"><span class="nav-number">5.</span> <span class="nav-text">对象</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#this"><span class="nav-number">6.</span> <span class="nav-text">this</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%BB%A7%E6%89%BF"><span class="nav-number">7.</span> <span class="nav-text">继承</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%A8%A1%E5%9D%97"><span class="nav-number">8.</span> <span class="nav-text">模块</span></a></li></ol></div>
         </div>
         <!--/noindex-->
 
@@ -227,7 +227,7 @@
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">更新于</span>
-      <time title="修改时间：2022-06-16 21:50:37" itemprop="dateModified" datetime="2022-06-16T21:50:37+08:00">2022-06-16</time>
+      <time title="修改时间：2022-06-19 14:36:57" itemprop="dateModified" datetime="2022-06-19T14:36:57+08:00">2022-06-19</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -271,7 +271,7 @@
         <i class="far fa-file-word"></i>
       </span>
       <span class="post-meta-item-text">本文字数：</span>
-      <span>1.5k</span>
+      <span>1.6k</span>
     </span>
     <span class="post-meta-item" title="阅读时长">
       <span class="post-meta-item-icon">
@@ -338,6 +338,12 @@
 <li>for..in 循环在其自身和继承的属性上进行迭代。所有其他的键&#x2F;值获取方法仅对对象本身起作用。</li>
 <li>几乎所有其他键&#x2F;值获取方法，例如 Object.keys 和 Object.values 等，都会忽略继承的属性。它们只会对对象自身进行操作。不考虑 继承自原型的属性。</li>
 <li>父类构造器总是会使用它自己字段的值，而不是被重写的那一个。</li>
+</ul>
+<h1 id="模块"><a href="#模块" class="headerlink" title="模块"></a>模块</h1><ul>
+<li>模块脚本是被延迟的，所以要等到 HTML 文档被处理完成才会执行它。</li>
+<li>模块具有自己的本地顶级作用域，并可以通过 import&#x2F;export 交换功能。</li>
+<li>模块始终使用 use strict。</li>
+<li>模块代码只执行一次。导出仅创建一次，然后会在导入之间共享。</li>
 </ul>
 
     </div>
