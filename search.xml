@@ -250,119 +250,6 @@ User ||--o{ Msg: has</pre>
       </categories>
   </entry>
   <entry>
-    <title>论用神</title>
-    <url>/post/935779c7.html</url>
-    <content><![CDATA[<p>用神，就是对命主有好处的干支，能雪中送炭，能锦上添花。</p>
-<span id="more"></span>
-<p>用神可以分成下面四类</p>
-<ul>
-<li>扶抑用神</li>
-<li>格局用神</li>
-<li>调候用神</li>
-<li>通关用神</li>
-</ul>
-<h2 id="扶抑用神"><a href="#扶抑用神" class="headerlink" title="扶抑用神"></a>扶抑用神</h2><p>这也是目前最流行的一种用神定位方式，以追求日元平衡为目标。先看日主强弱，综合全盘衡量自党异党力量对比，日元强则喜克泄耗，弱则喜扶助。</p>
-<p>TODO</p>
-]]></content>
-      <categories>
-        <category>易经</category>
-        <category>子平</category>
-      </categories>
-  </entry>
-  <entry>
-    <title>javascript知识点总结</title>
-    <url>/post/78a8ec49.html</url>
-    <content><![CDATA[<h1 id="‘use-strict’"><a href="#‘use-strict’" class="headerlink" title="‘use strict’;"></a>‘use strict’;</h1><ul>
-<li>严格模式下，当一个函数声明在一个代码块内时，它在该代码块内的任何位置都是可见的。但在代码块外不可见。</li>
-</ul>
-<h1 id="比较"><a href="#比较" class="headerlink" title="比较"></a>比较</h1><ul>
-<li>在比较不同类型的值时，处于相等判断符号 &#x3D;&#x3D; 两侧的值会先被转化为数字。空字符串和 false 也是如此，转化后它们都为数字 0。</li>
-<li>严格相等运算符 &#x3D;&#x3D;&#x3D; 在进行比较时不会做任何的类型转换。</li>
-</ul>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">&#x27;&#x27; == false // true</span><br><span class="line">undefined == null // true</span><br><span class="line">undefined === null // false</span><br><span class="line">undefined == undefined // true</span><br><span class="line">undefined === undefined // true</span><br></pre></td></tr></table></figure>
-
-<h1 id="空值合并运算符"><a href="#空值合并运算符" class="headerlink" title="空值合并运算符 ??"></a>空值合并运算符 ??</h1><p>空值合并运算符 ?? 是最近才被添加到 JavaScript 中的，它的出现是因为人们对 || 不太满意。<br>它们之间重要的区别是：</p>
-<ul>
-<li>|| 返回第一个 真 值。</li>
-<li>?? 返回第一个 已定义的 值。</li>
-</ul>
-<p>数字类型</p>
-<ul>
-<li>NaN &#x3D;&#x3D;&#x3D; NaN &#x2F;&#x2F; false</li>
-<li>判断数字是否有效 <code>isFinite</code></li>
-<li>生成指定范围内概率均匀的随机整数</li>
-</ul>
-<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="keyword">function</span> <span class="title function_">randomInteger</span>(<span class="params">min, max</span>) &#123;</span><br><span class="line">  <span class="comment">// here rand is from min to (max+1)</span></span><br><span class="line">  <span class="keyword">let</span> rand = min + <span class="title class_">Math</span>.<span class="title function_">random</span>() * (max + <span class="number">1</span> - min);</span><br><span class="line">  <span class="keyword">return</span> <span class="title class_">Math</span>.<span class="title function_">floor</span>(rand);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<h1 id="数组"><a href="#数组" class="headerlink" title="数组"></a>数组</h1><ul>
-<li>取最后一个元素: <code>fruits.at(-1)</code></li>
-<li>遍历数组使用 <code>for (let fruit of fruits)</code></li>
-<li>清空数组最简单的方法就是: <code>arr.length = 0</code></li>
-<li>数组删除元素用 <code>arr.splice(start[, deleteCount, elem1, ..., elemN])</code></li>
-<li>拷贝数组 <code>arr.slice()</code></li>
-<li>拼接多个数组 <code>arr.concat()</code></li>
-<li>判断对象是否为数组 <code>Array.isArray()</code></li>
-</ul>
-<h1 id="对象"><a href="#对象" class="headerlink" title="对象"></a>对象</h1><ul>
-<li>对象解构赋值，函数参数默认值</li>
-</ul>
-<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="keyword">function</span> <span class="title function_">showMenu</span>(<span class="params">&#123; title = <span class="string">&quot;Menu&quot;</span>, width = <span class="number">100</span>, height = <span class="number">200</span> &#125; = &#123;&#125;</span>) &#123;</span><br><span class="line">    <span class="title function_">alert</span>( <span class="string">`<span class="subst">$&#123;title&#125;</span> <span class="subst">$&#123;width&#125;</span> <span class="subst">$&#123;height&#125;</span>`</span> );</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<ul>
-<li>使用 Object.create 来实现比复制 for..in 循环中的属性更强大的对象克隆方式：<br><code>let clone = Object.create(Object.getPrototypeOf(obj), Object.getOwnPropertyDescriptors(obj));</code></li>
-<li>使用 Object.create(null) 创建一个没有 <strong>proto</strong> 的 “very plain” 对象，或者对此类场景坚持使用 Map 对象就可以了。</li>
-</ul>
-<h1 id="this"><a href="#this" class="headerlink" title="this"></a>this</h1><ul>
-<li>箭头函数 this 的查找与常规变量的搜索方式完全相同：在外部词法环境中查找。</li>
-<li>普通函数this在调用时决定，即调用对象</li>
-<li>在一个对象还是在原型中。在一个方法调用中，this 始终是点符号 . 前面的对象。this 根本不受原型的影响。</li>
-</ul>
-<h1 id="继承"><a href="#继承" class="headerlink" title="继承"></a>继承</h1><ul>
-<li>for..in 循环在其自身和继承的属性上进行迭代。所有其他的键&#x2F;值获取方法仅对对象本身起作用。</li>
-<li>几乎所有其他键&#x2F;值获取方法，例如 Object.keys 和 Object.values 等，都会忽略继承的属性。它们只会对对象自身进行操作。不考虑 继承自原型的属性。</li>
-<li>父类构造器总是会使用它自己字段的值，而不是被重写的那一个。</li>
-</ul>
-<h1 id="模块"><a href="#模块" class="headerlink" title="模块"></a>模块</h1><ul>
-<li>模块脚本是被延迟的，所以要等到 HTML 文档被处理完成才会执行它。</li>
-<li>模块具有自己的本地顶级作用域，并可以通过 import&#x2F;export 交换功能。</li>
-<li>模块始终使用 use strict。</li>
-<li>模块代码只执行一次。导出仅创建一次，然后会在导入之间共享。</li>
-</ul>
-]]></content>
-      <categories>
-        <category>技术</category>
-        <category>javascript</category>
-      </categories>
-  </entry>
-  <entry>
-    <title>论驿马</title>
-    <url>/post/53de3820.html</url>
-    <content><![CDATA[]]></content>
-      <categories>
-        <category>易经</category>
-        <category>子平</category>
-      </categories>
-  </entry>
-  <entry>
-    <title>八字案例收集</title>
-    <url>/post/9a56a5e1.html</url>
-    <content><![CDATA[<h3 id="case-1-坤造-壬戌-辛亥-甲子-丙寅"><a href="#case-1-坤造-壬戌-辛亥-甲子-丙寅" class="headerlink" title="case 1: 坤造: 壬戌 辛亥 甲子 丙寅"></a>case 1: 坤造: 壬戌 辛亥 甲子 丙寅</h3><blockquote>
-<p>大运: 庚戌 己酉 戊申 丁未 丙午</p>
-</blockquote>
-<ul>
-<li>分析: 日主身强，正官格，偏印格，食神格，用火土金</li>
-<li>优点: 己酉、戊申运，夫星旺相，夫登甲第，官至御史</li>
-<li>缺点: 运入南方，旺火烧金夫，丁未夫死孀居</li>
-<li>综合: 中年旺夫，晚年旺子，夫明子秀</li>
-<li>出自: 《神峰通考》</li>
-</ul>
-]]></content>
-      <categories>
-        <category>易经</category>
-        <category>子平</category>
-      </categories>
-  </entry>
-  <entry>
     <title>人体系统调优指南</title>
     <url>/post/ec307913.html</url>
     <content><![CDATA[<p><a href="https://github.com/zijie0/humanSystemOptimization">原文地址</a></p>
@@ -626,5 +513,136 @@ User ||--o{ Msg: has</pre>
       <tags>
         <tag>转载</tag>
       </tags>
+  </entry>
+  <entry>
+    <title>论用神</title>
+    <url>/post/935779c7.html</url>
+    <content><![CDATA[<p>用神，就是对命主有好处的干支，能雪中送炭，能锦上添花。</p>
+<span id="more"></span>
+<p>用神可以分成下面四类</p>
+<ul>
+<li>扶抑用神</li>
+<li>格局用神</li>
+<li>调候用神</li>
+<li>通关用神</li>
+</ul>
+<h2 id="扶抑用神"><a href="#扶抑用神" class="headerlink" title="扶抑用神"></a>扶抑用神</h2><p>这也是目前最流行的一种用神定位方式，以追求日元平衡为目标。先看日主强弱，综合全盘衡量自党异党力量对比，日元强则喜克泄耗，弱则喜扶助。</p>
+<p>TODO</p>
+]]></content>
+      <categories>
+        <category>易经</category>
+        <category>子平</category>
+      </categories>
+  </entry>
+  <entry>
+    <title>论驿马</title>
+    <url>/post/53de3820.html</url>
+    <content><![CDATA[]]></content>
+      <categories>
+        <category>易经</category>
+        <category>子平</category>
+      </categories>
+  </entry>
+  <entry>
+    <title>python笔记</title>
+    <url>/post/c00b24b1.html</url>
+    <content><![CDATA[]]></content>
+      <categories>
+        <category>技术</category>
+        <category>python</category>
+      </categories>
+  </entry>
+  <entry>
+    <title>javascript知识点总结</title>
+    <url>/post/78a8ec49.html</url>
+    <content><![CDATA[<h1 id="‘use-strict’"><a href="#‘use-strict’" class="headerlink" title="‘use strict’;"></a>‘use strict’;</h1><ul>
+<li>严格模式下，当一个函数声明在一个代码块内时，它在该代码块内的任何位置都是可见的。但在代码块外不可见。</li>
+</ul>
+<h1 id="比较"><a href="#比较" class="headerlink" title="比较"></a>比较</h1><ul>
+<li>在比较不同类型的值时，处于相等判断符号 &#x3D;&#x3D; 两侧的值会先被转化为数字。空字符串和 false 也是如此，转化后它们都为数字 0。</li>
+<li>严格相等运算符 &#x3D;&#x3D;&#x3D; 在进行比较时不会做任何的类型转换。</li>
+</ul>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">&#x27;&#x27; == false // true</span><br><span class="line">undefined == null // true</span><br><span class="line">undefined === null // false</span><br><span class="line">undefined == undefined // true</span><br><span class="line">undefined === undefined // true</span><br></pre></td></tr></table></figure>
+
+<h1 id="空值合并运算符"><a href="#空值合并运算符" class="headerlink" title="空值合并运算符 ??"></a>空值合并运算符 ??</h1><p>空值合并运算符 ?? 是最近才被添加到 JavaScript 中的，它的出现是因为人们对 || 不太满意。<br>它们之间重要的区别是：</p>
+<ul>
+<li>|| 返回第一个 真 值。</li>
+<li>?? 返回第一个 已定义的 值。</li>
+</ul>
+<p>数字类型</p>
+<ul>
+<li>NaN &#x3D;&#x3D;&#x3D; NaN &#x2F;&#x2F; false</li>
+<li>判断数字是否有效 <code>isFinite</code></li>
+<li>生成指定范围内概率均匀的随机整数</li>
+</ul>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="keyword">function</span> <span class="title function_">randomInteger</span>(<span class="params">min, max</span>) &#123;</span><br><span class="line">  <span class="comment">// here rand is from min to (max+1)</span></span><br><span class="line">  <span class="keyword">let</span> rand = min + <span class="title class_">Math</span>.<span class="title function_">random</span>() * (max + <span class="number">1</span> - min);</span><br><span class="line">  <span class="keyword">return</span> <span class="title class_">Math</span>.<span class="title function_">floor</span>(rand);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h1 id="数组"><a href="#数组" class="headerlink" title="数组"></a>数组</h1><ul>
+<li>取最后一个元素: <code>fruits.at(-1)</code></li>
+<li>遍历数组使用 <code>for (let fruit of fruits)</code></li>
+<li>清空数组最简单的方法就是: <code>arr.length = 0</code></li>
+<li>数组删除元素用 <code>arr.splice(start[, deleteCount, elem1, ..., elemN])</code></li>
+<li>拷贝数组 <code>arr.slice()</code></li>
+<li>拼接多个数组 <code>arr.concat()</code></li>
+<li>判断对象是否为数组 <code>Array.isArray()</code></li>
+</ul>
+<h1 id="对象"><a href="#对象" class="headerlink" title="对象"></a>对象</h1><ul>
+<li>对象解构赋值，函数参数默认值</li>
+</ul>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="keyword">function</span> <span class="title function_">showMenu</span>(<span class="params">&#123; title = <span class="string">&quot;Menu&quot;</span>, width = <span class="number">100</span>, height = <span class="number">200</span> &#125; = &#123;&#125;</span>) &#123;</span><br><span class="line">    <span class="title function_">alert</span>( <span class="string">`<span class="subst">$&#123;title&#125;</span> <span class="subst">$&#123;width&#125;</span> <span class="subst">$&#123;height&#125;</span>`</span> );</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>使用 Object.create 来实现比复制 for..in 循环中的属性更强大的对象克隆方式：<br><code>let clone = Object.create(Object.getPrototypeOf(obj), Object.getOwnPropertyDescriptors(obj));</code></li>
+<li>使用 Object.create(null) 创建一个没有 <strong>proto</strong> 的 “very plain” 对象，或者对此类场景坚持使用 Map 对象就可以了。</li>
+</ul>
+<h1 id="this"><a href="#this" class="headerlink" title="this"></a>this</h1><ul>
+<li>箭头函数 this 的查找与常规变量的搜索方式完全相同：在外部词法环境中查找。</li>
+<li>普通函数this在调用时决定，即调用对象</li>
+<li>在一个对象还是在原型中。在一个方法调用中，this 始终是点符号 . 前面的对象。this 根本不受原型的影响。</li>
+</ul>
+<h1 id="继承"><a href="#继承" class="headerlink" title="继承"></a>继承</h1><ul>
+<li>for..in 循环在其自身和继承的属性上进行迭代。所有其他的键&#x2F;值获取方法仅对对象本身起作用。</li>
+<li>几乎所有其他键&#x2F;值获取方法，例如 Object.keys 和 Object.values 等，都会忽略继承的属性。它们只会对对象自身进行操作。不考虑 继承自原型的属性。</li>
+<li>父类构造器总是会使用它自己字段的值，而不是被重写的那一个。</li>
+</ul>
+<h1 id="模块"><a href="#模块" class="headerlink" title="模块"></a>模块</h1><ul>
+<li>模块脚本是被延迟的，所以要等到 HTML 文档被处理完成才会执行它。</li>
+<li>模块具有自己的本地顶级作用域，并可以通过 import&#x2F;export 交换功能。</li>
+<li>模块始终使用 use strict。</li>
+<li>模块代码只执行一次。导出仅创建一次，然后会在导入之间共享。</li>
+<li>严格模式下，eval 有属于自己的词法环境。因此我们不能从外部访问在 eval 中声明的函数和变量, eval 访问外部变量的能力会产生副作用。代码压缩工具（在把 JS 投入生产环境前对其进行压缩的工具）将局部变量重命名为更短的变量（例如 a 和 b 等），以使代码体积更小。这通常是安全的，但在使用了 eval 的情况下就不一样了，因为局部变量可能会被 eval 中的代码访问到。因此压缩工具不会对所有可能会被从 eval 中访问的变量进行重命名。这样会导致代码压缩率降低。</li>
+</ul>
+<h1 id="DOM"><a href="#DOM" class="headerlink" title="DOM"></a>DOM</h1><ul>
+<li>查看浏览器内部窗口高度: <code>window.innerHeight</code></li>
+<li>修改网页背景色: &#96;document.body.style.background &#x3D; “red”;</li>
+<li>由于历史原因，<head> 之前的空格和换行符均被忽略。<br>如果我们在 </body> 之后放置一些东西，那么它会被自动移动到 body 内，并处于 body 中的最下方，因为 HTML 规范要求所有内容必须位于 <body> 内。所以 </body> 之后不能有空格</li>
+<li>elem.closest(css) 方法会查找与 CSS 选择器匹配的最近的祖先</li>
+<li>所有的 “getElementsBy*” 方法都会返回一个 实时的（live） 集合。相反，querySelectorAll 返回的是一个 静态的 集合。就像元素的固定数组。</li>
+<li>判断元素B是否为A的子元素或者与其相等: elemA.contains(elemB)</li>
+</ul>
+]]></content>
+      <categories>
+        <category>技术</category>
+        <category>javascript</category>
+      </categories>
+  </entry>
+  <entry>
+    <title>八字案例收集</title>
+    <url>/post/9a56a5e1.html</url>
+    <content><![CDATA[<h3 id="case-1-坤造-壬戌-辛亥-甲子-丙寅"><a href="#case-1-坤造-壬戌-辛亥-甲子-丙寅" class="headerlink" title="case 1: 坤造: 壬戌 辛亥 甲子 丙寅"></a>case 1: 坤造: 壬戌 辛亥 甲子 丙寅</h3><blockquote>
+<p>大运: 庚戌 己酉 戊申 丁未 丙午</p>
+</blockquote>
+<ul>
+<li>分析: 日主身强，正官格，偏印格，食神格，用火土金</li>
+<li>优点: 己酉、戊申运，夫星旺相，夫登甲第，官至御史</li>
+<li>缺点: 运入南方，旺火烧金夫，丁未夫死孀居</li>
+<li>综合: 中年旺夫，晚年旺子，夫明子秀</li>
+<li>出自: 《神峰通考》</li>
+</ul>
+]]></content>
+      <categories>
+        <category>易经</category>
+        <category>子平</category>
+      </categories>
   </entry>
 </search>
