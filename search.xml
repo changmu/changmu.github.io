@@ -538,7 +538,11 @@ User ||--o{ Msg: has</pre>
     <title>javascript知识点总结</title>
     <url>/post/78a8ec49.html</url>
     <content><![CDATA[<h1 id="‘use-strict’"><a href="#‘use-strict’" class="headerlink" title="‘use strict’;"></a>‘use strict’;</h1><ul>
-<li>严格模式下，当一个函数声明在一个代码块内时，它在该代码块内的任何位置都是可见的。但在代码块外不可见。</li>
+<li><p>import方式</p>
+<figure class="highlight html"><table><tr><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">script</span> <span class="attr">type</span>=<span class="string">&quot;importmap&quot;</span>&gt;</span><span class="language-javascript"></span></span><br><span class="line"><span class="language-javascript">  &#123;</span></span><br><span class="line"><span class="language-javascript">    <span class="string">&quot;imports&quot;</span>: &#123;</span></span><br><span class="line"><span class="language-javascript">      <span class="string">&quot;vue&quot;</span>: <span class="string">&quot;https://unpkg.com/vue@3/dist/vue.esm-browser.js&quot;</span></span></span><br><span class="line"><span class="language-javascript">    &#125;</span></span><br><span class="line"><span class="language-javascript">  &#125;</span></span><br><span class="line"><span class="language-javascript"></span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;<span class="name">div</span> <span class="attr">id</span>=<span class="string">&quot;app&quot;</span>&gt;</span>&#123;&#123; message &#125;&#125;<span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;<span class="name">script</span> <span class="attr">type</span>=<span class="string">&quot;module&quot;</span>&gt;</span><span class="language-javascript"></span></span><br><span class="line"><span class="language-javascript">  <span class="keyword">import</span> &#123; createApp &#125; <span class="keyword">from</span> <span class="string">&#x27;vue&#x27;</span></span></span><br><span class="line"><span class="language-javascript"></span></span><br><span class="line"><span class="language-javascript">  <span class="title function_">createApp</span>(&#123;</span></span><br><span class="line"><span class="language-javascript">    <span class="title function_">data</span>(<span class="params"></span>) &#123;</span></span><br><span class="line"><span class="language-javascript">      <span class="keyword">return</span> &#123;</span></span><br><span class="line"><span class="language-javascript">        <span class="attr">message</span>: <span class="string">&#x27;Hello Vue!&#x27;</span></span></span><br><span class="line"><span class="language-javascript">      &#125;</span></span><br><span class="line"><span class="language-javascript">    &#125;</span></span><br><span class="line"><span class="language-javascript">  &#125;).<span class="title function_">mount</span>(<span class="string">&#x27;#app&#x27;</span>)</span></span><br><span class="line"><span class="language-javascript"></span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>严格模式下，当一个函数声明在一个代码块内时，它在该代码块内的任何位置都是可见的。但在代码块外不可见。</p>
+</li>
 </ul>
 <h1 id="比较"><a href="#比较" class="headerlink" title="比较"></a>比较</h1><ul>
 <li>在比较不同类型的值时，处于相等判断符号 &#x3D;&#x3D; 两侧的值会先被转化为数字。空字符串和 false 也是如此，转化后它们都为数字 0。</li>
@@ -661,6 +665,16 @@ User ||--o{ Msg: has</pre>
 </li>
 <li><p>本地脚本异步加载写法</p>
 <figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="keyword">function</span> <span class="title function_">loadScript</span>(<span class="params">src</span>) &#123;</span><br><span class="line">  <span class="keyword">let</span> script = <span class="variable language_">document</span>.<span class="title function_">createElement</span>(<span class="string">&#x27;script&#x27;</span>);</span><br><span class="line">  script.<span class="property">src</span> = src;</span><br><span class="line">  script.<span class="property">async</span> = <span class="literal">false</span>;</span><br><span class="line">  <span class="variable language_">document</span>.<span class="property">body</span>.<span class="title function_">append</span>(script);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// long.js 先执行，因为代码中设置了 async=false</span></span><br><span class="line"><span class="title function_">loadScript</span>(<span class="string">&quot;/article/script-async-defer/long.js&quot;</span>);</span><br><span class="line"><span class="title function_">loadScript</span>(<span class="string">&quot;/article/script-async-defer/small.js&quot;</span>);</span><br></pre></td></tr></table></figure></li>
+<li><p>在新窗口打开网页: window.open(‘<a href="https://javascript.info/&#39;">https://javascript.info/&#39;</a>)</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="comment">// 大多数浏览器都会阻止此类弹窗</span></span><br><span class="line"><span class="variable language_">window</span>.<span class="title function_">open</span>(<span class="string">&#x27;https://javascript.info&#x27;</span>);</span><br><span class="line"></span><br><span class="line"><span class="comment">// 弹窗被允许</span></span><br><span class="line">button.<span class="property">onclick</span> = <span class="function">() =&gt;</span> &#123;</span><br><span class="line">  <span class="variable language_">window</span>.<span class="title function_">open</span>(<span class="string">&#x27;https://javascript.info&#x27;</span>);</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure></li>
+<li><p>如果窗口的二级域相同，例如 john.site.com，peter.site.com 和 site.com（它们共同的二级域是 site.com），我们可以使浏览器忽略该差异，使得它们可以被作为“同源”的来对待，以便进行跨窗口通信。</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="variable language_">document</span>.<span class="property">domain</span> = <span class="string">&#x27;site.com&#x27;</span>;</span><br></pre></td></tr></table></figure></li>
+<li><p>samesite cookie 特性可以阻止点击劫持攻击。<br>具有 samesite 特性的 cookie 仅在网站是通过直接方式打开（而不是通过 frame 或其他方式）的情况下才发送到网站。更多细节请见 Cookie，document.cookie。<br>如果网站，例如 Facebook，在其身份验证 cookie 中具有 samesite 特性，像这样：<br><code>Set-Cookie: authorization=secret; samesite</code><br>……那么，当在另一个网站中的 iframe 中打开 Facebook 时，此类 cookie 将不会被发送。因此，攻击将失败。</p>
+</li>
+<li><p>nanoid库生成唯一id</p>
+</li>
+<li><p>时间格式化为<code>YYYY/MM/DD HH:mm:ss</code>: <code>new Date().toLocaleString()</code></p>
+</li>
 </ul>
 ]]></content>
       <categories>
@@ -704,5 +718,10 @@ User ||--o{ Msg: has</pre>
         <category>易经</category>
         <category>子平</category>
       </categories>
+  </entry>
+  <entry>
+    <title>html_css笔记</title>
+    <url>/post/fa4f271f.html</url>
+    <content><![CDATA[<h2 id="解决浮动元素撑满父元素的问题"><a href="#解决浮动元素撑满父元素的问题" class="headerlink" title="解决浮动元素撑满父元素的问题"></a>解决浮动元素撑满父元素的问题</h2><figure class="highlight css"><table><tr><td class="code"><pre><span class="line"><span class="selector-class">.outer</span><span class="selector-pseudo">::after</span> &#123;</span><br><span class="line">  <span class="attribute">content</span>: <span class="string">&#x27;&#x27;</span>;</span><br><span class="line">  <span class="attribute">clear</span>: both;</span><br><span class="line">  <span class="attribute">display</span>: block;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>]]></content>
   </entry>
 </search>
