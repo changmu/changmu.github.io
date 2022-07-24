@@ -215,9 +215,15 @@
         <i class="far fa-calendar"></i>
       </span>
       <span class="post-meta-item-text">发表于</span>
-      
 
-      <time title="创建时间：2022-07-21 16:22:41 / 修改时间：16:23:56" itemprop="dateCreated datePublished" datetime="2022-07-21T16:22:41+08:00">2022-07-21</time>
+      <time title="创建时间：2022-07-21 16:22:41" itemprop="dateCreated datePublished" datetime="2022-07-21T16:22:41+08:00">2022-07-21</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2022-07-24 19:11:38" itemprop="dateModified" datetime="2022-07-24T19:11:38+08:00">2022-07-24</time>
     </span>
 
   
@@ -241,7 +247,7 @@
         <i class="far fa-file-word"></i>
       </span>
       <span class="post-meta-item-text">本文字数：</span>
-      <span>90</span>
+      <span>168</span>
     </span>
     <span class="post-meta-item" title="阅读时长">
       <span class="post-meta-item-icon">
@@ -259,7 +265,10 @@
     
     
     <div class="post-body" itemprop="articleBody">
-          <h2 id="解决浮动元素撑满父元素的问题"><a href="#解决浮动元素撑满父元素的问题" class="headerlink" title="解决浮动元素撑满父元素的问题"></a>解决浮动元素撑满父元素的问题</h2><figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="selector-class">.outer</span><span class="selector-pseudo">::after</span> &#123;</span><br><span class="line">  <span class="attribute">content</span>: <span class="string">&#x27;&#x27;</span>;</span><br><span class="line">  <span class="attribute">clear</span>: both;</span><br><span class="line">  <span class="attribute">display</span>: block;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+          <h2 id="css学习资源"><a href="#css学习资源" class="headerlink" title="css学习资源"></a>css学习资源</h2><ul>
+<li><a target="_blank" rel="noopener" href="https://github.com/l-hammer/You-need-to-know-css">You-need-to-know-css</a></li>
+</ul>
+<h2 id="解决父元素高度塌陷问题-和-外边距重叠问题，使用flex布局可避免该问题"><a href="#解决父元素高度塌陷问题-和-外边距重叠问题，使用flex布局可避免该问题" class="headerlink" title="解决父元素高度塌陷问题 和 外边距重叠问题，使用flex布局可避免该问题"></a>解决父元素高度塌陷问题 和 外边距重叠问题，使用flex布局可避免该问题</h2><figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/* 终极版本 */</span></span><br><span class="line"><span class="selector-class">.clearfix</span><span class="selector-pseudo">::before</span>,</span><br><span class="line"><span class="selector-class">.clearfix</span><span class="selector-pseudo">::after</span> &#123;</span><br><span class="line">  <span class="attribute">content</span>: <span class="string">&#x27;&#x27;</span>;</span><br><span class="line">  <span class="attribute">display</span>: table;</span><br><span class="line">  <span class="attribute">clear</span>: both;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
       
     </div>
 
