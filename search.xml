@@ -723,8 +723,17 @@ User ||--o{ Msg: has</pre>
     <title>html_css笔记</title>
     <url>/post/fa4f271f.html</url>
     <content><![CDATA[<h2 id="css学习资源"><a href="#css学习资源" class="headerlink" title="css学习资源"></a>css学习资源</h2><ul>
+<li><a href="https://www.guess-css.app/">GuessCSS</a></li>
 <li><a href="https://github.com/l-hammer/You-need-to-know-css">You-need-to-know-css</a></li>
+<li><a href="https://github.com/chokcoco/CSS-Inspiration">CSS-Inspiration</a></li>
 </ul>
 <h2 id="解决父元素高度塌陷问题-和-外边距重叠问题，使用flex布局可避免该问题"><a href="#解决父元素高度塌陷问题-和-外边距重叠问题，使用flex布局可避免该问题" class="headerlink" title="解决父元素高度塌陷问题 和 外边距重叠问题，使用flex布局可避免该问题"></a>解决父元素高度塌陷问题 和 外边距重叠问题，使用flex布局可避免该问题</h2><figure class="highlight css"><table><tr><td class="code"><pre><span class="line"><span class="comment">/* 终极版本 */</span></span><br><span class="line"><span class="selector-class">.clearfix</span><span class="selector-pseudo">::before</span>,</span><br><span class="line"><span class="selector-class">.clearfix</span><span class="selector-pseudo">::after</span> &#123;</span><br><span class="line">  <span class="attribute">content</span>: <span class="string">&#x27;&#x27;</span>;</span><br><span class="line">  <span class="attribute">display</span>: table;</span><br><span class="line">  <span class="attribute">clear</span>: both;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>]]></content>
+  </entry>
+  <entry>
+    <title>spider learn notes</title>
+    <url>/post/15afb360.html</url>
+    <content><![CDATA[<h2 id="环境准备"><a href="#环境准备" class="headerlink" title="环境准备"></a>环境准备</h2><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">pip3 install &quot;https[http2]&quot;</span><br></pre></td></tr></table></figure>
+
+<h2 id="案例"><a href="#案例" class="headerlink" title="案例"></a>案例</h2>]]></content>
   </entry>
 </search>
