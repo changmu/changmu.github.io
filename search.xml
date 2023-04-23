@@ -148,137 +148,6 @@ User ||--o{ Msg: has</pre>
 <h2 id="并发处理任务"><a href="#并发处理任务" class="headerlink" title="并发处理任务"></a>并发处理任务</h2><figure class="highlight go"><table><tr><td class="code"><pre><span class="line"><span class="comment">// GoAndWait 封装更安全的多并发调用, 启动goroutine并等待所有处理流程完成，自动recover</span></span><br><span class="line"><span class="comment">// 返回值error返回的是多并发协程里面第一个返回的不为nil的error，主要用于关键路径判断，当多并发协程里面有一个是关键路径且有失败则返回err，其他非关键路径并发全部返回nil</span></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">GoAndWait</span><span class="params">(handlers ...<span class="keyword">func</span>()</span></span> <span class="type">error</span>) <span class="type">error</span> &#123;</span><br><span class="line">	<span class="keyword">var</span> (</span><br><span class="line">		wg   sync.WaitGroup</span><br><span class="line">		once sync.Once</span><br><span class="line">		err  <span class="type">error</span></span><br><span class="line">	)</span><br><span class="line">	<span class="keyword">for</span> _, f := <span class="keyword">range</span> handlers &#123;</span><br><span class="line">		wg.Add(<span class="number">1</span>)</span><br><span class="line">		<span class="keyword">go</span> <span class="function"><span class="keyword">func</span><span class="params">(handler <span class="keyword">func</span>()</span></span> <span class="type">error</span>) &#123;</span><br><span class="line">			<span class="keyword">defer</span> <span class="function"><span class="keyword">func</span><span class="params">()</span></span> &#123;</span><br><span class="line">				<span class="keyword">if</span> e := <span class="built_in">recover</span>(); e != <span class="literal">nil</span> &#123;</span><br><span class="line">					buf := <span class="built_in">make</span>([]<span class="type">byte</span>, PanicBufLen)</span><br><span class="line">					buf = buf[:runtime.Stack(buf, <span class="literal">false</span>)]</span><br><span class="line">					log.Errorf(<span class="string">&quot;[PANIC]%v\n%s\n&quot;</span>, e, buf)</span><br><span class="line">					once.Do(<span class="function"><span class="keyword">func</span><span class="params">()</span></span> &#123;</span><br><span class="line">						err = errs.New(errs.RetServerSystemErr, <span class="string">&quot;panic found in call handlers&quot;</span>)</span><br><span class="line">					&#125;)</span><br><span class="line">				&#125;</span><br><span class="line">				wg.Done()</span><br><span class="line">			&#125;()</span><br><span class="line">			<span class="keyword">if</span> e := handler(); e != <span class="literal">nil</span> &#123;</span><br><span class="line">				once.Do(<span class="function"><span class="keyword">func</span><span class="params">()</span></span> &#123;</span><br><span class="line">					err = e</span><br><span class="line">				&#125;)</span><br><span class="line">			&#125;</span><br><span class="line">		&#125;(f)</span><br><span class="line">	&#125;</span><br><span class="line">	wg.Wait()</span><br><span class="line">	<span class="keyword">return</span> err</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>]]></content>
   </entry>
   <entry>
-    <title>golang知识点总结</title>
-    <url>/post/393519b.html</url>
-    <content><![CDATA[<h1 id="GMP调度器"><a href="#GMP调度器" class="headerlink" title="GMP调度器"></a>GMP调度器</h1><p>gmp可以理解为是golang管理协程的一套算法</p>
-<h2 id="前置条件"><a href="#前置条件" class="headerlink" title="前置条件"></a>前置条件</h2><p>linux默认线程大小是8MB(默认栈大小)<br>goroutine大小是8KB左右</p>
-<h3 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h3><ul>
-<li><a href="https://learnku.com/articles/41728">Golang 调度器 GMP 原理与调度全分析</a></li>
-<li><a href="https://www.yuque.com/aceld/golang/ithv8f">Golang修养之路</a></li>
-</ul>
-]]></content>
-      <categories>
-        <category>技术</category>
-        <category>golang</category>
-      </categories>
-  </entry>
-  <entry>
-    <title>Hello World</title>
-    <url>/post/4a17b156.html</url>
-    <content><![CDATA[<p>用来测试相关特性.</p>
-<h1 id="测试代码块"><a href="#测试代码块" class="headerlink" title="测试代码块"></a>测试代码块</h1><h2 id="gannt"><a href="#gannt" class="headerlink" title="gannt"></a>gannt</h2><pre class="mermaid">gantt
-  title wind的排期表
-  %% this is a comment
-  dateFormat  YYYY-MM-DD
-
-  section 方法论
-  学习写作: s1, 2022-06-17, 5d
-  学习思考武器: s2, after s1, 7d
-  学习谈判武器: s3, after s2, 7d
-
-  section 业余学习
-  js语法学习: t1, 2022-06-17, 5d
-  markdown指南学习: 2022-06-18, 1d
-  js浏览器学习: t2, after t1, 7d
-  js进阶学习: t3, after t2, 10d
-  %% 完成js进阶学习: milestone, 2022-07-12
-
-  section 职业技能
-  go语言深入学习: u1, 2022-06-20, 10d
-  go语言gmp模型: u2, 2022-06-20, 1d</pre>
-<pre class="mermaid">gantt
-  title wind的日计划
-  %% this is a comment
-  dateFormat HH:mm
-  axisFormat %H:%M
-
-  section 每日时间规划
-  起床洗漱: 08:00, 30m
-  吃早饭: 08:30, 30m
-  学习+陪小宝: 09:00, 3h
-  吃午饭: 30m
-  午休: 90min
-  学习+陪小宝+跑步: 4h
-  吃饭: 30m
-  小憩: 30m
-  学习: 270m</pre>
-
-
-<pre class="mermaid">gantt   
-       dateFormat MM-DD   
-       title wind的排期表
-
-       section 方法论
-       已完成的任务           :done,    des1, 06-06,06-08
-       正在进行的任务               :active,  des2, 06-09, 3d
-       待完成任务1               :         des3, after des2, 5d
-       待完成任务2              :         des4, after des3, 5d
-
-       section 业余任务
-       已完成的关键任务 :crit, done, 06-06,24h
-       已完成的关键任务2         :crit, done, after des1, 2d
-       正在进行的关键任务             :crit, active, 3d
-       待完成的关键任务        :crit, 5d
-       待完成任务           :2d
-       待完成任务2                      :1d
-
-       section 工作技能
-       描述甘特图语法               :active, a1, after des1, 3d
-       完成甘特图实例1      :after a1  , 20h
-       完成甘特图实例2    :doc1, after a1  , 48h</pre>
-
-<figure class="highlight go"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">getFreeAddr</span><span class="params">()</span></span> (<span class="type">string</span>, <span class="type">error</span>) &#123;</span><br><span class="line">	tmpAddr, err := net.ResolveTCPAddr(<span class="string">&quot;tcp&quot;</span>, <span class="string">&quot;127.0.0.1:0&quot;</span>)</span><br><span class="line">	<span class="keyword">if</span> err != <span class="literal">nil</span> &#123;</span><br><span class="line">		<span class="keyword">return</span> <span class="string">&quot;&quot;</span>, err</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	l, err := net.ListenTCP(<span class="string">&quot;tcp&quot;</span>, tmpAddr)</span><br><span class="line">	<span class="keyword">if</span> err != <span class="literal">nil</span> &#123;</span><br><span class="line">		<span class="keyword">return</span> <span class="string">&quot;&quot;</span>, err</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	err = l.Close()</span><br><span class="line">	<span class="keyword">if</span> err != <span class="literal">nil</span> &#123;</span><br><span class="line">		<span class="keyword">return</span> <span class="string">&quot;&quot;</span>, err</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="keyword">return</span> l.Addr().String(), <span class="literal">nil</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<h1 id="测试专用语法代码块"><a href="#测试专用语法代码块" class="headerlink" title="测试专用语法代码块"></a>测试专用语法代码块</h1><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">alert(&#x27;Hello World!&#x27;);</span><br></pre></td></tr></table></figure>
-
-<span id="more"></span>
-
-<h2 id="Quick-Start"><a href="#Quick-Start" class="headerlink" title="Quick Start"></a>Quick Start</h2>]]></content>
-      <categories>
-        <category>备忘录</category>
-      </categories>
-  </entry>
-  <entry>
-    <title>论寅巳申三刑</title>
-    <url>/post/ee408ec8.html</url>
-    <content><![CDATA[<p>寅巳申三刑是地支刑冲破害合会关系中的一种，本身无关吉凶，其吉凶体现在以下各个场景</p>
-<h2 id="1-申金柱透出庚金"><a href="#1-申金柱透出庚金" class="headerlink" title="1.申金柱透出庚金"></a>1.申金柱透出庚金</h2><p>此时庚金受伤，若庚金为用神，则吉，否则凶，具体应事看受伤的十神</p>
-]]></content>
-      <categories>
-        <category>易经</category>
-        <category>子平</category>
-      </categories>
-  </entry>
-  <entry>
-    <title>论驿马</title>
-    <url>/post/53de3820.html</url>
-    <content><![CDATA[]]></content>
-      <categories>
-        <category>易经</category>
-        <category>子平</category>
-      </categories>
-  </entry>
-  <entry>
-    <title>论用神</title>
-    <url>/post/935779c7.html</url>
-    <content><![CDATA[<p>用神，就是对命主有好处的干支，能雪中送炭，能锦上添花。</p>
-<span id="more"></span>
-<p>用神可以分成下面四类</p>
-<ul>
-<li>扶抑用神</li>
-<li>格局用神</li>
-<li>调候用神</li>
-<li>通关用神</li>
-</ul>
-<h2 id="扶抑用神"><a href="#扶抑用神" class="headerlink" title="扶抑用神"></a>扶抑用神</h2><p>这也是目前最流行的一种用神定位方式，以追求日元平衡为目标。先看日主强弱，综合全盘衡量自党异党力量对比，日元强则喜克泄耗，弱则喜扶助。</p>
-<p>TODO</p>
-]]></content>
-      <categories>
-        <category>易经</category>
-        <category>子平</category>
-      </categories>
-  </entry>
-  <entry>
     <title>人体系统调优指南</title>
     <url>/post/ec307913.html</url>
     <content><![CDATA[<p><a href="https://github.com/zijie0/humanSystemOptimization">原文地址</a></p>
@@ -544,6 +413,128 @@ User ||--o{ Msg: has</pre>
       </tags>
   </entry>
   <entry>
+    <title>Hello World</title>
+    <url>/post/4a17b156.html</url>
+    <content><![CDATA[<p>用来测试相关特性.</p>
+<h1 id="测试代码块"><a href="#测试代码块" class="headerlink" title="测试代码块"></a>测试代码块</h1><h2 id="gannt"><a href="#gannt" class="headerlink" title="gannt"></a>gannt</h2><pre class="mermaid">gantt
+  title wind的排期表
+  %% this is a comment
+  dateFormat  YYYY-MM-DD
+
+  section 方法论
+  学习写作: s1, 2022-06-17, 5d
+  学习思考武器: s2, after s1, 7d
+  学习谈判武器: s3, after s2, 7d
+
+  section 业余学习
+  js语法学习: t1, 2022-06-17, 5d
+  markdown指南学习: 2022-06-18, 1d
+  js浏览器学习: t2, after t1, 7d
+  js进阶学习: t3, after t2, 10d
+  %% 完成js进阶学习: milestone, 2022-07-12
+
+  section 职业技能
+  go语言深入学习: u1, 2022-06-20, 10d
+  go语言gmp模型: u2, 2022-06-20, 1d</pre>
+<pre class="mermaid">gantt
+  title wind的日计划
+  %% this is a comment
+  dateFormat HH:mm
+  axisFormat %H:%M
+
+  section 每日时间规划
+  起床洗漱: 08:00, 30m
+  吃早饭: 08:30, 30m
+  学习+陪小宝: 09:00, 3h
+  吃午饭: 30m
+  午休: 90min
+  学习+陪小宝+跑步: 4h
+  吃饭: 30m
+  小憩: 30m
+  学习: 270m</pre>
+
+
+<pre class="mermaid">gantt   
+       dateFormat MM-DD   
+       title wind的排期表
+
+       section 方法论
+       已完成的任务           :done,    des1, 06-06,06-08
+       正在进行的任务               :active,  des2, 06-09, 3d
+       待完成任务1               :         des3, after des2, 5d
+       待完成任务2              :         des4, after des3, 5d
+
+       section 业余任务
+       已完成的关键任务 :crit, done, 06-06,24h
+       已完成的关键任务2         :crit, done, after des1, 2d
+       正在进行的关键任务             :crit, active, 3d
+       待完成的关键任务        :crit, 5d
+       待完成任务           :2d
+       待完成任务2                      :1d
+
+       section 工作技能
+       描述甘特图语法               :active, a1, after des1, 3d
+       完成甘特图实例1      :after a1  , 20h
+       完成甘特图实例2    :doc1, after a1  , 48h</pre>
+
+<figure class="highlight go"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">getFreeAddr</span><span class="params">()</span></span> (<span class="type">string</span>, <span class="type">error</span>) &#123;</span><br><span class="line">	tmpAddr, err := net.ResolveTCPAddr(<span class="string">&quot;tcp&quot;</span>, <span class="string">&quot;127.0.0.1:0&quot;</span>)</span><br><span class="line">	<span class="keyword">if</span> err != <span class="literal">nil</span> &#123;</span><br><span class="line">		<span class="keyword">return</span> <span class="string">&quot;&quot;</span>, err</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	l, err := net.ListenTCP(<span class="string">&quot;tcp&quot;</span>, tmpAddr)</span><br><span class="line">	<span class="keyword">if</span> err != <span class="literal">nil</span> &#123;</span><br><span class="line">		<span class="keyword">return</span> <span class="string">&quot;&quot;</span>, err</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	err = l.Close()</span><br><span class="line">	<span class="keyword">if</span> err != <span class="literal">nil</span> &#123;</span><br><span class="line">		<span class="keyword">return</span> <span class="string">&quot;&quot;</span>, err</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="keyword">return</span> l.Addr().String(), <span class="literal">nil</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h1 id="测试专用语法代码块"><a href="#测试专用语法代码块" class="headerlink" title="测试专用语法代码块"></a>测试专用语法代码块</h1><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">alert(&#x27;Hello World!&#x27;);</span><br></pre></td></tr></table></figure>
+
+<span id="more"></span>
+
+<h2 id="Quick-Start"><a href="#Quick-Start" class="headerlink" title="Quick Start"></a>Quick Start</h2>]]></content>
+      <categories>
+        <category>备忘录</category>
+      </categories>
+  </entry>
+  <entry>
+    <title>golang知识点总结</title>
+    <url>/post/393519b.html</url>
+    <content><![CDATA[<h1 id="GMP调度器"><a href="#GMP调度器" class="headerlink" title="GMP调度器"></a>GMP调度器</h1><p>gmp可以理解为是golang管理协程的一套算法</p>
+<h2 id="前置条件"><a href="#前置条件" class="headerlink" title="前置条件"></a>前置条件</h2><p>linux默认线程大小是8MB(默认栈大小)<br>goroutine大小是8KB左右</p>
+<h3 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h3><ul>
+<li><a href="https://learnku.com/articles/41728">Golang 调度器 GMP 原理与调度全分析</a></li>
+<li><a href="https://www.yuque.com/aceld/golang/ithv8f">Golang修养之路</a></li>
+</ul>
+]]></content>
+      <categories>
+        <category>技术</category>
+        <category>golang</category>
+      </categories>
+  </entry>
+  <entry>
+    <title>论寅巳申三刑</title>
+    <url>/post/ee408ec8.html</url>
+    <content><![CDATA[<p>寅巳申三刑是地支刑冲破害合会关系中的一种，本身无关吉凶，其吉凶体现在以下各个场景</p>
+<h2 id="1-申金柱透出庚金"><a href="#1-申金柱透出庚金" class="headerlink" title="1.申金柱透出庚金"></a>1.申金柱透出庚金</h2><p>此时庚金受伤，若庚金为用神，则吉，否则凶，具体应事看受伤的十神</p>
+]]></content>
+      <categories>
+        <category>易经</category>
+        <category>子平</category>
+      </categories>
+  </entry>
+  <entry>
+    <title>论用神</title>
+    <url>/post/935779c7.html</url>
+    <content><![CDATA[<p>用神，就是对命主有好处的干支，能雪中送炭，能锦上添花。</p>
+<span id="more"></span>
+<p>用神可以分成下面四类</p>
+<ul>
+<li>扶抑用神</li>
+<li>格局用神</li>
+<li>调候用神</li>
+<li>通关用神</li>
+</ul>
+<h2 id="扶抑用神"><a href="#扶抑用神" class="headerlink" title="扶抑用神"></a>扶抑用神</h2><p>这也是目前最流行的一种用神定位方式，以追求日元平衡为目标。先看日主强弱，综合全盘衡量自党异党力量对比，日元强则喜克泄耗，弱则喜扶助。</p>
+<p>TODO</p>
+]]></content>
+      <categories>
+        <category>易经</category>
+        <category>子平</category>
+      </categories>
+  </entry>
+  <entry>
     <title>javascript知识点总结</title>
     <url>/post/78a8ec49.html</url>
     <content><![CDATA[<h1 id="‘use-strict’"><a href="#‘use-strict’" class="headerlink" title="‘use strict’;"></a>‘use strict’;</h1><ul>
@@ -689,6 +680,15 @@ User ||--o{ Msg: has</pre>
       <categories>
         <category>技术</category>
         <category>javascript</category>
+      </categories>
+  </entry>
+  <entry>
+    <title>论驿马</title>
+    <url>/post/53de3820.html</url>
+    <content><![CDATA[]]></content>
+      <categories>
+        <category>易经</category>
+        <category>子平</category>
       </categories>
   </entry>
   <entry>
