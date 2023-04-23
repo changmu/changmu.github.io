@@ -1,6 +1,28 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title>golang code snippet</title>
+    <url>/post/cee729f9.html</url>
+    <content><![CDATA[<h2 id="列表去重"><a href="#列表去重" class="headerlink" title="列表去重"></a>列表去重</h2><figure class="highlight go"><table><tr><td class="code"><pre><span class="line"><span class="comment">// RmDupAndEmptyOfList 列表元素去重并去空</span></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">RmDupAndEmptyOfList</span><span class="params">(list []<span class="type">string</span>)</span></span> []<span class="type">string</span> &#123;</span><br><span class="line">	mp := <span class="keyword">map</span>[<span class="type">string</span>]<span class="type">bool</span>&#123;&#125;</span><br><span class="line">	<span class="keyword">for</span> _, item := <span class="keyword">range</span> list &#123;</span><br><span class="line">		<span class="keyword">if</span> item != <span class="string">&quot;&quot;</span> &#123;</span><br><span class="line">			mp[item] = <span class="literal">true</span></span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="keyword">var</span> listUniq []<span class="type">string</span></span><br><span class="line">	<span class="keyword">for</span> k := <span class="keyword">range</span> mp &#123;</span><br><span class="line">		listUniq = <span class="built_in">append</span>(listUniq, k)</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="keyword">return</span> listUniq</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="并发处理任务"><a href="#并发处理任务" class="headerlink" title="并发处理任务"></a>并发处理任务</h2><figure class="highlight go"><table><tr><td class="code"><pre><span class="line"><span class="comment">// GoAndWait 封装更安全的多并发调用, 启动goroutine并等待所有处理流程完成，自动recover</span></span><br><span class="line"><span class="comment">// 返回值error返回的是多并发协程里面第一个返回的不为nil的error，主要用于关键路径判断，当多并发协程里面有一个是关键路径且有失败则返回err，其他非关键路径并发全部返回nil</span></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">GoAndWait</span><span class="params">(handlers ...<span class="keyword">func</span>()</span></span> <span class="type">error</span>) <span class="type">error</span> &#123;</span><br><span class="line">	<span class="keyword">var</span> (</span><br><span class="line">		wg   sync.WaitGroup</span><br><span class="line">		once sync.Once</span><br><span class="line">		err  <span class="type">error</span></span><br><span class="line">	)</span><br><span class="line">	<span class="keyword">for</span> _, f := <span class="keyword">range</span> handlers &#123;</span><br><span class="line">		wg.Add(<span class="number">1</span>)</span><br><span class="line">		<span class="keyword">go</span> <span class="function"><span class="keyword">func</span><span class="params">(handler <span class="keyword">func</span>()</span></span> <span class="type">error</span>) &#123;</span><br><span class="line">			<span class="keyword">defer</span> <span class="function"><span class="keyword">func</span><span class="params">()</span></span> &#123;</span><br><span class="line">				<span class="keyword">if</span> e := <span class="built_in">recover</span>(); e != <span class="literal">nil</span> &#123;</span><br><span class="line">					buf := <span class="built_in">make</span>([]<span class="type">byte</span>, PanicBufLen)</span><br><span class="line">					buf = buf[:runtime.Stack(buf, <span class="literal">false</span>)]</span><br><span class="line">					log.Errorf(<span class="string">&quot;[PANIC]%v\n%s\n&quot;</span>, e, buf)</span><br><span class="line">					once.Do(<span class="function"><span class="keyword">func</span><span class="params">()</span></span> &#123;</span><br><span class="line">						err = errs.New(errs.RetServerSystemErr, <span class="string">&quot;panic found in call handlers&quot;</span>)</span><br><span class="line">					&#125;)</span><br><span class="line">				&#125;</span><br><span class="line">				wg.Done()</span><br><span class="line">			&#125;()</span><br><span class="line">			<span class="keyword">if</span> e := handler(); e != <span class="literal">nil</span> &#123;</span><br><span class="line">				once.Do(<span class="function"><span class="keyword">func</span><span class="params">()</span></span> &#123;</span><br><span class="line">					err = e</span><br><span class="line">				&#125;)</span><br><span class="line">			&#125;</span><br><span class="line">		&#125;(f)</span><br><span class="line">	&#125;</span><br><span class="line">	wg.Wait()</span><br><span class="line">	<span class="keyword">return</span> err</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>]]></content>
+  </entry>
+  <entry>
+    <title>golang知识点总结</title>
+    <url>/post/393519b.html</url>
+    <content><![CDATA[<h1 id="GMP调度器"><a href="#GMP调度器" class="headerlink" title="GMP调度器"></a>GMP调度器</h1><p>gmp可以理解为是golang管理协程的一套算法</p>
+<h2 id="前置条件"><a href="#前置条件" class="headerlink" title="前置条件"></a>前置条件</h2><p>linux默认线程大小是8MB(默认栈大小)<br>goroutine大小是8KB左右</p>
+<h3 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h3><ul>
+<li><a href="https://learnku.com/articles/41728">Golang 调度器 GMP 原理与调度全分析</a></li>
+<li><a href="https://www.yuque.com/aceld/golang/ithv8f">Golang修养之路</a></li>
+</ul>
+]]></content>
+      <categories>
+        <category>技术</category>
+        <category>golang</category>
+      </categories>
+  </entry>
+  <entry>
     <title>ERD</title>
     <url>/post/702c2c66.html</url>
     <content><![CDATA[<h2 id="ERD定义"><a href="#ERD定义" class="headerlink" title="ERD定义"></a>ERD定义</h2><p>ERD全称<code>Entity Relationship Diagrams</code>, 提供了表示存储结构的实体类型、属性和联系的方法，用来描述存储设计。</p>
@@ -139,28 +161,6 @@ User ||--o{ Msg: has</pre>
       <tags>
         <tag>ERD</tag>
       </tags>
-  </entry>
-  <entry>
-    <title>golang code snippet</title>
-    <url>/post/cee729f9.html</url>
-    <content><![CDATA[<h2 id="列表去重"><a href="#列表去重" class="headerlink" title="列表去重"></a>列表去重</h2><figure class="highlight go"><table><tr><td class="code"><pre><span class="line"><span class="comment">// RmDupAndEmptyOfList 列表元素去重并去空</span></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">RmDupAndEmptyOfList</span><span class="params">(list []<span class="type">string</span>)</span></span> []<span class="type">string</span> &#123;</span><br><span class="line">	mp := <span class="keyword">map</span>[<span class="type">string</span>]<span class="type">bool</span>&#123;&#125;</span><br><span class="line">	<span class="keyword">for</span> _, item := <span class="keyword">range</span> list &#123;</span><br><span class="line">		<span class="keyword">if</span> item != <span class="string">&quot;&quot;</span> &#123;</span><br><span class="line">			mp[item] = <span class="literal">true</span></span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="keyword">var</span> listUniq []<span class="type">string</span></span><br><span class="line">	<span class="keyword">for</span> k := <span class="keyword">range</span> mp &#123;</span><br><span class="line">		listUniq = <span class="built_in">append</span>(listUniq, k)</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="keyword">return</span> listUniq</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<h2 id="并发处理任务"><a href="#并发处理任务" class="headerlink" title="并发处理任务"></a>并发处理任务</h2><figure class="highlight go"><table><tr><td class="code"><pre><span class="line"><span class="comment">// GoAndWait 封装更安全的多并发调用, 启动goroutine并等待所有处理流程完成，自动recover</span></span><br><span class="line"><span class="comment">// 返回值error返回的是多并发协程里面第一个返回的不为nil的error，主要用于关键路径判断，当多并发协程里面有一个是关键路径且有失败则返回err，其他非关键路径并发全部返回nil</span></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">GoAndWait</span><span class="params">(handlers ...<span class="keyword">func</span>()</span></span> <span class="type">error</span>) <span class="type">error</span> &#123;</span><br><span class="line">	<span class="keyword">var</span> (</span><br><span class="line">		wg   sync.WaitGroup</span><br><span class="line">		once sync.Once</span><br><span class="line">		err  <span class="type">error</span></span><br><span class="line">	)</span><br><span class="line">	<span class="keyword">for</span> _, f := <span class="keyword">range</span> handlers &#123;</span><br><span class="line">		wg.Add(<span class="number">1</span>)</span><br><span class="line">		<span class="keyword">go</span> <span class="function"><span class="keyword">func</span><span class="params">(handler <span class="keyword">func</span>()</span></span> <span class="type">error</span>) &#123;</span><br><span class="line">			<span class="keyword">defer</span> <span class="function"><span class="keyword">func</span><span class="params">()</span></span> &#123;</span><br><span class="line">				<span class="keyword">if</span> e := <span class="built_in">recover</span>(); e != <span class="literal">nil</span> &#123;</span><br><span class="line">					buf := <span class="built_in">make</span>([]<span class="type">byte</span>, PanicBufLen)</span><br><span class="line">					buf = buf[:runtime.Stack(buf, <span class="literal">false</span>)]</span><br><span class="line">					log.Errorf(<span class="string">&quot;[PANIC]%v\n%s\n&quot;</span>, e, buf)</span><br><span class="line">					once.Do(<span class="function"><span class="keyword">func</span><span class="params">()</span></span> &#123;</span><br><span class="line">						err = errs.New(errs.RetServerSystemErr, <span class="string">&quot;panic found in call handlers&quot;</span>)</span><br><span class="line">					&#125;)</span><br><span class="line">				&#125;</span><br><span class="line">				wg.Done()</span><br><span class="line">			&#125;()</span><br><span class="line">			<span class="keyword">if</span> e := handler(); e != <span class="literal">nil</span> &#123;</span><br><span class="line">				once.Do(<span class="function"><span class="keyword">func</span><span class="params">()</span></span> &#123;</span><br><span class="line">					err = e</span><br><span class="line">				&#125;)</span><br><span class="line">			&#125;</span><br><span class="line">		&#125;(f)</span><br><span class="line">	&#125;</span><br><span class="line">	wg.Wait()</span><br><span class="line">	<span class="keyword">return</span> err</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>]]></content>
-  </entry>
-  <entry>
-    <title>golang知识点总结</title>
-    <url>/post/393519b.html</url>
-    <content><![CDATA[<h1 id="GMP调度器"><a href="#GMP调度器" class="headerlink" title="GMP调度器"></a>GMP调度器</h1><p>gmp可以理解为是golang管理协程的一套算法</p>
-<h2 id="前置条件"><a href="#前置条件" class="headerlink" title="前置条件"></a>前置条件</h2><p>linux默认线程大小是8MB(默认栈大小)<br>goroutine大小是8KB左右</p>
-<h3 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h3><ul>
-<li><a href="https://learnku.com/articles/41728">Golang 调度器 GMP 原理与调度全分析</a></li>
-<li><a href="https://www.yuque.com/aceld/golang/ithv8f">Golang修养之路</a></li>
-</ul>
-]]></content>
-      <categories>
-        <category>技术</category>
-        <category>golang</category>
-      </categories>
   </entry>
   <entry>
     <title>Hello World</title>
@@ -504,11 +504,9 @@ User ||--o{ Msg: has</pre>
       </tags>
   </entry>
   <entry>
-    <title>论寅巳申三刑</title>
-    <url>/post/ee408ec8.html</url>
-    <content><![CDATA[<p>寅巳申三刑是地支刑冲破害合会关系中的一种，本身无关吉凶，其吉凶体现在以下各个场景</p>
-<h2 id="1-申金柱透出庚金"><a href="#1-申金柱透出庚金" class="headerlink" title="1.申金柱透出庚金"></a>1.申金柱透出庚金</h2><p>此时庚金受伤，若庚金为用神，则吉，否则凶，具体应事看受伤的十神</p>
-]]></content>
+    <title>论驿马</title>
+    <url>/post/53de3820.html</url>
+    <content><![CDATA[]]></content>
       <categories>
         <category>易经</category>
         <category>子平</category>
@@ -535,15 +533,6 @@ User ||--o{ Msg: has</pre>
       </categories>
   </entry>
   <entry>
-    <title>论驿马</title>
-    <url>/post/53de3820.html</url>
-    <content><![CDATA[]]></content>
-      <categories>
-        <category>易经</category>
-        <category>子平</category>
-      </categories>
-  </entry>
-  <entry>
     <title>python笔记</title>
     <url>/post/c00b24b1.html</url>
     <content><![CDATA[]]></content>
@@ -551,6 +540,99 @@ User ||--o{ Msg: has</pre>
         <category>技术</category>
         <category>python</category>
       </categories>
+  </entry>
+  <entry>
+    <title>html_css笔记</title>
+    <url>/post/fa4f271f.html</url>
+    <content><![CDATA[<h2 id="css学习资源"><a href="#css学习资源" class="headerlink" title="css学习资源"></a>css学习资源</h2><ul>
+<li><a href="https://www.guess-css.app/">GuessCSS</a></li>
+<li><a href="https://github.com/l-hammer/You-need-to-know-css">You-need-to-know-css</a></li>
+<li><a href="https://github.com/chokcoco/CSS-Inspiration">CSS-Inspiration</a></li>
+</ul>
+<h2 id="解决父元素高度塌陷问题-和-外边距重叠问题，使用flex布局可避免该问题"><a href="#解决父元素高度塌陷问题-和-外边距重叠问题，使用flex布局可避免该问题" class="headerlink" title="解决父元素高度塌陷问题 和 外边距重叠问题，使用flex布局可避免该问题"></a>解决父元素高度塌陷问题 和 外边距重叠问题，使用flex布局可避免该问题</h2><figure class="highlight css"><table><tr><td class="code"><pre><span class="line"><span class="comment">/* 终极版本 */</span></span><br><span class="line"><span class="selector-class">.clearfix</span><span class="selector-pseudo">::before</span>,</span><br><span class="line"><span class="selector-class">.clearfix</span><span class="selector-pseudo">::after</span> &#123;</span><br><span class="line">  <span class="attribute">content</span>: <span class="string">&#x27;&#x27;</span>;</span><br><span class="line">  <span class="attribute">display</span>: table;</span><br><span class="line">  <span class="attribute">clear</span>: both;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>]]></content>
+  </entry>
+  <entry>
+    <title>八字案例收集</title>
+    <url>/post/9a56a5e1.html</url>
+    <content><![CDATA[<h2 id="身弱伤官见官富贵"><a href="#身弱伤官见官富贵" class="headerlink" title="身弱伤官见官富贵"></a>身弱伤官见官富贵</h2><h3 id="乾造-癸未-乙卯-戊辰-辛酉"><a href="#乾造-癸未-乙卯-戊辰-辛酉" class="headerlink" title="乾造 癸未 乙卯 戊辰 辛酉"></a>乾造 癸未 乙卯 戊辰 辛酉</h3><img src="/images/01_chenminzhi.jpeg" width = "200" alt="图片名称" align=center />
+
+<blockquote>
+<p>大运: 甲寅(2&#x2F;1945) 癸丑 壬子 辛亥 庚戌 己酉 戊申</p>
+</blockquote>
+<ul>
+<li>身弱，伤官见官，虽然年干透财，但虚浮无根，不足以通关，因此伤官和官杀形成对抗，吉凶要看谁强谁弱；月干正官，坐禄得令而旺，更得财星生扶，且有卯未半合官局，可以说强旺至极，再看时干伤官，坐禄不弱，且得辰酉合金为强根，并得日主生扶，和官杀分庭抗礼，保护日主不被杀克，因此显贵，由于命局五行均衡，</li>
+<li>断语: <ul>
+<li>出身于富贵之家，父母及本人均有大作为，上能得父母之力，下能享子女之福，为三代富贵之命</li>
+<li>胆大心细，倔强直率，办事认真，性情开朗</li>
+<li>初运不佳，体弱多病，多灾多难，1951(辛卯年)有死里逃生之灾。反馈：从小有支气管炎，肺炎，消化不良，51年因肺炎差点死掉</li>
+<li>学历不高，有经营头脑，少年得志，中年大发，晚年暴富。反馈：牛脾气，做生意拿手，不怕担风险，总是成功</li>
+<li>72、77、81、97年大发</li>
+<li>85、86、88年大灾。反馈：做生意失手，损失千万以上</li>
+<li>晚运99年开始，00、01、04、05年大发，之后运气不佳，应步步为营，方可安享晚年</li>
+<li>父母高寿，本人家庭幸福，婚姻和顺，65或72年结婚。反馈：家庭幸福，有2女1子，父母80高龄，均健在</li>
+<li></li>
+</ul>
+</li>
+</ul>
+<h2 id="身弱印旺"><a href="#身弱印旺" class="headerlink" title="身弱印旺"></a>身弱印旺</h2><h3 id="乾造-癸丑-戊午-庚子-己卯"><a href="#乾造-癸丑-戊午-庚子-己卯" class="headerlink" title="乾造: 癸丑 戊午 庚子 己卯"></a>乾造: 癸丑 戊午 庚子 己卯</h3><blockquote>
+<p>大运: 丁巳 丙辰 乙卯(29) 甲寅 癸丑 壬子</p>
+</blockquote>
+<ul>
+<li>先看日主，地支毫无根气，戊癸合火生旺了土印，月令午火，火土同宫印旺，因此命盘的特点就是身弱印旺，食伤生财为用，比劫为喜，忌火土</li>
+<li>再看婚姻宫被冲，财星不透，财的原神食伤又被合走，有妻子被婆婆制住之象，可断婆媳关系不好，食伤和财都被制则妻子精力不足，性生活不和谐，枭印旺疑心重，怀疑妻子出轨</li>
+</ul>
+<h2 id="克夫"><a href="#克夫" class="headerlink" title="克夫"></a>克夫</h2><h3 id="坤造-壬戌-辛亥-甲子-丙寅"><a href="#坤造-壬戌-辛亥-甲子-丙寅" class="headerlink" title="坤造: 壬戌 辛亥 甲子 丙寅"></a>坤造: 壬戌 辛亥 甲子 丙寅</h3><blockquote>
+<p>大运: 庚戌 己酉 戊申 丁未 丙午</p>
+</blockquote>
+<ul>
+<li>分析: 日主身强，正官格，偏印格，食神格，用火土金</li>
+<li>优点: 己酉、戊申运，夫星旺相，夫登甲第，官至御史</li>
+<li>缺点: 运入南方，旺火烧金夫，丁未夫死孀居</li>
+<li>综合: 中年旺夫，晚年旺子，夫明子秀</li>
+<li>出自: 《神峰通考》</li>
+</ul>
+<h2 id="克妻"><a href="#克妻" class="headerlink" title="克妻"></a>克妻</h2><h3 id="乾造-丙子-辛卯-丁酉-庚戌"><a href="#乾造-丙子-辛卯-丁酉-庚戌" class="headerlink" title="乾造: 丙子 辛卯 丁酉 庚戌"></a>乾造: 丙子 辛卯 丁酉 庚戌</h3><blockquote>
+<p>大运: 壬辰 癸巳 甲午 乙未</p>
+</blockquote>
+<ul>
+<li>分析: 日主身不弱，甲午运乙巳年离婚，原因丙辛合天干无水，因此化木，增旺了日主，甲午运丙火劫财坐羊刃，乙巳引发卯酉冲，婚姻宫被冲+羊刃劫财，因此婚灾</li>
+</ul>
+<h2 id="克父"><a href="#克父" class="headerlink" title="克父"></a>克父</h2><h3 id="乾造-癸未-戊午-庚申-庚辰"><a href="#乾造-癸未-戊午-庚申-庚辰" class="headerlink" title="乾造: 癸未 戊午 庚申 庚辰"></a>乾造: 癸未 戊午 庚申 庚辰</h3><blockquote>
+<p>大运: 丁巳 丙辰 乙卯 甲寅</p>
+</blockquote>
+<ul>
+<li>分析: 戊癸合不化火而化土印，日主身旺，甲寅运辛酉年父死，原因是比劫过旺夺财</li>
+</ul>
+<h2 id="贪财坏印"><a href="#贪财坏印" class="headerlink" title="贪财坏印"></a>贪财坏印</h2><h3 id="乾造-己丑-癸酉-乙卯-丁丑"><a href="#乾造-己丑-癸酉-乙卯-丁丑" class="headerlink" title="乾造: 己丑 癸酉 乙卯 丁丑"></a>乾造: 己丑 癸酉 乙卯 丁丑</h3><blockquote>
+<p>己巳运 辛未年</p>
+</blockquote>
+<ul>
+<li>分析: 原局身弱，透印为用，巳酉丑三合官杀局，流年辛金透出有力，但是卯未合木，杀被冲弱，丑未冲，四个土导致财比杀更旺，杀不受生，财越级克印，用神被伤，因此，命主贪财犯事，犯官非。</li>
+<li>实际此人是单位领导，因挪用公款与人做生意而亏本，被发现后罢职、丢官、吃官司。</li>
+</ul>
+]]></content>
+      <categories>
+        <category>易经</category>
+        <category>子平</category>
+      </categories>
+  </entry>
+  <entry>
+    <title>论寅巳申三刑</title>
+    <url>/post/ee408ec8.html</url>
+    <content><![CDATA[<p>寅巳申三刑是地支刑冲破害合会关系中的一种，本身无关吉凶，其吉凶体现在以下各个场景</p>
+<h2 id="1-申金柱透出庚金"><a href="#1-申金柱透出庚金" class="headerlink" title="1.申金柱透出庚金"></a>1.申金柱透出庚金</h2><p>此时庚金受伤，若庚金为用神，则吉，否则凶，具体应事看受伤的十神</p>
+]]></content>
+      <categories>
+        <category>易经</category>
+        <category>子平</category>
+      </categories>
+  </entry>
+  <entry>
+    <title>spider learn notes</title>
+    <url>/post/15afb360.html</url>
+    <content><![CDATA[<h2 id="环境准备"><a href="#环境准备" class="headerlink" title="环境准备"></a>环境准备</h2><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">pip3 install &quot;https[http2]&quot;</span><br></pre></td></tr></table></figure>
+
+<h2 id="案例"><a href="#案例" class="headerlink" title="案例"></a>案例</h2>]]></content>
   </entry>
   <entry>
     <title>javascript知识点总结</title>
@@ -699,87 +781,5 @@ User ||--o{ Msg: has</pre>
         <category>技术</category>
         <category>javascript</category>
       </categories>
-  </entry>
-  <entry>
-    <title>八字案例收集</title>
-    <url>/post/9a56a5e1.html</url>
-    <content><![CDATA[<h2 id="身弱伤官见官富贵"><a href="#身弱伤官见官富贵" class="headerlink" title="身弱伤官见官富贵"></a>身弱伤官见官富贵</h2><h3 id="乾造-癸未-乙卯-戊辰-辛酉"><a href="#乾造-癸未-乙卯-戊辰-辛酉" class="headerlink" title="乾造 癸未 乙卯 戊辰 辛酉"></a>乾造 癸未 乙卯 戊辰 辛酉</h3><img src="/images/01_chenminzhi.jpeg" width = "200" alt="图片名称" align=center />
-
-<blockquote>
-<p>大运: 甲寅(2&#x2F;1945) 癸丑 壬子 辛亥 庚戌 己酉 戊申</p>
-</blockquote>
-<ul>
-<li>身弱，伤官见官，虽然年干透财，但虚浮无根，不足以通关，因此伤官和官杀形成对抗，吉凶要看谁强谁弱；月干正官，坐禄得令而旺，更得财星生扶，且有卯未半合官局，可以说强旺至极，再看时干伤官，坐禄不弱，且得辰酉合金为强根，并得日主生扶，和官杀分庭抗礼，保护日主不被杀克，因此显贵，由于命局五行均衡，</li>
-<li>断语: <ul>
-<li>出身于富贵之家，父母及本人均有大作为，上能得父母之力，下能享子女之福，为三代富贵之命</li>
-<li>胆大心细，倔强直率，办事认真，性情开朗</li>
-<li>初运不佳，体弱多病，多灾多难，1951(辛卯年)有死里逃生之灾。反馈：从小有支气管炎，肺炎，消化不良，51年因肺炎差点死掉</li>
-<li>学历不高，有经营头脑，少年得志，中年大发，晚年暴富。反馈：牛脾气，做生意拿手，不怕担风险，总是成功</li>
-<li>72、77、81、97年大发</li>
-<li>85、86、88年大灾。反馈：做生意失手，损失千万以上</li>
-<li>晚运99年开始，00、01、04、05年大发，之后运气不佳，应步步为营，方可安享晚年</li>
-<li>父母高寿，本人家庭幸福，婚姻和顺，65或72年结婚。反馈：家庭幸福，有2女1子，父母80高龄，均健在</li>
-<li></li>
-</ul>
-</li>
-</ul>
-<h2 id="身弱印旺"><a href="#身弱印旺" class="headerlink" title="身弱印旺"></a>身弱印旺</h2><h3 id="乾造-癸丑-戊午-庚子-己卯"><a href="#乾造-癸丑-戊午-庚子-己卯" class="headerlink" title="乾造: 癸丑 戊午 庚子 己卯"></a>乾造: 癸丑 戊午 庚子 己卯</h3><blockquote>
-<p>大运: 丁巳 丙辰 乙卯(29) 甲寅 癸丑 壬子</p>
-</blockquote>
-<ul>
-<li>先看日主，地支毫无根气，戊癸合火生旺了土印，月令午火，火土同宫印旺，因此命盘的特点就是身弱印旺，食伤生财为用，比劫为喜，忌火土</li>
-<li>再看婚姻宫被冲，财星不透，财的原神食伤又被合走，有妻子被婆婆制住之象，可断婆媳关系不好，食伤和财都被制则妻子精力不足，性生活不和谐，枭印旺疑心重，怀疑妻子出轨</li>
-</ul>
-<h2 id="克夫"><a href="#克夫" class="headerlink" title="克夫"></a>克夫</h2><h3 id="坤造-壬戌-辛亥-甲子-丙寅"><a href="#坤造-壬戌-辛亥-甲子-丙寅" class="headerlink" title="坤造: 壬戌 辛亥 甲子 丙寅"></a>坤造: 壬戌 辛亥 甲子 丙寅</h3><blockquote>
-<p>大运: 庚戌 己酉 戊申 丁未 丙午</p>
-</blockquote>
-<ul>
-<li>分析: 日主身强，正官格，偏印格，食神格，用火土金</li>
-<li>优点: 己酉、戊申运，夫星旺相，夫登甲第，官至御史</li>
-<li>缺点: 运入南方，旺火烧金夫，丁未夫死孀居</li>
-<li>综合: 中年旺夫，晚年旺子，夫明子秀</li>
-<li>出自: 《神峰通考》</li>
-</ul>
-<h2 id="克妻"><a href="#克妻" class="headerlink" title="克妻"></a>克妻</h2><h3 id="乾造-丙子-辛卯-丁酉-庚戌"><a href="#乾造-丙子-辛卯-丁酉-庚戌" class="headerlink" title="乾造: 丙子 辛卯 丁酉 庚戌"></a>乾造: 丙子 辛卯 丁酉 庚戌</h3><blockquote>
-<p>大运: 壬辰 癸巳 甲午 乙未</p>
-</blockquote>
-<ul>
-<li>分析: 日主身不弱，甲午运乙巳年离婚，原因丙辛合天干无水，因此化木，增旺了日主，甲午运丙火劫财坐羊刃，乙巳引发卯酉冲，婚姻宫被冲+羊刃劫财，因此婚灾</li>
-</ul>
-<h2 id="克父"><a href="#克父" class="headerlink" title="克父"></a>克父</h2><h3 id="乾造-癸未-戊午-庚申-庚辰"><a href="#乾造-癸未-戊午-庚申-庚辰" class="headerlink" title="乾造: 癸未 戊午 庚申 庚辰"></a>乾造: 癸未 戊午 庚申 庚辰</h3><blockquote>
-<p>大运: 丁巳 丙辰 乙卯 甲寅</p>
-</blockquote>
-<ul>
-<li>分析: 戊癸合不化火而化土印，日主身旺，甲寅运辛酉年父死，原因是比劫过旺夺财</li>
-</ul>
-<h2 id="贪财坏印"><a href="#贪财坏印" class="headerlink" title="贪财坏印"></a>贪财坏印</h2><h3 id="乾造-己丑-癸酉-乙卯-丁丑"><a href="#乾造-己丑-癸酉-乙卯-丁丑" class="headerlink" title="乾造: 己丑 癸酉 乙卯 丁丑"></a>乾造: 己丑 癸酉 乙卯 丁丑</h3><blockquote>
-<p>己巳运 辛未年</p>
-</blockquote>
-<ul>
-<li>分析: 原局身弱，透印为用，巳酉丑三合官杀局，流年辛金透出有力，但是卯未合木，杀被冲弱，丑未冲，四个土导致财比杀更旺，杀不受生，财越级克印，用神被伤，因此，命主贪财犯事，犯官非。</li>
-<li>实际此人是单位领导，因挪用公款与人做生意而亏本，被发现后罢职、丢官、吃官司。</li>
-</ul>
-]]></content>
-      <categories>
-        <category>易经</category>
-        <category>子平</category>
-      </categories>
-  </entry>
-  <entry>
-    <title>html_css笔记</title>
-    <url>/post/fa4f271f.html</url>
-    <content><![CDATA[<h2 id="css学习资源"><a href="#css学习资源" class="headerlink" title="css学习资源"></a>css学习资源</h2><ul>
-<li><a href="https://www.guess-css.app/">GuessCSS</a></li>
-<li><a href="https://github.com/l-hammer/You-need-to-know-css">You-need-to-know-css</a></li>
-<li><a href="https://github.com/chokcoco/CSS-Inspiration">CSS-Inspiration</a></li>
-</ul>
-<h2 id="解决父元素高度塌陷问题-和-外边距重叠问题，使用flex布局可避免该问题"><a href="#解决父元素高度塌陷问题-和-外边距重叠问题，使用flex布局可避免该问题" class="headerlink" title="解决父元素高度塌陷问题 和 外边距重叠问题，使用flex布局可避免该问题"></a>解决父元素高度塌陷问题 和 外边距重叠问题，使用flex布局可避免该问题</h2><figure class="highlight css"><table><tr><td class="code"><pre><span class="line"><span class="comment">/* 终极版本 */</span></span><br><span class="line"><span class="selector-class">.clearfix</span><span class="selector-pseudo">::before</span>,</span><br><span class="line"><span class="selector-class">.clearfix</span><span class="selector-pseudo">::after</span> &#123;</span><br><span class="line">  <span class="attribute">content</span>: <span class="string">&#x27;&#x27;</span>;</span><br><span class="line">  <span class="attribute">display</span>: table;</span><br><span class="line">  <span class="attribute">clear</span>: both;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>]]></content>
-  </entry>
-  <entry>
-    <title>spider learn notes</title>
-    <url>/post/15afb360.html</url>
-    <content><![CDATA[<h2 id="环境准备"><a href="#环境准备" class="headerlink" title="环境准备"></a>环境准备</h2><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">pip3 install &quot;https[http2]&quot;</span><br></pre></td></tr></table></figure>
-
-<h2 id="案例"><a href="#案例" class="headerlink" title="案例"></a>案例</h2>]]></content>
   </entry>
 </search>
