@@ -141,6 +141,13 @@ User ||--o{ Msg: has</pre>
       </tags>
   </entry>
   <entry>
+    <title>golang code snippet</title>
+    <url>/post/cee729f9.html</url>
+    <content><![CDATA[<h2 id="列表去重"><a href="#列表去重" class="headerlink" title="列表去重"></a>列表去重</h2><figure class="highlight go"><table><tr><td class="code"><pre><span class="line"><span class="comment">// RmDupAndEmptyOfList 列表元素去重并去空</span></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">RmDupAndEmptyOfList</span><span class="params">(list []<span class="type">string</span>)</span></span> []<span class="type">string</span> &#123;</span><br><span class="line">	mp := <span class="keyword">map</span>[<span class="type">string</span>]<span class="type">bool</span>&#123;&#125;</span><br><span class="line">	<span class="keyword">for</span> _, item := <span class="keyword">range</span> list &#123;</span><br><span class="line">		<span class="keyword">if</span> item != <span class="string">&quot;&quot;</span> &#123;</span><br><span class="line">			mp[item] = <span class="literal">true</span></span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="keyword">var</span> listUniq []<span class="type">string</span></span><br><span class="line">	<span class="keyword">for</span> k := <span class="keyword">range</span> mp &#123;</span><br><span class="line">		listUniq = <span class="built_in">append</span>(listUniq, k)</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="keyword">return</span> listUniq</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="并发处理任务"><a href="#并发处理任务" class="headerlink" title="并发处理任务"></a>并发处理任务</h2><figure class="highlight go"><table><tr><td class="code"><pre><span class="line"><span class="comment">// GoAndWait 封装更安全的多并发调用, 启动goroutine并等待所有处理流程完成，自动recover</span></span><br><span class="line"><span class="comment">// 返回值error返回的是多并发协程里面第一个返回的不为nil的error，主要用于关键路径判断，当多并发协程里面有一个是关键路径且有失败则返回err，其他非关键路径并发全部返回nil</span></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">GoAndWait</span><span class="params">(handlers ...<span class="keyword">func</span>()</span></span> <span class="type">error</span>) <span class="type">error</span> &#123;</span><br><span class="line">	<span class="keyword">var</span> (</span><br><span class="line">		wg   sync.WaitGroup</span><br><span class="line">		once sync.Once</span><br><span class="line">		err  <span class="type">error</span></span><br><span class="line">	)</span><br><span class="line">	<span class="keyword">for</span> _, f := <span class="keyword">range</span> handlers &#123;</span><br><span class="line">		wg.Add(<span class="number">1</span>)</span><br><span class="line">		<span class="keyword">go</span> <span class="function"><span class="keyword">func</span><span class="params">(handler <span class="keyword">func</span>()</span></span> <span class="type">error</span>) &#123;</span><br><span class="line">			<span class="keyword">defer</span> <span class="function"><span class="keyword">func</span><span class="params">()</span></span> &#123;</span><br><span class="line">				<span class="keyword">if</span> e := <span class="built_in">recover</span>(); e != <span class="literal">nil</span> &#123;</span><br><span class="line">					buf := <span class="built_in">make</span>([]<span class="type">byte</span>, PanicBufLen)</span><br><span class="line">					buf = buf[:runtime.Stack(buf, <span class="literal">false</span>)]</span><br><span class="line">					log.Errorf(<span class="string">&quot;[PANIC]%v\n%s\n&quot;</span>, e, buf)</span><br><span class="line">					once.Do(<span class="function"><span class="keyword">func</span><span class="params">()</span></span> &#123;</span><br><span class="line">						err = errs.New(errs.RetServerSystemErr, <span class="string">&quot;panic found in call handlers&quot;</span>)</span><br><span class="line">					&#125;)</span><br><span class="line">				&#125;</span><br><span class="line">				wg.Done()</span><br><span class="line">			&#125;()</span><br><span class="line">			<span class="keyword">if</span> e := handler(); e != <span class="literal">nil</span> &#123;</span><br><span class="line">				once.Do(<span class="function"><span class="keyword">func</span><span class="params">()</span></span> &#123;</span><br><span class="line">					err = e</span><br><span class="line">				&#125;)</span><br><span class="line">			&#125;</span><br><span class="line">		&#125;(f)</span><br><span class="line">	&#125;</span><br><span class="line">	wg.Wait()</span><br><span class="line">	<span class="keyword">return</span> err</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>]]></content>
+  </entry>
+  <entry>
     <title>golang知识点总结</title>
     <url>/post/393519b.html</url>
     <content><![CDATA[<h1 id="GMP调度器"><a href="#GMP调度器" class="headerlink" title="GMP调度器"></a>GMP调度器</h1><p>gmp可以理解为是golang管理协程的一套算法</p>
@@ -232,24 +239,6 @@ User ||--o{ Msg: has</pre>
       </categories>
   </entry>
   <entry>
-    <title>golang code snippet</title>
-    <url>/post/cee729f9.html</url>
-    <content><![CDATA[<h2 id="列表去重"><a href="#列表去重" class="headerlink" title="列表去重"></a>列表去重</h2><figure class="highlight go"><table><tr><td class="code"><pre><span class="line"><span class="comment">// RmDupAndEmptyOfList 列表元素去重并去空</span></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">RmDupAndEmptyOfList</span><span class="params">(list []<span class="type">string</span>)</span></span> []<span class="type">string</span> &#123;</span><br><span class="line">	mp := <span class="keyword">map</span>[<span class="type">string</span>]<span class="type">bool</span>&#123;&#125;</span><br><span class="line">	<span class="keyword">for</span> _, item := <span class="keyword">range</span> list &#123;</span><br><span class="line">		<span class="keyword">if</span> item != <span class="string">&quot;&quot;</span> &#123;</span><br><span class="line">			mp[item] = <span class="literal">true</span></span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="keyword">var</span> listUniq []<span class="type">string</span></span><br><span class="line">	<span class="keyword">for</span> k := <span class="keyword">range</span> mp &#123;</span><br><span class="line">		listUniq = <span class="built_in">append</span>(listUniq, k)</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="keyword">return</span> listUniq</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<h2 id="并发处理任务"><a href="#并发处理任务" class="headerlink" title="并发处理任务"></a>并发处理任务</h2><figure class="highlight go"><table><tr><td class="code"><pre><span class="line"><span class="comment">// GoAndWait 封装更安全的多并发调用, 启动goroutine并等待所有处理流程完成，自动recover</span></span><br><span class="line"><span class="comment">// 返回值error返回的是多并发协程里面第一个返回的不为nil的error，主要用于关键路径判断，当多并发协程里面有一个是关键路径且有失败则返回err，其他非关键路径并发全部返回nil</span></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">GoAndWait</span><span class="params">(handlers ...<span class="keyword">func</span>()</span></span> <span class="type">error</span>) <span class="type">error</span> &#123;</span><br><span class="line">	<span class="keyword">var</span> (</span><br><span class="line">		wg   sync.WaitGroup</span><br><span class="line">		once sync.Once</span><br><span class="line">		err  <span class="type">error</span></span><br><span class="line">	)</span><br><span class="line">	<span class="keyword">for</span> _, f := <span class="keyword">range</span> handlers &#123;</span><br><span class="line">		wg.Add(<span class="number">1</span>)</span><br><span class="line">		<span class="keyword">go</span> <span class="function"><span class="keyword">func</span><span class="params">(handler <span class="keyword">func</span>()</span></span> <span class="type">error</span>) &#123;</span><br><span class="line">			<span class="keyword">defer</span> <span class="function"><span class="keyword">func</span><span class="params">()</span></span> &#123;</span><br><span class="line">				<span class="keyword">if</span> e := <span class="built_in">recover</span>(); e != <span class="literal">nil</span> &#123;</span><br><span class="line">					buf := <span class="built_in">make</span>([]<span class="type">byte</span>, PanicBufLen)</span><br><span class="line">					buf = buf[:runtime.Stack(buf, <span class="literal">false</span>)]</span><br><span class="line">					log.Errorf(<span class="string">&quot;[PANIC]%v\n%s\n&quot;</span>, e, buf)</span><br><span class="line">					once.Do(<span class="function"><span class="keyword">func</span><span class="params">()</span></span> &#123;</span><br><span class="line">						err = errs.New(errs.RetServerSystemErr, <span class="string">&quot;panic found in call handlers&quot;</span>)</span><br><span class="line">					&#125;)</span><br><span class="line">				&#125;</span><br><span class="line">				wg.Done()</span><br><span class="line">			&#125;()</span><br><span class="line">			<span class="keyword">if</span> e := handler(); e != <span class="literal">nil</span> &#123;</span><br><span class="line">				once.Do(<span class="function"><span class="keyword">func</span><span class="params">()</span></span> &#123;</span><br><span class="line">					err = e</span><br><span class="line">				&#125;)</span><br><span class="line">			&#125;</span><br><span class="line">		&#125;(f)</span><br><span class="line">	&#125;</span><br><span class="line">	wg.Wait()</span><br><span class="line">	<span class="keyword">return</span> err</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>]]></content>
-  </entry>
-  <entry>
-    <title>论寅巳申三刑</title>
-    <url>/post/ee408ec8.html</url>
-    <content><![CDATA[<p>寅巳申三刑是地支刑冲破害合会关系中的一种，本身无关吉凶，其吉凶体现在以下各个场景</p>
-<h2 id="1-申金柱透出庚金"><a href="#1-申金柱透出庚金" class="headerlink" title="1.申金柱透出庚金"></a>1.申金柱透出庚金</h2><p>此时庚金受伤，若庚金为用神，则吉，否则凶，具体应事看受伤的十神</p>
-]]></content>
-      <categories>
-        <category>易经</category>
-        <category>子平</category>
-      </categories>
-  </entry>
-  <entry>
     <title>论用神</title>
     <url>/post/935779c7.html</url>
     <content><![CDATA[<p>用神，就是对命主有好处的干支，能雪中送炭，能锦上添花。</p>
@@ -263,6 +252,265 @@ User ||--o{ Msg: has</pre>
 </ul>
 <h2 id="扶抑用神"><a href="#扶抑用神" class="headerlink" title="扶抑用神"></a>扶抑用神</h2><p>这也是目前最流行的一种用神定位方式，以追求日元平衡为目标。先看日主强弱，综合全盘衡量自党异党力量对比，日元强则喜克泄耗，弱则喜扶助。</p>
 <p>TODO</p>
+]]></content>
+      <categories>
+        <category>易经</category>
+        <category>子平</category>
+      </categories>
+  </entry>
+  <entry>
+    <title>论寅巳申三刑</title>
+    <url>/post/ee408ec8.html</url>
+    <content><![CDATA[<p>寅巳申三刑是地支刑冲破害合会关系中的一种，本身无关吉凶，其吉凶体现在以下各个场景</p>
+<h2 id="1-申金柱透出庚金"><a href="#1-申金柱透出庚金" class="headerlink" title="1.申金柱透出庚金"></a>1.申金柱透出庚金</h2><p>此时庚金受伤，若庚金为用神，则吉，否则凶，具体应事看受伤的十神</p>
+]]></content>
+      <categories>
+        <category>易经</category>
+        <category>子平</category>
+      </categories>
+  </entry>
+  <entry>
+    <title>javascript知识点总结</title>
+    <url>/post/78a8ec49.html</url>
+    <content><![CDATA[<h1 id="‘use-strict’"><a href="#‘use-strict’" class="headerlink" title="‘use strict’;"></a>‘use strict’;</h1><ul>
+<li><p>import方式</p>
+<figure class="highlight html"><table><tr><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">script</span> <span class="attr">type</span>=<span class="string">&quot;importmap&quot;</span>&gt;</span><span class="language-javascript"></span></span><br><span class="line"><span class="language-javascript">  &#123;</span></span><br><span class="line"><span class="language-javascript">    <span class="string">&quot;imports&quot;</span>: &#123;</span></span><br><span class="line"><span class="language-javascript">      <span class="string">&quot;vue&quot;</span>: <span class="string">&quot;https://unpkg.com/vue@3/dist/vue.esm-browser.js&quot;</span></span></span><br><span class="line"><span class="language-javascript">    &#125;</span></span><br><span class="line"><span class="language-javascript">  &#125;</span></span><br><span class="line"><span class="language-javascript"></span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;<span class="name">div</span> <span class="attr">id</span>=<span class="string">&quot;app&quot;</span>&gt;</span>&#123;&#123; message &#125;&#125;<span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;<span class="name">script</span> <span class="attr">type</span>=<span class="string">&quot;module&quot;</span>&gt;</span><span class="language-javascript"></span></span><br><span class="line"><span class="language-javascript">  <span class="keyword">import</span> &#123; createApp &#125; <span class="keyword">from</span> <span class="string">&#x27;vue&#x27;</span></span></span><br><span class="line"><span class="language-javascript"></span></span><br><span class="line"><span class="language-javascript">  <span class="title function_">createApp</span>(&#123;</span></span><br><span class="line"><span class="language-javascript">    <span class="title function_">data</span>(<span class="params"></span>) &#123;</span></span><br><span class="line"><span class="language-javascript">      <span class="keyword">return</span> &#123;</span></span><br><span class="line"><span class="language-javascript">        <span class="attr">message</span>: <span class="string">&#x27;Hello Vue!&#x27;</span></span></span><br><span class="line"><span class="language-javascript">      &#125;</span></span><br><span class="line"><span class="language-javascript">    &#125;</span></span><br><span class="line"><span class="language-javascript">  &#125;).<span class="title function_">mount</span>(<span class="string">&#x27;#app&#x27;</span>)</span></span><br><span class="line"><span class="language-javascript"></span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>严格模式下，当一个函数声明在一个代码块内时，它在该代码块内的任何位置都是可见的。但在代码块外不可见。</p>
+</li>
+</ul>
+<h1 id="比较"><a href="#比较" class="headerlink" title="比较"></a>比较</h1><ul>
+<li>在比较不同类型的值时，处于相等判断符号 &#x3D;&#x3D; 两侧的值会先被转化为数字。空字符串和 false 也是如此，转化后它们都为数字 0。</li>
+<li>严格相等运算符 &#x3D;&#x3D;&#x3D; 在进行比较时不会做任何的类型转换。</li>
+</ul>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">&#x27;&#x27; == false // true</span><br><span class="line">undefined == null // true</span><br><span class="line">undefined === null // false</span><br><span class="line">undefined == undefined // true</span><br><span class="line">undefined === undefined // true</span><br></pre></td></tr></table></figure>
+
+<h1 id="空值合并运算符"><a href="#空值合并运算符" class="headerlink" title="空值合并运算符 ??"></a>空值合并运算符 ??</h1><p>空值合并运算符 ?? 是最近才被添加到 JavaScript 中的，它的出现是因为人们对 || 不太满意。<br>它们之间重要的区别是：</p>
+<ul>
+<li>|| 返回第一个 真 值。</li>
+<li>?? 返回第一个 已定义的 值。</li>
+</ul>
+<p>数字类型</p>
+<ul>
+<li>NaN &#x3D;&#x3D;&#x3D; NaN &#x2F;&#x2F; false</li>
+<li>判断数字是否有效 <code>isFinite</code></li>
+<li>生成指定范围内概率均匀的随机整数</li>
+</ul>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="keyword">function</span> <span class="title function_">randomInteger</span>(<span class="params">min, max</span>) &#123;</span><br><span class="line">  <span class="comment">// here rand is from min to (max+1)</span></span><br><span class="line">  <span class="keyword">let</span> rand = min + <span class="title class_">Math</span>.<span class="title function_">random</span>() * (max + <span class="number">1</span> - min);</span><br><span class="line">  <span class="keyword">return</span> <span class="title class_">Math</span>.<span class="title function_">floor</span>(rand);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h1 id="数组"><a href="#数组" class="headerlink" title="数组"></a>数组</h1><ul>
+<li>取最后一个元素: <code>fruits.at(-1)</code></li>
+<li>遍历数组使用 <code>for (let fruit of fruits)</code></li>
+<li>清空数组最简单的方法就是: <code>arr.length = 0</code></li>
+<li>数组删除元素用 <code>arr.splice(start[, deleteCount, elem1, ..., elemN])</code></li>
+<li>拷贝数组 <code>arr.slice()</code></li>
+<li>拼接多个数组 <code>arr.concat()</code></li>
+<li>判断对象是否为数组 <code>Array.isArray()</code></li>
+</ul>
+<h1 id="对象"><a href="#对象" class="headerlink" title="对象"></a>对象</h1><ul>
+<li>对象解构赋值，函数参数默认值</li>
+</ul>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="keyword">function</span> <span class="title function_">showMenu</span>(<span class="params">&#123; title = <span class="string">&quot;Menu&quot;</span>, width = <span class="number">100</span>, height = <span class="number">200</span> &#125; = &#123;&#125;</span>) &#123;</span><br><span class="line">    <span class="title function_">alert</span>( <span class="string">`<span class="subst">$&#123;title&#125;</span> <span class="subst">$&#123;width&#125;</span> <span class="subst">$&#123;height&#125;</span>`</span> );</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>使用 Object.create 来实现比复制 for..in 循环中的属性更强大的对象克隆方式：<br><code>let clone = Object.create(Object.getPrototypeOf(obj), Object.getOwnPropertyDescriptors(obj));</code></li>
+<li>使用 Object.create(null) 创建一个没有 <strong>proto</strong> 的 “very plain” 对象，或者对此类场景坚持使用 Map 对象就可以了。</li>
+</ul>
+<h1 id="Promise"><a href="#Promise" class="headerlink" title="Promise"></a>Promise</h1><ul>
+<li>使用promise实现sleep<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="keyword">let</span> <span class="title function_">sleep</span> = (<span class="params">ms</span>)=&gt; <span class="keyword">new</span> <span class="title class_">Promise</span>(<span class="function">(<span class="params">resolve</span>)=&gt;</span>&#123; <span class="built_in">setTimeout</span>(resolve, ms); &#125;);</span><br><span class="line"><span class="comment">// 用法: await sleep(2000);</span></span><br></pre></td></tr></table></figure></li>
+</ul>
+<h1 id="this"><a href="#this" class="headerlink" title="this"></a>this</h1><ul>
+<li>箭头函数 this 的查找与常规变量的搜索方式完全相同：在外部词法环境中查找。</li>
+<li>普通函数this在调用时决定，即调用对象</li>
+<li>在一个对象还是在原型中。在一个方法调用中，this 始终是点符号 . 前面的对象。this 根本不受原型的影响。</li>
+</ul>
+<h1 id="继承"><a href="#继承" class="headerlink" title="继承"></a>继承</h1><ul>
+<li>for..in 循环在其自身和继承的属性上进行迭代。所有其他的键&#x2F;值获取方法仅对对象本身起作用。</li>
+<li>几乎所有其他键&#x2F;值获取方法，例如 Object.keys 和 Object.values 等，都会忽略继承的属性。它们只会对对象自身进行操作。不考虑 继承自原型的属性。</li>
+<li>父类构造器总是会使用它自己字段的值，而不是被重写的那一个。</li>
+</ul>
+<h1 id="模块"><a href="#模块" class="headerlink" title="模块"></a>模块</h1><ul>
+<li>模块脚本是被延迟的，所以要等到 HTML 文档被处理完成才会执行它。</li>
+<li>模块具有自己的本地顶级作用域，并可以通过 import&#x2F;export 交换功能。</li>
+<li>模块始终使用 use strict。</li>
+<li>模块代码只执行一次。导出仅创建一次，然后会在导入之间共享。</li>
+<li>严格模式下，eval 有属于自己的词法环境。因此我们不能从外部访问在 eval 中声明的函数和变量, eval 访问外部变量的能力会产生副作用。代码压缩工具（在把 JS 投入生产环境前对其进行压缩的工具）将局部变量重命名为更短的变量（例如 a 和 b 等），以使代码体积更小。这通常是安全的，但在使用了 eval 的情况下就不一样了，因为局部变量可能会被 eval 中的代码访问到。因此压缩工具不会对所有可能会被从 eval 中访问的变量进行重命名。这样会导致代码压缩率降低。</li>
+</ul>
+<h1 id="DOM"><a href="#DOM" class="headerlink" title="DOM"></a>DOM</h1><ul>
+<li>查看浏览器内部窗口高度: <code>window.innerHeight</code></li>
+<li>修改网页背景色: &#96;document.body.style.background &#x3D; “red”;</li>
+<li>由于历史原因，<head> 之前的空格和换行符均被忽略。<br>如果我们在 </body> 之后放置一些东西，那么它会被自动移动到 body 内，并处于 body 中的最下方，因为 HTML 规范要求所有内容必须位于 <body> 内。所以 </body> 之后不能有空格</li>
+<li>elem.closest(css) 方法会查找与 CSS 选择器匹配的最近的祖先</li>
+<li>所有的 “getElementsBy*” 方法都会返回一个 实时的（live） 集合。相反，querySelectorAll 返回的是一个 静态的 集合。就像元素的固定数组。</li>
+<li>判断元素B是否为A的子元素或者与其相等: elemA.contains(elemB)</li>
+<li>创建元素 let div &#x3D; document.createElement(‘div’);</li>
+<li>添加元素到body: document.body.append(div); 字符串内容会以文本的形式添加， 如果要添加html元素使用div.insertAdjacentHTML(‘beforebegin’, ‘<p>Hello</p>‘);</li>
+<li>移除节点: node.remove()</li>
+<li>所有插入方法都会自动从旧位置删除该节点。</li>
+<li>elem.cloneNode(true) 来创建元素的一个“深”克隆 — 具有所有特性（attribute）和子元素</li>
+<li>元素包装器: let fragment &#x3D; new DocumentFragment();</li>
+<li>清除子元素的方式<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="comment">// 方法一:</span></span><br><span class="line"><span class="keyword">function</span> <span class="title function_">clear</span>(<span class="params">elem</span>) &#123;</span><br><span class="line">  elem.<span class="property">innerHTML</span> = <span class="string">&#x27;&#x27;</span>;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">// 方法二: </span></span><br><span class="line"><span class="keyword">function</span> <span class="title function_">clear</span>(<span class="params">elem</span>) &#123;</span><br><span class="line">  <span class="keyword">while</span> (elem.<span class="property">firstChild</span>) &#123;</span><br><span class="line">    elem.<span class="property">firstChild</span>.<span class="title function_">remove</span>();</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li>
+</ul>
+<h1 id="dom样式"><a href="#dom样式" class="headerlink" title="dom样式"></a>dom样式</h1><ul>
+<li><p>为元素添加类: document.body.classList.add(‘article’);</p>
+</li>
+<li><p>设置字符串完整样式: div.cssText&#x3D;”color: red; width: 100px” 设置完整的属性</p>
+</li>
+<li><p>获取计算后的样式: let computedStyle &#x3D; getComputedStyle(document.body);</p>
+</li>
+<li><p>添加dom加载完成事件</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="comment">// 这种方式可以运行</span></span><br><span class="line"><span class="variable language_">document</span>.<span class="title function_">addEventListener</span>(<span class="string">&quot;DOMContentLoaded&quot;</span>, <span class="keyword">function</span>(<span class="params"></span>) &#123;</span><br><span class="line">  <span class="title function_">alert</span>(<span class="string">&quot;DOM built&quot;</span>);</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure></li>
+<li><p>停止冒泡的方法是 event.stopPropagation(), event.stopImmediatePropagation() 方法，可以用于停止冒泡，并阻止当前元素上的处理程序运行。使用该方法之后，其他处理程序就不会被执行。</p>
+</li>
+<li><p>elem.closest(selector) 方法返回与 selector 匹配的最近的祖先</p>
+</li>
+<li><p>event.preventDefault() 方法阻止浏览器默认行为</p>
+</li>
+<li><p>事件处理程序返回的值通常会被忽略。唯一的例外是从使用 on<event> 分配的处理程序中返回的 return false。在所有其他情况下，return 值都会被忽略。并且，返回 true 没有意义。</p>
+</li>
+<li><p>对于来自真实用户操作的事件，event.isTrusted 属性为 true，对于脚本生成的事件，event.isTrusted 属性为 false。</p>
+</li>
+<li><p>自定义事件</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line">&lt;h1 id=<span class="string">&quot;elem&quot;</span>&gt;<span class="title class_">Hello</span> <span class="keyword">for</span> <span class="title class_">John</span>!&lt;/h1&gt;</span><br><span class="line"></span><br><span class="line"><span class="language-xml"><span class="tag">&lt;<span class="name">script</span>&gt;</span><span class="language-javascript"></span></span></span><br><span class="line"><span class="language-javascript"><span class="language-xml">  <span class="comment">// 事件附带给处理程序的其他详细信息</span></span></span></span><br><span class="line"><span class="language-javascript"><span class="language-xml">  elem.<span class="title function_">addEventListener</span>(<span class="string">&quot;hello&quot;</span>, <span class="keyword">function</span>(<span class="params">event</span>) &#123;</span></span></span><br><span class="line"><span class="language-javascript"><span class="language-xml">    <span class="title function_">alert</span>(event.<span class="property">detail</span>.<span class="property">name</span>);</span></span></span><br><span class="line"><span class="language-javascript"><span class="language-xml">  &#125;);</span></span></span><br><span class="line"><span class="language-javascript"><span class="language-xml"></span></span></span><br><span class="line"><span class="language-javascript"><span class="language-xml">  elem.<span class="title function_">dispatchEvent</span>(<span class="keyword">new</span> <span class="title class_">CustomEvent</span>(<span class="string">&quot;hello&quot;</span>, &#123;</span></span></span><br><span class="line"><span class="language-javascript"><span class="language-xml">    <span class="attr">detail</span>: &#123; <span class="attr">name</span>: <span class="string">&quot;John&quot;</span> &#125;</span></span></span><br><span class="line"><span class="language-javascript"><span class="language-xml">  &#125;));</span></span></span><br><span class="line"><span class="language-javascript"><span class="language-xml"></span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span></span><br></pre></td></tr></table></figure></li>
+<li><p>点击鼠标左键，在鼠标左键被按下时，会首先触发 mousedown，然后当鼠标左键被释放时，会触发 mouseup 和 click。</p>
+</li>
+<li><p>组合键（如果被按下则为 true）：altKey，ctrlKey，shiftKey 和 metaKey（Mac）。<br>如果你想处理 Ctrl，那么不要忘记 Mac 用户，他们通常使用的是 Cmd，所以最好检查 if (e.metaKey || e.ctrlKey)。<br>窗口相对坐标：clientX&#x2F;clientY。<br>文档相对坐标：pageX&#x2F;pageY。</p>
+</li>
+<li><p>事件 mouseenter&#x2F;mouseleave 类似于 mouseover&#x2F;mouseout。它们在鼠标指针进入&#x2F;离开元素时触发。<br>但是有两个重要的区别：<br>元素内部与后代之间的转换不会产生影响。<br>事件 mouseenter&#x2F;mouseleave 不会冒泡。</p>
+</li>
+<li><p>oninput 事件 —— 在任何修改后都会触发此事件。这样我们就可以检查新的 input.value，并在其无效时修改它&#x2F;高亮显示 <input></p>
+</li>
+<li><p>键盘事件：<br>keydown —— 在按下键时（如果长按按键，则将自动重复），<br>keyup —— 释放按键时。<br>键盘事件的主要属性：<br>code —— “按键代码”（”KeyA”，”ArrowLeft” 等），特定于键盘上按键的物理位置。<br>key —— 字符（”A”，”a” 等），对于非字符（non-character）的按键，通常具有与 code 相同的值。</p>
+</li>
+<li><p>判断元素在当前页面是否可见</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="keyword">function</span> <span class="title function_">isVisible</span>(<span class="params">elem</span>) &#123;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">let</span> coords = elem.<span class="title function_">getBoundingClientRect</span>();</span><br><span class="line"></span><br><span class="line">  <span class="keyword">let</span> windowHeight = <span class="variable language_">document</span>.<span class="property">documentElement</span>.<span class="property">clientHeight</span>;</span><br><span class="line"></span><br><span class="line">  <span class="comment">// 顶部元素边缘可见吗？</span></span><br><span class="line">  <span class="keyword">let</span> topVisible = coords.<span class="property">top</span> &gt; <span class="number">0</span> &amp;&amp; coords.<span class="property">top</span> &lt; windowHeight;</span><br><span class="line"></span><br><span class="line">  <span class="comment">// 底部元素边缘可见吗？</span></span><br><span class="line">  <span class="keyword">let</span> bottomVisible = coords.<span class="property">bottom</span> &lt; windowHeight &amp;&amp; coords.<span class="property">bottom</span> &gt; <span class="number">0</span>;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">return</span> topVisible || bottomVisible;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">function</span> <span class="title function_">showVisible</span>(<span class="params"></span>) &#123;</span><br><span class="line">  <span class="keyword">for</span> (<span class="keyword">let</span> img <span class="keyword">of</span> <span class="variable language_">document</span>.<span class="title function_">querySelectorAll</span>(<span class="string">&#x27;img&#x27;</span>)) &#123;</span><br><span class="line">    <span class="keyword">let</span> realSrc = img.<span class="property">dataset</span>.<span class="property">src</span>;</span><br><span class="line">    <span class="keyword">if</span> (!realSrc) <span class="keyword">continue</span>;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (<span class="title function_">isVisible</span>(img)) &#123;</span><br><span class="line">      img.<span class="property">src</span> = realSrc;</span><br><span class="line">      img.<span class="property">dataset</span>.<span class="property">src</span> = <span class="string">&#x27;&#x27;</span>;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="title function_">showVisible</span>();</span><br><span class="line"><span class="variable language_">window</span>.<span class="property">onscroll</span> = showVisible;</span><br></pre></td></tr></table></figure></li>
+<li><p>表单:<br>document.forms.my; &#x2F;&#x2F; name&#x3D;”my” 的表单<br>document.forms[0]; &#x2F;&#x2F; 文档中的第一个表单<br>let elem &#x3D; form.elements.one; &#x2F;&#x2F; input name&#x3D;”one” 元素</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="comment">// 表格标题</span></span><br><span class="line">&lt;form id=<span class="string">&quot;form&quot;</span>&gt;</span><br><span class="line">    <span class="language-xml"><span class="tag">&lt;<span class="name">fieldset</span> <span class="attr">name</span>=<span class="string">&quot;userFields&quot;</span>&gt;</span></span></span><br><span class="line"><span class="language-xml">      <span class="tag">&lt;<span class="name">legend</span>&gt;</span>info<span class="tag">&lt;/<span class="name">legend</span>&gt;</span></span></span><br><span class="line"><span class="language-xml">      <span class="tag">&lt;<span class="name">input</span> <span class="attr">name</span>=<span class="string">&quot;login&quot;</span> <span class="attr">type</span>=<span class="string">&quot;text&quot;</span>&gt;</span></span></span><br><span class="line"><span class="language-xml">    <span class="tag">&lt;/<span class="name">fieldset</span>&gt;</span></span></span><br><span class="line"><span class="language-xml">  <span class="tag">&lt;/<span class="name">form</span>&gt;</span></span></span><br><span class="line"></span><br></pre></td></tr></table></figure></li>
+<li><p>tabindex&#x3D;”0” 会使该元素被与那些不具有 tabindex 的元素放在一起。也就是说，当我们切换元素时，具有 tabindex&#x3D;”0” 的元素将排在那些具有 tabindex ≥ 1 的元素的后面。<br>通常，它用于使元素具有焦点，但是保留默认的切换顺序。使元素成为与 <input> 一样的表单的一部分。<br>tabindex&#x3D;”-1” 只允许以编程的方式聚焦于元素。Tab 键会忽略这样的元素，但是 elem.focus() 有效。</p>
+</li>
+<li><p>获取被选中的文本: document.getSelection()</p>
+</li>
+<li><p>禁止页面滚动: document.body.style.overflowY &#x3D; ‘hidden’;</p>
+</li>
+<li><p>DOMContentLoaded 事件 —— DOM 已经就绪，因此处理程序可以查找 DOM 节点，并初始化接口。<br>load 事件 —— 外部资源已加载完成，样式已被应用，图片大小也已知了。<br>beforeunload 事件 —— 用户正在离开：我们可以检查用户是否保存了更改，并询问他是否真的要离开。<br>unload 事件 —— 用户几乎已经离开了，但是我们仍然可以启动一些操作，例如发送统计数据。</p>
+</li>
+<li><p>页面生命周期事件执行顺序示例</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line">&lt;script&gt;</span><br><span class="line">  <span class="title function_">log</span>(<span class="string">&#x27;initial readyState:&#x27;</span> + <span class="variable language_">document</span>.<span class="property">readyState</span>);</span><br><span class="line"></span><br><span class="line">  <span class="variable language_">document</span>.<span class="title function_">addEventListener</span>(<span class="string">&#x27;readystatechange&#x27;</span>, <span class="function">() =&gt;</span> <span class="title function_">log</span>(<span class="string">&#x27;readyState:&#x27;</span> + <span class="variable language_">document</span>.<span class="property">readyState</span>));</span><br><span class="line">  <span class="variable language_">document</span>.<span class="title function_">addEventListener</span>(<span class="string">&#x27;DOMContentLoaded&#x27;</span>, <span class="function">() =&gt;</span> <span class="title function_">log</span>(<span class="string">&#x27;DOMContentLoaded&#x27;</span>));</span><br><span class="line"></span><br><span class="line">  <span class="variable language_">window</span>.<span class="property">onload</span> = <span class="function">() =&gt;</span> <span class="title function_">log</span>(<span class="string">&#x27;window onload&#x27;</span>);</span><br><span class="line">&lt;/script&gt;</span><br><span class="line"></span><br><span class="line"><span class="language-xml"><span class="tag">&lt;<span class="name">iframe</span> <span class="attr">src</span>=<span class="string">&quot;iframe.html&quot;</span> <span class="attr">onload</span>=<span class="string">&quot;log(&#x27;iframe onload&#x27;)&quot;</span>&gt;</span><span class="tag">&lt;/<span class="name">iframe</span>&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="language-xml"><span class="tag">&lt;<span class="name">img</span> <span class="attr">src</span>=<span class="string">&quot;http://en.js.cx/clipart/train.gif&quot;</span> <span class="attr">id</span>=<span class="string">&quot;img&quot;</span>&gt;</span></span></span><br><span class="line"><span class="language-xml"><span class="tag">&lt;<span class="name">script</span>&gt;</span><span class="language-javascript"></span></span></span><br><span class="line"><span class="language-javascript"><span class="language-xml">  img.<span class="property">onload</span> = <span class="function">() =&gt;</span> <span class="title function_">log</span>(<span class="string">&#x27;img onload&#x27;</span>);</span></span></span><br><span class="line"><span class="language-javascript"><span class="language-xml"></span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span></span><br><span class="line"><span class="language-xml"></span></span><br><span class="line"><span class="language-xml">典型输出：</span></span><br><span class="line"><span class="language-xml">[1] initial readyState:loading</span></span><br><span class="line"><span class="language-xml">[2] readyState:interactive</span></span><br><span class="line"><span class="language-xml">[2] DOMContentLoaded</span></span><br><span class="line"><span class="language-xml">[3] iframe onload</span></span><br><span class="line"><span class="language-xml">[4] img onload</span></span><br><span class="line"><span class="language-xml">[4] readyState:complete</span></span><br><span class="line"><span class="language-xml">[4] window onload</span></span><br></pre></td></tr></table></figure></li>
+<li><p>具有 defer 特性的脚本不会阻塞页面。<br>具有 defer 特性的脚本总是要等到 DOM 解析完毕，但在 DOMContentLoaded 事件之前执行。defer 特性仅适用于外部脚本</p>
+</li>
+<li><p>本地脚本异步加载写法</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="keyword">function</span> <span class="title function_">loadScript</span>(<span class="params">src</span>) &#123;</span><br><span class="line">  <span class="keyword">let</span> script = <span class="variable language_">document</span>.<span class="title function_">createElement</span>(<span class="string">&#x27;script&#x27;</span>);</span><br><span class="line">  script.<span class="property">src</span> = src;</span><br><span class="line">  script.<span class="property">async</span> = <span class="literal">false</span>;</span><br><span class="line">  <span class="variable language_">document</span>.<span class="property">body</span>.<span class="title function_">append</span>(script);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// long.js 先执行，因为代码中设置了 async=false</span></span><br><span class="line"><span class="title function_">loadScript</span>(<span class="string">&quot;/article/script-async-defer/long.js&quot;</span>);</span><br><span class="line"><span class="title function_">loadScript</span>(<span class="string">&quot;/article/script-async-defer/small.js&quot;</span>);</span><br></pre></td></tr></table></figure></li>
+<li><p>在新窗口打开网页: window.open(‘<a href="https://javascript.info/&#39;">https://javascript.info/&#39;</a>)</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="comment">// 大多数浏览器都会阻止此类弹窗</span></span><br><span class="line"><span class="variable language_">window</span>.<span class="title function_">open</span>(<span class="string">&#x27;https://javascript.info&#x27;</span>);</span><br><span class="line"></span><br><span class="line"><span class="comment">// 弹窗被允许</span></span><br><span class="line">button.<span class="property">onclick</span> = <span class="function">() =&gt;</span> &#123;</span><br><span class="line">  <span class="variable language_">window</span>.<span class="title function_">open</span>(<span class="string">&#x27;https://javascript.info&#x27;</span>);</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure></li>
+<li><p>如果窗口的二级域相同，例如 john.site.com，peter.site.com 和 site.com（它们共同的二级域是 site.com），我们可以使浏览器忽略该差异，使得它们可以被作为“同源”的来对待，以便进行跨窗口通信。</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="variable language_">document</span>.<span class="property">domain</span> = <span class="string">&#x27;site.com&#x27;</span>;</span><br></pre></td></tr></table></figure></li>
+<li><p>samesite cookie 特性可以阻止点击劫持攻击。<br>具有 samesite 特性的 cookie 仅在网站是通过直接方式打开（而不是通过 frame 或其他方式）的情况下才发送到网站。更多细节请见 Cookie，document.cookie。<br>如果网站，例如 Facebook，在其身份验证 cookie 中具有 samesite 特性，像这样：<br><code>Set-Cookie: authorization=secret; samesite</code><br>……那么，当在另一个网站中的 iframe 中打开 Facebook 时，此类 cookie 将不会被发送。因此，攻击将失败。</p>
+</li>
+<li><p>nanoid库生成唯一id</p>
+</li>
+<li><p>时间格式化为<code>YYYY/MM/DD HH:mm:ss</code>: <code>new Date().toLocaleString()</code></p>
+</li>
+</ul>
+]]></content>
+      <categories>
+        <category>技术</category>
+        <category>javascript</category>
+      </categories>
+  </entry>
+  <entry>
+    <title>python笔记</title>
+    <url>/post/c00b24b1.html</url>
+    <content><![CDATA[]]></content>
+      <categories>
+        <category>技术</category>
+        <category>python</category>
+      </categories>
+  </entry>
+  <entry>
+    <title>论驿马</title>
+    <url>/post/53de3820.html</url>
+    <content><![CDATA[]]></content>
+      <categories>
+        <category>易经</category>
+        <category>子平</category>
+      </categories>
+  </entry>
+  <entry>
+    <title>html_css笔记</title>
+    <url>/post/fa4f271f.html</url>
+    <content><![CDATA[<h2 id="css学习资源"><a href="#css学习资源" class="headerlink" title="css学习资源"></a>css学习资源</h2><ul>
+<li><a href="https://www.guess-css.app/">GuessCSS</a></li>
+<li><a href="https://github.com/l-hammer/You-need-to-know-css">You-need-to-know-css</a></li>
+<li><a href="https://github.com/chokcoco/CSS-Inspiration">CSS-Inspiration</a></li>
+</ul>
+<h2 id="解决父元素高度塌陷问题-和-外边距重叠问题，使用flex布局可避免该问题"><a href="#解决父元素高度塌陷问题-和-外边距重叠问题，使用flex布局可避免该问题" class="headerlink" title="解决父元素高度塌陷问题 和 外边距重叠问题，使用flex布局可避免该问题"></a>解决父元素高度塌陷问题 和 外边距重叠问题，使用flex布局可避免该问题</h2><figure class="highlight css"><table><tr><td class="code"><pre><span class="line"><span class="comment">/* 终极版本 */</span></span><br><span class="line"><span class="selector-class">.clearfix</span><span class="selector-pseudo">::before</span>,</span><br><span class="line"><span class="selector-class">.clearfix</span><span class="selector-pseudo">::after</span> &#123;</span><br><span class="line">  <span class="attribute">content</span>: <span class="string">&#x27;&#x27;</span>;</span><br><span class="line">  <span class="attribute">display</span>: table;</span><br><span class="line">  <span class="attribute">clear</span>: both;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>]]></content>
+  </entry>
+  <entry>
+    <title>spider learn notes</title>
+    <url>/post/15afb360.html</url>
+    <content><![CDATA[<h2 id="环境准备"><a href="#环境准备" class="headerlink" title="环境准备"></a>环境准备</h2><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">pip3 install &quot;https[http2]&quot;</span><br></pre></td></tr></table></figure>
+
+<h2 id="案例"><a href="#案例" class="headerlink" title="案例"></a>案例</h2>]]></content>
+  </entry>
+  <entry>
+    <title>八字案例收集</title>
+    <url>/post/9a56a5e1.html</url>
+    <content><![CDATA[<h2 id="身弱伤官见官富贵"><a href="#身弱伤官见官富贵" class="headerlink" title="身弱伤官见官富贵"></a>身弱伤官见官富贵</h2><h3 id="乾造-癸未-乙卯-戊辰-辛酉"><a href="#乾造-癸未-乙卯-戊辰-辛酉" class="headerlink" title="乾造 癸未 乙卯 戊辰 辛酉"></a>乾造 癸未 乙卯 戊辰 辛酉</h3><img src="/images/01_chenminzhi.jpeg" width = "200" alt="图片名称" align=center />
+
+<blockquote>
+<p>大运: 甲寅(2&#x2F;1945) 癸丑 壬子 辛亥 庚戌 己酉 戊申</p>
+</blockquote>
+<ul>
+<li>身弱，伤官见官，虽然年干透财，但虚浮无根，不足以通关，因此伤官和官杀形成对抗，吉凶要看谁强谁弱；月干正官，坐禄得令而旺，更得财星生扶，且有卯未半合官局，可以说强旺至极，再看时干伤官，坐禄不弱，且得辰酉合金为强根，并得日主生扶，和官杀分庭抗礼，保护日主不被杀克，因此显贵，由于命局五行均衡，</li>
+<li>断语: <ul>
+<li>出身于富贵之家，父母及本人均有大作为，上能得父母之力，下能享子女之福，为三代富贵之命</li>
+<li>胆大心细，倔强直率，办事认真，性情开朗</li>
+<li>初运不佳，体弱多病，多灾多难，1951(辛卯年)有死里逃生之灾。反馈：从小有支气管炎，肺炎，消化不良，51年因肺炎差点死掉</li>
+<li>学历不高，有经营头脑，少年得志，中年大发，晚年暴富。反馈：牛脾气，做生意拿手，不怕担风险，总是成功</li>
+<li>72、77、81、97年大发</li>
+<li>85、86、88年大灾。反馈：做生意失手，损失千万以上</li>
+<li>晚运99年开始，00、01、04、05年大发，之后运气不佳，应步步为营，方可安享晚年</li>
+<li>父母高寿，本人家庭幸福，婚姻和顺，65或72年结婚。反馈：家庭幸福，有2女1子，父母80高龄，均健在</li>
+<li></li>
+</ul>
+</li>
+</ul>
+<h2 id="身弱印旺"><a href="#身弱印旺" class="headerlink" title="身弱印旺"></a>身弱印旺</h2><h3 id="乾造-癸丑-戊午-庚子-己卯"><a href="#乾造-癸丑-戊午-庚子-己卯" class="headerlink" title="乾造: 癸丑 戊午 庚子 己卯"></a>乾造: 癸丑 戊午 庚子 己卯</h3><blockquote>
+<p>大运: 丁巳 丙辰 乙卯(29) 甲寅 癸丑 壬子</p>
+</blockquote>
+<ul>
+<li>先看日主，地支毫无根气，戊癸合火生旺了土印，月令午火，火土同宫印旺，因此命盘的特点就是身弱印旺，食伤生财为用，比劫为喜，忌火土</li>
+<li>再看婚姻宫被冲，财星不透，财的原神食伤又被合走，有妻子被婆婆制住之象，可断婆媳关系不好，食伤和财都被制则妻子精力不足，性生活不和谐，枭印旺疑心重，怀疑妻子出轨</li>
+</ul>
+<h2 id="克夫"><a href="#克夫" class="headerlink" title="克夫"></a>克夫</h2><h3 id="坤造-壬戌-辛亥-甲子-丙寅"><a href="#坤造-壬戌-辛亥-甲子-丙寅" class="headerlink" title="坤造: 壬戌 辛亥 甲子 丙寅"></a>坤造: 壬戌 辛亥 甲子 丙寅</h3><blockquote>
+<p>大运: 庚戌 己酉 戊申 丁未 丙午</p>
+</blockquote>
+<ul>
+<li>分析: 日主身强，正官格，偏印格，食神格，用火土金</li>
+<li>优点: 己酉、戊申运，夫星旺相，夫登甲第，官至御史</li>
+<li>缺点: 运入南方，旺火烧金夫，丁未夫死孀居</li>
+<li>综合: 中年旺夫，晚年旺子，夫明子秀</li>
+<li>出自: 《神峰通考》</li>
+</ul>
+<h2 id="克妻"><a href="#克妻" class="headerlink" title="克妻"></a>克妻</h2><h3 id="乾造-丙子-辛卯-丁酉-庚戌"><a href="#乾造-丙子-辛卯-丁酉-庚戌" class="headerlink" title="乾造: 丙子 辛卯 丁酉 庚戌"></a>乾造: 丙子 辛卯 丁酉 庚戌</h3><blockquote>
+<p>大运: 壬辰 癸巳 甲午 乙未</p>
+</blockquote>
+<ul>
+<li>分析: 日主身不弱，甲午运乙巳年离婚，原因丙辛合天干无水，因此化木，增旺了日主，甲午运丙火劫财坐羊刃，乙巳引发卯酉冲，婚姻宫被冲+羊刃劫财，因此婚灾</li>
+</ul>
+<h2 id="克父"><a href="#克父" class="headerlink" title="克父"></a>克父</h2><h3 id="乾造-癸未-戊午-庚申-庚辰"><a href="#乾造-癸未-戊午-庚申-庚辰" class="headerlink" title="乾造: 癸未 戊午 庚申 庚辰"></a>乾造: 癸未 戊午 庚申 庚辰</h3><blockquote>
+<p>大运: 丁巳 丙辰 乙卯 甲寅</p>
+</blockquote>
+<ul>
+<li>分析: 戊癸合不化火而化土印，日主身旺，甲寅运辛酉年父死，原因是比劫过旺夺财</li>
+</ul>
+<h2 id="贪财坏印"><a href="#贪财坏印" class="headerlink" title="贪财坏印"></a>贪财坏印</h2><h3 id="乾造-己丑-癸酉-乙卯-丁丑"><a href="#乾造-己丑-癸酉-乙卯-丁丑" class="headerlink" title="乾造: 己丑 癸酉 乙卯 丁丑"></a>乾造: 己丑 癸酉 乙卯 丁丑</h3><blockquote>
+<p>己巳运 辛未年</p>
+</blockquote>
+<ul>
+<li>分析: 原局身弱，透印为用，巳酉丑三合官杀局，流年辛金透出有力，但是卯未合木，杀被冲弱，丑未冲，四个土导致财比杀更旺，杀不受生，财越级克印，用神被伤，因此，命主贪财犯事，犯官非。</li>
+<li>实际此人是单位领导，因挪用公款与人做生意而亏本，被发现后罢职、丢官、吃官司。</li>
+</ul>
 ]]></content>
       <categories>
         <category>易经</category>
@@ -533,253 +781,5 @@ User ||--o{ Msg: has</pre>
       <tags>
         <tag>转载</tag>
       </tags>
-  </entry>
-  <entry>
-    <title>论驿马</title>
-    <url>/post/53de3820.html</url>
-    <content><![CDATA[]]></content>
-      <categories>
-        <category>易经</category>
-        <category>子平</category>
-      </categories>
-  </entry>
-  <entry>
-    <title>javascript知识点总结</title>
-    <url>/post/78a8ec49.html</url>
-    <content><![CDATA[<h1 id="‘use-strict’"><a href="#‘use-strict’" class="headerlink" title="‘use strict’;"></a>‘use strict’;</h1><ul>
-<li><p>import方式</p>
-<figure class="highlight html"><table><tr><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">script</span> <span class="attr">type</span>=<span class="string">&quot;importmap&quot;</span>&gt;</span><span class="language-javascript"></span></span><br><span class="line"><span class="language-javascript">  &#123;</span></span><br><span class="line"><span class="language-javascript">    <span class="string">&quot;imports&quot;</span>: &#123;</span></span><br><span class="line"><span class="language-javascript">      <span class="string">&quot;vue&quot;</span>: <span class="string">&quot;https://unpkg.com/vue@3/dist/vue.esm-browser.js&quot;</span></span></span><br><span class="line"><span class="language-javascript">    &#125;</span></span><br><span class="line"><span class="language-javascript">  &#125;</span></span><br><span class="line"><span class="language-javascript"></span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;<span class="name">div</span> <span class="attr">id</span>=<span class="string">&quot;app&quot;</span>&gt;</span>&#123;&#123; message &#125;&#125;<span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;<span class="name">script</span> <span class="attr">type</span>=<span class="string">&quot;module&quot;</span>&gt;</span><span class="language-javascript"></span></span><br><span class="line"><span class="language-javascript">  <span class="keyword">import</span> &#123; createApp &#125; <span class="keyword">from</span> <span class="string">&#x27;vue&#x27;</span></span></span><br><span class="line"><span class="language-javascript"></span></span><br><span class="line"><span class="language-javascript">  <span class="title function_">createApp</span>(&#123;</span></span><br><span class="line"><span class="language-javascript">    <span class="title function_">data</span>(<span class="params"></span>) &#123;</span></span><br><span class="line"><span class="language-javascript">      <span class="keyword">return</span> &#123;</span></span><br><span class="line"><span class="language-javascript">        <span class="attr">message</span>: <span class="string">&#x27;Hello Vue!&#x27;</span></span></span><br><span class="line"><span class="language-javascript">      &#125;</span></span><br><span class="line"><span class="language-javascript">    &#125;</span></span><br><span class="line"><span class="language-javascript">  &#125;).<span class="title function_">mount</span>(<span class="string">&#x27;#app&#x27;</span>)</span></span><br><span class="line"><span class="language-javascript"></span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br></pre></td></tr></table></figure>
-</li>
-<li><p>严格模式下，当一个函数声明在一个代码块内时，它在该代码块内的任何位置都是可见的。但在代码块外不可见。</p>
-</li>
-</ul>
-<h1 id="比较"><a href="#比较" class="headerlink" title="比较"></a>比较</h1><ul>
-<li>在比较不同类型的值时，处于相等判断符号 &#x3D;&#x3D; 两侧的值会先被转化为数字。空字符串和 false 也是如此，转化后它们都为数字 0。</li>
-<li>严格相等运算符 &#x3D;&#x3D;&#x3D; 在进行比较时不会做任何的类型转换。</li>
-</ul>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">&#x27;&#x27; == false // true</span><br><span class="line">undefined == null // true</span><br><span class="line">undefined === null // false</span><br><span class="line">undefined == undefined // true</span><br><span class="line">undefined === undefined // true</span><br></pre></td></tr></table></figure>
-
-<h1 id="空值合并运算符"><a href="#空值合并运算符" class="headerlink" title="空值合并运算符 ??"></a>空值合并运算符 ??</h1><p>空值合并运算符 ?? 是最近才被添加到 JavaScript 中的，它的出现是因为人们对 || 不太满意。<br>它们之间重要的区别是：</p>
-<ul>
-<li>|| 返回第一个 真 值。</li>
-<li>?? 返回第一个 已定义的 值。</li>
-</ul>
-<p>数字类型</p>
-<ul>
-<li>NaN &#x3D;&#x3D;&#x3D; NaN &#x2F;&#x2F; false</li>
-<li>判断数字是否有效 <code>isFinite</code></li>
-<li>生成指定范围内概率均匀的随机整数</li>
-</ul>
-<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="keyword">function</span> <span class="title function_">randomInteger</span>(<span class="params">min, max</span>) &#123;</span><br><span class="line">  <span class="comment">// here rand is from min to (max+1)</span></span><br><span class="line">  <span class="keyword">let</span> rand = min + <span class="title class_">Math</span>.<span class="title function_">random</span>() * (max + <span class="number">1</span> - min);</span><br><span class="line">  <span class="keyword">return</span> <span class="title class_">Math</span>.<span class="title function_">floor</span>(rand);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<h1 id="数组"><a href="#数组" class="headerlink" title="数组"></a>数组</h1><ul>
-<li>取最后一个元素: <code>fruits.at(-1)</code></li>
-<li>遍历数组使用 <code>for (let fruit of fruits)</code></li>
-<li>清空数组最简单的方法就是: <code>arr.length = 0</code></li>
-<li>数组删除元素用 <code>arr.splice(start[, deleteCount, elem1, ..., elemN])</code></li>
-<li>拷贝数组 <code>arr.slice()</code></li>
-<li>拼接多个数组 <code>arr.concat()</code></li>
-<li>判断对象是否为数组 <code>Array.isArray()</code></li>
-</ul>
-<h1 id="对象"><a href="#对象" class="headerlink" title="对象"></a>对象</h1><ul>
-<li>对象解构赋值，函数参数默认值</li>
-</ul>
-<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="keyword">function</span> <span class="title function_">showMenu</span>(<span class="params">&#123; title = <span class="string">&quot;Menu&quot;</span>, width = <span class="number">100</span>, height = <span class="number">200</span> &#125; = &#123;&#125;</span>) &#123;</span><br><span class="line">    <span class="title function_">alert</span>( <span class="string">`<span class="subst">$&#123;title&#125;</span> <span class="subst">$&#123;width&#125;</span> <span class="subst">$&#123;height&#125;</span>`</span> );</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<ul>
-<li>使用 Object.create 来实现比复制 for..in 循环中的属性更强大的对象克隆方式：<br><code>let clone = Object.create(Object.getPrototypeOf(obj), Object.getOwnPropertyDescriptors(obj));</code></li>
-<li>使用 Object.create(null) 创建一个没有 <strong>proto</strong> 的 “very plain” 对象，或者对此类场景坚持使用 Map 对象就可以了。</li>
-</ul>
-<h1 id="Promise"><a href="#Promise" class="headerlink" title="Promise"></a>Promise</h1><ul>
-<li>使用promise实现sleep<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="keyword">let</span> <span class="title function_">sleep</span> = (<span class="params">ms</span>)=&gt; <span class="keyword">new</span> <span class="title class_">Promise</span>(<span class="function">(<span class="params">resolve</span>)=&gt;</span>&#123; <span class="built_in">setTimeout</span>(resolve, ms); &#125;);</span><br><span class="line"><span class="comment">// 用法: await sleep(2000);</span></span><br></pre></td></tr></table></figure></li>
-</ul>
-<h1 id="this"><a href="#this" class="headerlink" title="this"></a>this</h1><ul>
-<li>箭头函数 this 的查找与常规变量的搜索方式完全相同：在外部词法环境中查找。</li>
-<li>普通函数this在调用时决定，即调用对象</li>
-<li>在一个对象还是在原型中。在一个方法调用中，this 始终是点符号 . 前面的对象。this 根本不受原型的影响。</li>
-</ul>
-<h1 id="继承"><a href="#继承" class="headerlink" title="继承"></a>继承</h1><ul>
-<li>for..in 循环在其自身和继承的属性上进行迭代。所有其他的键&#x2F;值获取方法仅对对象本身起作用。</li>
-<li>几乎所有其他键&#x2F;值获取方法，例如 Object.keys 和 Object.values 等，都会忽略继承的属性。它们只会对对象自身进行操作。不考虑 继承自原型的属性。</li>
-<li>父类构造器总是会使用它自己字段的值，而不是被重写的那一个。</li>
-</ul>
-<h1 id="模块"><a href="#模块" class="headerlink" title="模块"></a>模块</h1><ul>
-<li>模块脚本是被延迟的，所以要等到 HTML 文档被处理完成才会执行它。</li>
-<li>模块具有自己的本地顶级作用域，并可以通过 import&#x2F;export 交换功能。</li>
-<li>模块始终使用 use strict。</li>
-<li>模块代码只执行一次。导出仅创建一次，然后会在导入之间共享。</li>
-<li>严格模式下，eval 有属于自己的词法环境。因此我们不能从外部访问在 eval 中声明的函数和变量, eval 访问外部变量的能力会产生副作用。代码压缩工具（在把 JS 投入生产环境前对其进行压缩的工具）将局部变量重命名为更短的变量（例如 a 和 b 等），以使代码体积更小。这通常是安全的，但在使用了 eval 的情况下就不一样了，因为局部变量可能会被 eval 中的代码访问到。因此压缩工具不会对所有可能会被从 eval 中访问的变量进行重命名。这样会导致代码压缩率降低。</li>
-</ul>
-<h1 id="DOM"><a href="#DOM" class="headerlink" title="DOM"></a>DOM</h1><ul>
-<li>查看浏览器内部窗口高度: <code>window.innerHeight</code></li>
-<li>修改网页背景色: &#96;document.body.style.background &#x3D; “red”;</li>
-<li>由于历史原因，<head> 之前的空格和换行符均被忽略。<br>如果我们在 </body> 之后放置一些东西，那么它会被自动移动到 body 内，并处于 body 中的最下方，因为 HTML 规范要求所有内容必须位于 <body> 内。所以 </body> 之后不能有空格</li>
-<li>elem.closest(css) 方法会查找与 CSS 选择器匹配的最近的祖先</li>
-<li>所有的 “getElementsBy*” 方法都会返回一个 实时的（live） 集合。相反，querySelectorAll 返回的是一个 静态的 集合。就像元素的固定数组。</li>
-<li>判断元素B是否为A的子元素或者与其相等: elemA.contains(elemB)</li>
-<li>创建元素 let div &#x3D; document.createElement(‘div’);</li>
-<li>添加元素到body: document.body.append(div); 字符串内容会以文本的形式添加， 如果要添加html元素使用div.insertAdjacentHTML(‘beforebegin’, ‘<p>Hello</p>‘);</li>
-<li>移除节点: node.remove()</li>
-<li>所有插入方法都会自动从旧位置删除该节点。</li>
-<li>elem.cloneNode(true) 来创建元素的一个“深”克隆 — 具有所有特性（attribute）和子元素</li>
-<li>元素包装器: let fragment &#x3D; new DocumentFragment();</li>
-<li>清除子元素的方式<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="comment">// 方法一:</span></span><br><span class="line"><span class="keyword">function</span> <span class="title function_">clear</span>(<span class="params">elem</span>) &#123;</span><br><span class="line">  elem.<span class="property">innerHTML</span> = <span class="string">&#x27;&#x27;</span>;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">// 方法二: </span></span><br><span class="line"><span class="keyword">function</span> <span class="title function_">clear</span>(<span class="params">elem</span>) &#123;</span><br><span class="line">  <span class="keyword">while</span> (elem.<span class="property">firstChild</span>) &#123;</span><br><span class="line">    elem.<span class="property">firstChild</span>.<span class="title function_">remove</span>();</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li>
-</ul>
-<h1 id="dom样式"><a href="#dom样式" class="headerlink" title="dom样式"></a>dom样式</h1><ul>
-<li><p>为元素添加类: document.body.classList.add(‘article’);</p>
-</li>
-<li><p>设置字符串完整样式: div.cssText&#x3D;”color: red; width: 100px” 设置完整的属性</p>
-</li>
-<li><p>获取计算后的样式: let computedStyle &#x3D; getComputedStyle(document.body);</p>
-</li>
-<li><p>添加dom加载完成事件</p>
-<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="comment">// 这种方式可以运行</span></span><br><span class="line"><span class="variable language_">document</span>.<span class="title function_">addEventListener</span>(<span class="string">&quot;DOMContentLoaded&quot;</span>, <span class="keyword">function</span>(<span class="params"></span>) &#123;</span><br><span class="line">  <span class="title function_">alert</span>(<span class="string">&quot;DOM built&quot;</span>);</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure></li>
-<li><p>停止冒泡的方法是 event.stopPropagation(), event.stopImmediatePropagation() 方法，可以用于停止冒泡，并阻止当前元素上的处理程序运行。使用该方法之后，其他处理程序就不会被执行。</p>
-</li>
-<li><p>elem.closest(selector) 方法返回与 selector 匹配的最近的祖先</p>
-</li>
-<li><p>event.preventDefault() 方法阻止浏览器默认行为</p>
-</li>
-<li><p>事件处理程序返回的值通常会被忽略。唯一的例外是从使用 on<event> 分配的处理程序中返回的 return false。在所有其他情况下，return 值都会被忽略。并且，返回 true 没有意义。</p>
-</li>
-<li><p>对于来自真实用户操作的事件，event.isTrusted 属性为 true，对于脚本生成的事件，event.isTrusted 属性为 false。</p>
-</li>
-<li><p>自定义事件</p>
-<figure class="highlight js"><table><tr><td class="code"><pre><span class="line">&lt;h1 id=<span class="string">&quot;elem&quot;</span>&gt;<span class="title class_">Hello</span> <span class="keyword">for</span> <span class="title class_">John</span>!&lt;/h1&gt;</span><br><span class="line"></span><br><span class="line"><span class="language-xml"><span class="tag">&lt;<span class="name">script</span>&gt;</span><span class="language-javascript"></span></span></span><br><span class="line"><span class="language-javascript"><span class="language-xml">  <span class="comment">// 事件附带给处理程序的其他详细信息</span></span></span></span><br><span class="line"><span class="language-javascript"><span class="language-xml">  elem.<span class="title function_">addEventListener</span>(<span class="string">&quot;hello&quot;</span>, <span class="keyword">function</span>(<span class="params">event</span>) &#123;</span></span></span><br><span class="line"><span class="language-javascript"><span class="language-xml">    <span class="title function_">alert</span>(event.<span class="property">detail</span>.<span class="property">name</span>);</span></span></span><br><span class="line"><span class="language-javascript"><span class="language-xml">  &#125;);</span></span></span><br><span class="line"><span class="language-javascript"><span class="language-xml"></span></span></span><br><span class="line"><span class="language-javascript"><span class="language-xml">  elem.<span class="title function_">dispatchEvent</span>(<span class="keyword">new</span> <span class="title class_">CustomEvent</span>(<span class="string">&quot;hello&quot;</span>, &#123;</span></span></span><br><span class="line"><span class="language-javascript"><span class="language-xml">    <span class="attr">detail</span>: &#123; <span class="attr">name</span>: <span class="string">&quot;John&quot;</span> &#125;</span></span></span><br><span class="line"><span class="language-javascript"><span class="language-xml">  &#125;));</span></span></span><br><span class="line"><span class="language-javascript"><span class="language-xml"></span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span></span><br></pre></td></tr></table></figure></li>
-<li><p>点击鼠标左键，在鼠标左键被按下时，会首先触发 mousedown，然后当鼠标左键被释放时，会触发 mouseup 和 click。</p>
-</li>
-<li><p>组合键（如果被按下则为 true）：altKey，ctrlKey，shiftKey 和 metaKey（Mac）。<br>如果你想处理 Ctrl，那么不要忘记 Mac 用户，他们通常使用的是 Cmd，所以最好检查 if (e.metaKey || e.ctrlKey)。<br>窗口相对坐标：clientX&#x2F;clientY。<br>文档相对坐标：pageX&#x2F;pageY。</p>
-</li>
-<li><p>事件 mouseenter&#x2F;mouseleave 类似于 mouseover&#x2F;mouseout。它们在鼠标指针进入&#x2F;离开元素时触发。<br>但是有两个重要的区别：<br>元素内部与后代之间的转换不会产生影响。<br>事件 mouseenter&#x2F;mouseleave 不会冒泡。</p>
-</li>
-<li><p>oninput 事件 —— 在任何修改后都会触发此事件。这样我们就可以检查新的 input.value，并在其无效时修改它&#x2F;高亮显示 <input></p>
-</li>
-<li><p>键盘事件：<br>keydown —— 在按下键时（如果长按按键，则将自动重复），<br>keyup —— 释放按键时。<br>键盘事件的主要属性：<br>code —— “按键代码”（”KeyA”，”ArrowLeft” 等），特定于键盘上按键的物理位置。<br>key —— 字符（”A”，”a” 等），对于非字符（non-character）的按键，通常具有与 code 相同的值。</p>
-</li>
-<li><p>判断元素在当前页面是否可见</p>
-<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="keyword">function</span> <span class="title function_">isVisible</span>(<span class="params">elem</span>) &#123;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">let</span> coords = elem.<span class="title function_">getBoundingClientRect</span>();</span><br><span class="line"></span><br><span class="line">  <span class="keyword">let</span> windowHeight = <span class="variable language_">document</span>.<span class="property">documentElement</span>.<span class="property">clientHeight</span>;</span><br><span class="line"></span><br><span class="line">  <span class="comment">// 顶部元素边缘可见吗？</span></span><br><span class="line">  <span class="keyword">let</span> topVisible = coords.<span class="property">top</span> &gt; <span class="number">0</span> &amp;&amp; coords.<span class="property">top</span> &lt; windowHeight;</span><br><span class="line"></span><br><span class="line">  <span class="comment">// 底部元素边缘可见吗？</span></span><br><span class="line">  <span class="keyword">let</span> bottomVisible = coords.<span class="property">bottom</span> &lt; windowHeight &amp;&amp; coords.<span class="property">bottom</span> &gt; <span class="number">0</span>;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">return</span> topVisible || bottomVisible;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">function</span> <span class="title function_">showVisible</span>(<span class="params"></span>) &#123;</span><br><span class="line">  <span class="keyword">for</span> (<span class="keyword">let</span> img <span class="keyword">of</span> <span class="variable language_">document</span>.<span class="title function_">querySelectorAll</span>(<span class="string">&#x27;img&#x27;</span>)) &#123;</span><br><span class="line">    <span class="keyword">let</span> realSrc = img.<span class="property">dataset</span>.<span class="property">src</span>;</span><br><span class="line">    <span class="keyword">if</span> (!realSrc) <span class="keyword">continue</span>;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (<span class="title function_">isVisible</span>(img)) &#123;</span><br><span class="line">      img.<span class="property">src</span> = realSrc;</span><br><span class="line">      img.<span class="property">dataset</span>.<span class="property">src</span> = <span class="string">&#x27;&#x27;</span>;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="title function_">showVisible</span>();</span><br><span class="line"><span class="variable language_">window</span>.<span class="property">onscroll</span> = showVisible;</span><br></pre></td></tr></table></figure></li>
-<li><p>表单:<br>document.forms.my; &#x2F;&#x2F; name&#x3D;”my” 的表单<br>document.forms[0]; &#x2F;&#x2F; 文档中的第一个表单<br>let elem &#x3D; form.elements.one; &#x2F;&#x2F; input name&#x3D;”one” 元素</p>
-<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="comment">// 表格标题</span></span><br><span class="line">&lt;form id=<span class="string">&quot;form&quot;</span>&gt;</span><br><span class="line">    <span class="language-xml"><span class="tag">&lt;<span class="name">fieldset</span> <span class="attr">name</span>=<span class="string">&quot;userFields&quot;</span>&gt;</span></span></span><br><span class="line"><span class="language-xml">      <span class="tag">&lt;<span class="name">legend</span>&gt;</span>info<span class="tag">&lt;/<span class="name">legend</span>&gt;</span></span></span><br><span class="line"><span class="language-xml">      <span class="tag">&lt;<span class="name">input</span> <span class="attr">name</span>=<span class="string">&quot;login&quot;</span> <span class="attr">type</span>=<span class="string">&quot;text&quot;</span>&gt;</span></span></span><br><span class="line"><span class="language-xml">    <span class="tag">&lt;/<span class="name">fieldset</span>&gt;</span></span></span><br><span class="line"><span class="language-xml">  <span class="tag">&lt;/<span class="name">form</span>&gt;</span></span></span><br><span class="line"></span><br></pre></td></tr></table></figure></li>
-<li><p>tabindex&#x3D;”0” 会使该元素被与那些不具有 tabindex 的元素放在一起。也就是说，当我们切换元素时，具有 tabindex&#x3D;”0” 的元素将排在那些具有 tabindex ≥ 1 的元素的后面。<br>通常，它用于使元素具有焦点，但是保留默认的切换顺序。使元素成为与 <input> 一样的表单的一部分。<br>tabindex&#x3D;”-1” 只允许以编程的方式聚焦于元素。Tab 键会忽略这样的元素，但是 elem.focus() 有效。</p>
-</li>
-<li><p>获取被选中的文本: document.getSelection()</p>
-</li>
-<li><p>禁止页面滚动: document.body.style.overflowY &#x3D; ‘hidden’;</p>
-</li>
-<li><p>DOMContentLoaded 事件 —— DOM 已经就绪，因此处理程序可以查找 DOM 节点，并初始化接口。<br>load 事件 —— 外部资源已加载完成，样式已被应用，图片大小也已知了。<br>beforeunload 事件 —— 用户正在离开：我们可以检查用户是否保存了更改，并询问他是否真的要离开。<br>unload 事件 —— 用户几乎已经离开了，但是我们仍然可以启动一些操作，例如发送统计数据。</p>
-</li>
-<li><p>页面生命周期事件执行顺序示例</p>
-<figure class="highlight js"><table><tr><td class="code"><pre><span class="line">&lt;script&gt;</span><br><span class="line">  <span class="title function_">log</span>(<span class="string">&#x27;initial readyState:&#x27;</span> + <span class="variable language_">document</span>.<span class="property">readyState</span>);</span><br><span class="line"></span><br><span class="line">  <span class="variable language_">document</span>.<span class="title function_">addEventListener</span>(<span class="string">&#x27;readystatechange&#x27;</span>, <span class="function">() =&gt;</span> <span class="title function_">log</span>(<span class="string">&#x27;readyState:&#x27;</span> + <span class="variable language_">document</span>.<span class="property">readyState</span>));</span><br><span class="line">  <span class="variable language_">document</span>.<span class="title function_">addEventListener</span>(<span class="string">&#x27;DOMContentLoaded&#x27;</span>, <span class="function">() =&gt;</span> <span class="title function_">log</span>(<span class="string">&#x27;DOMContentLoaded&#x27;</span>));</span><br><span class="line"></span><br><span class="line">  <span class="variable language_">window</span>.<span class="property">onload</span> = <span class="function">() =&gt;</span> <span class="title function_">log</span>(<span class="string">&#x27;window onload&#x27;</span>);</span><br><span class="line">&lt;/script&gt;</span><br><span class="line"></span><br><span class="line"><span class="language-xml"><span class="tag">&lt;<span class="name">iframe</span> <span class="attr">src</span>=<span class="string">&quot;iframe.html&quot;</span> <span class="attr">onload</span>=<span class="string">&quot;log(&#x27;iframe onload&#x27;)&quot;</span>&gt;</span><span class="tag">&lt;/<span class="name">iframe</span>&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="language-xml"><span class="tag">&lt;<span class="name">img</span> <span class="attr">src</span>=<span class="string">&quot;http://en.js.cx/clipart/train.gif&quot;</span> <span class="attr">id</span>=<span class="string">&quot;img&quot;</span>&gt;</span></span></span><br><span class="line"><span class="language-xml"><span class="tag">&lt;<span class="name">script</span>&gt;</span><span class="language-javascript"></span></span></span><br><span class="line"><span class="language-javascript"><span class="language-xml">  img.<span class="property">onload</span> = <span class="function">() =&gt;</span> <span class="title function_">log</span>(<span class="string">&#x27;img onload&#x27;</span>);</span></span></span><br><span class="line"><span class="language-javascript"><span class="language-xml"></span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span></span><br><span class="line"><span class="language-xml"></span></span><br><span class="line"><span class="language-xml">典型输出：</span></span><br><span class="line"><span class="language-xml">[1] initial readyState:loading</span></span><br><span class="line"><span class="language-xml">[2] readyState:interactive</span></span><br><span class="line"><span class="language-xml">[2] DOMContentLoaded</span></span><br><span class="line"><span class="language-xml">[3] iframe onload</span></span><br><span class="line"><span class="language-xml">[4] img onload</span></span><br><span class="line"><span class="language-xml">[4] readyState:complete</span></span><br><span class="line"><span class="language-xml">[4] window onload</span></span><br></pre></td></tr></table></figure></li>
-<li><p>具有 defer 特性的脚本不会阻塞页面。<br>具有 defer 特性的脚本总是要等到 DOM 解析完毕，但在 DOMContentLoaded 事件之前执行。defer 特性仅适用于外部脚本</p>
-</li>
-<li><p>本地脚本异步加载写法</p>
-<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="keyword">function</span> <span class="title function_">loadScript</span>(<span class="params">src</span>) &#123;</span><br><span class="line">  <span class="keyword">let</span> script = <span class="variable language_">document</span>.<span class="title function_">createElement</span>(<span class="string">&#x27;script&#x27;</span>);</span><br><span class="line">  script.<span class="property">src</span> = src;</span><br><span class="line">  script.<span class="property">async</span> = <span class="literal">false</span>;</span><br><span class="line">  <span class="variable language_">document</span>.<span class="property">body</span>.<span class="title function_">append</span>(script);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// long.js 先执行，因为代码中设置了 async=false</span></span><br><span class="line"><span class="title function_">loadScript</span>(<span class="string">&quot;/article/script-async-defer/long.js&quot;</span>);</span><br><span class="line"><span class="title function_">loadScript</span>(<span class="string">&quot;/article/script-async-defer/small.js&quot;</span>);</span><br></pre></td></tr></table></figure></li>
-<li><p>在新窗口打开网页: window.open(‘<a href="https://javascript.info/&#39;">https://javascript.info/&#39;</a>)</p>
-<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="comment">// 大多数浏览器都会阻止此类弹窗</span></span><br><span class="line"><span class="variable language_">window</span>.<span class="title function_">open</span>(<span class="string">&#x27;https://javascript.info&#x27;</span>);</span><br><span class="line"></span><br><span class="line"><span class="comment">// 弹窗被允许</span></span><br><span class="line">button.<span class="property">onclick</span> = <span class="function">() =&gt;</span> &#123;</span><br><span class="line">  <span class="variable language_">window</span>.<span class="title function_">open</span>(<span class="string">&#x27;https://javascript.info&#x27;</span>);</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure></li>
-<li><p>如果窗口的二级域相同，例如 john.site.com，peter.site.com 和 site.com（它们共同的二级域是 site.com），我们可以使浏览器忽略该差异，使得它们可以被作为“同源”的来对待，以便进行跨窗口通信。</p>
-<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="variable language_">document</span>.<span class="property">domain</span> = <span class="string">&#x27;site.com&#x27;</span>;</span><br></pre></td></tr></table></figure></li>
-<li><p>samesite cookie 特性可以阻止点击劫持攻击。<br>具有 samesite 特性的 cookie 仅在网站是通过直接方式打开（而不是通过 frame 或其他方式）的情况下才发送到网站。更多细节请见 Cookie，document.cookie。<br>如果网站，例如 Facebook，在其身份验证 cookie 中具有 samesite 特性，像这样：<br><code>Set-Cookie: authorization=secret; samesite</code><br>……那么，当在另一个网站中的 iframe 中打开 Facebook 时，此类 cookie 将不会被发送。因此，攻击将失败。</p>
-</li>
-<li><p>nanoid库生成唯一id</p>
-</li>
-<li><p>时间格式化为<code>YYYY/MM/DD HH:mm:ss</code>: <code>new Date().toLocaleString()</code></p>
-</li>
-</ul>
-]]></content>
-      <categories>
-        <category>技术</category>
-        <category>javascript</category>
-      </categories>
-  </entry>
-  <entry>
-    <title>python笔记</title>
-    <url>/post/c00b24b1.html</url>
-    <content><![CDATA[]]></content>
-      <categories>
-        <category>技术</category>
-        <category>python</category>
-      </categories>
-  </entry>
-  <entry>
-    <title>八字案例收集</title>
-    <url>/post/9a56a5e1.html</url>
-    <content><![CDATA[<h2 id="身弱伤官见官富贵"><a href="#身弱伤官见官富贵" class="headerlink" title="身弱伤官见官富贵"></a>身弱伤官见官富贵</h2><h3 id="乾造-癸未-乙卯-戊辰-辛酉"><a href="#乾造-癸未-乙卯-戊辰-辛酉" class="headerlink" title="乾造 癸未 乙卯 戊辰 辛酉"></a>乾造 癸未 乙卯 戊辰 辛酉</h3><img src="/images/01_chenminzhi.jpeg" width = "200" alt="图片名称" align=center />
-
-<blockquote>
-<p>大运: 甲寅(2&#x2F;1945) 癸丑 壬子 辛亥 庚戌 己酉 戊申</p>
-</blockquote>
-<ul>
-<li>身弱，伤官见官，虽然年干透财，但虚浮无根，不足以通关，因此伤官和官杀形成对抗，吉凶要看谁强谁弱；月干正官，坐禄得令而旺，更得财星生扶，且有卯未半合官局，可以说强旺至极，再看时干伤官，坐禄不弱，且得辰酉合金为强根，并得日主生扶，和官杀分庭抗礼，保护日主不被杀克，因此显贵，由于命局五行均衡，</li>
-<li>断语: <ul>
-<li>出身于富贵之家，父母及本人均有大作为，上能得父母之力，下能享子女之福，为三代富贵之命</li>
-<li>胆大心细，倔强直率，办事认真，性情开朗</li>
-<li>初运不佳，体弱多病，多灾多难，1951(辛卯年)有死里逃生之灾。反馈：从小有支气管炎，肺炎，消化不良，51年因肺炎差点死掉</li>
-<li>学历不高，有经营头脑，少年得志，中年大发，晚年暴富。反馈：牛脾气，做生意拿手，不怕担风险，总是成功</li>
-<li>72、77、81、97年大发</li>
-<li>85、86、88年大灾。反馈：做生意失手，损失千万以上</li>
-<li>晚运99年开始，00、01、04、05年大发，之后运气不佳，应步步为营，方可安享晚年</li>
-<li>父母高寿，本人家庭幸福，婚姻和顺，65或72年结婚。反馈：家庭幸福，有2女1子，父母80高龄，均健在</li>
-<li></li>
-</ul>
-</li>
-</ul>
-<h2 id="身弱印旺"><a href="#身弱印旺" class="headerlink" title="身弱印旺"></a>身弱印旺</h2><h3 id="乾造-癸丑-戊午-庚子-己卯"><a href="#乾造-癸丑-戊午-庚子-己卯" class="headerlink" title="乾造: 癸丑 戊午 庚子 己卯"></a>乾造: 癸丑 戊午 庚子 己卯</h3><blockquote>
-<p>大运: 丁巳 丙辰 乙卯(29) 甲寅 癸丑 壬子</p>
-</blockquote>
-<ul>
-<li>先看日主，地支毫无根气，戊癸合火生旺了土印，月令午火，火土同宫印旺，因此命盘的特点就是身弱印旺，食伤生财为用，比劫为喜，忌火土</li>
-<li>再看婚姻宫被冲，财星不透，财的原神食伤又被合走，有妻子被婆婆制住之象，可断婆媳关系不好，食伤和财都被制则妻子精力不足，性生活不和谐，枭印旺疑心重，怀疑妻子出轨</li>
-</ul>
-<h2 id="克夫"><a href="#克夫" class="headerlink" title="克夫"></a>克夫</h2><h3 id="坤造-壬戌-辛亥-甲子-丙寅"><a href="#坤造-壬戌-辛亥-甲子-丙寅" class="headerlink" title="坤造: 壬戌 辛亥 甲子 丙寅"></a>坤造: 壬戌 辛亥 甲子 丙寅</h3><blockquote>
-<p>大运: 庚戌 己酉 戊申 丁未 丙午</p>
-</blockquote>
-<ul>
-<li>分析: 日主身强，正官格，偏印格，食神格，用火土金</li>
-<li>优点: 己酉、戊申运，夫星旺相，夫登甲第，官至御史</li>
-<li>缺点: 运入南方，旺火烧金夫，丁未夫死孀居</li>
-<li>综合: 中年旺夫，晚年旺子，夫明子秀</li>
-<li>出自: 《神峰通考》</li>
-</ul>
-<h2 id="克妻"><a href="#克妻" class="headerlink" title="克妻"></a>克妻</h2><h3 id="乾造-丙子-辛卯-丁酉-庚戌"><a href="#乾造-丙子-辛卯-丁酉-庚戌" class="headerlink" title="乾造: 丙子 辛卯 丁酉 庚戌"></a>乾造: 丙子 辛卯 丁酉 庚戌</h3><blockquote>
-<p>大运: 壬辰 癸巳 甲午 乙未</p>
-</blockquote>
-<ul>
-<li>分析: 日主身不弱，甲午运乙巳年离婚，原因丙辛合天干无水，因此化木，增旺了日主，甲午运丙火劫财坐羊刃，乙巳引发卯酉冲，婚姻宫被冲+羊刃劫财，因此婚灾</li>
-</ul>
-<h2 id="克父"><a href="#克父" class="headerlink" title="克父"></a>克父</h2><h3 id="乾造-癸未-戊午-庚申-庚辰"><a href="#乾造-癸未-戊午-庚申-庚辰" class="headerlink" title="乾造: 癸未 戊午 庚申 庚辰"></a>乾造: 癸未 戊午 庚申 庚辰</h3><blockquote>
-<p>大运: 丁巳 丙辰 乙卯 甲寅</p>
-</blockquote>
-<ul>
-<li>分析: 戊癸合不化火而化土印，日主身旺，甲寅运辛酉年父死，原因是比劫过旺夺财</li>
-</ul>
-<h2 id="贪财坏印"><a href="#贪财坏印" class="headerlink" title="贪财坏印"></a>贪财坏印</h2><h3 id="乾造-己丑-癸酉-乙卯-丁丑"><a href="#乾造-己丑-癸酉-乙卯-丁丑" class="headerlink" title="乾造: 己丑 癸酉 乙卯 丁丑"></a>乾造: 己丑 癸酉 乙卯 丁丑</h3><blockquote>
-<p>己巳运 辛未年</p>
-</blockquote>
-<ul>
-<li>分析: 原局身弱，透印为用，巳酉丑三合官杀局，流年辛金透出有力，但是卯未合木，杀被冲弱，丑未冲，四个土导致财比杀更旺，杀不受生，财越级克印，用神被伤，因此，命主贪财犯事，犯官非。</li>
-<li>实际此人是单位领导，因挪用公款与人做生意而亏本，被发现后罢职、丢官、吃官司。</li>
-</ul>
-]]></content>
-      <categories>
-        <category>易经</category>
-        <category>子平</category>
-      </categories>
-  </entry>
-  <entry>
-    <title>html_css笔记</title>
-    <url>/post/fa4f271f.html</url>
-    <content><![CDATA[<h2 id="css学习资源"><a href="#css学习资源" class="headerlink" title="css学习资源"></a>css学习资源</h2><ul>
-<li><a href="https://www.guess-css.app/">GuessCSS</a></li>
-<li><a href="https://github.com/l-hammer/You-need-to-know-css">You-need-to-know-css</a></li>
-<li><a href="https://github.com/chokcoco/CSS-Inspiration">CSS-Inspiration</a></li>
-</ul>
-<h2 id="解决父元素高度塌陷问题-和-外边距重叠问题，使用flex布局可避免该问题"><a href="#解决父元素高度塌陷问题-和-外边距重叠问题，使用flex布局可避免该问题" class="headerlink" title="解决父元素高度塌陷问题 和 外边距重叠问题，使用flex布局可避免该问题"></a>解决父元素高度塌陷问题 和 外边距重叠问题，使用flex布局可避免该问题</h2><figure class="highlight css"><table><tr><td class="code"><pre><span class="line"><span class="comment">/* 终极版本 */</span></span><br><span class="line"><span class="selector-class">.clearfix</span><span class="selector-pseudo">::before</span>,</span><br><span class="line"><span class="selector-class">.clearfix</span><span class="selector-pseudo">::after</span> &#123;</span><br><span class="line">  <span class="attribute">content</span>: <span class="string">&#x27;&#x27;</span>;</span><br><span class="line">  <span class="attribute">display</span>: table;</span><br><span class="line">  <span class="attribute">clear</span>: both;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>]]></content>
-  </entry>
-  <entry>
-    <title>spider learn notes</title>
-    <url>/post/15afb360.html</url>
-    <content><![CDATA[<h2 id="环境准备"><a href="#环境准备" class="headerlink" title="环境准备"></a>环境准备</h2><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">pip3 install &quot;https[http2]&quot;</span><br></pre></td></tr></table></figure>
-
-<h2 id="案例"><a href="#案例" class="headerlink" title="案例"></a>案例</h2>]]></content>
   </entry>
 </search>
